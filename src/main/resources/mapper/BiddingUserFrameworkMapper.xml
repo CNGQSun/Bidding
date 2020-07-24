@@ -3,5 +3,17 @@
 
 <mapper namespace="com.dsmpharm.bidding.mapper.BiddingUserFrameworkMapper">
 
-
+<!--    查询所有未删除的架构关系-->
+    <select id="selectAllNoDel" resultType="com.dsmpharm.bidding.pojo.BiddingUserFramework">
+        select * from bidding_user_framework where delflag='0'
+        <if test="userId !=null and  userId!='' ">
+            and user_id= #{userId}
+        </if>
+        <if test="parentId !=null and  parentId!='' ">
+            and parent_id= #{parentId}
+        </if>
+        <if test="graParentId !=null and  graParentId!='' ">
+            and gra_parent_id= #{graParentId}
+        </if>
+    </select>
 </mapper>

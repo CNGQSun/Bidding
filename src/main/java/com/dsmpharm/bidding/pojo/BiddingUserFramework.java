@@ -17,6 +17,8 @@ public class BiddingUserFramework implements Serializable {
     @Id
     private String id;
 
+	private String graParentId;
+
     private String parentId;
 
     private String userId;
@@ -31,7 +33,13 @@ public class BiddingUserFramework implements Serializable {
     public void setId(String id) {
 		this.id = id;
 	}
-    public String getParentId() {
+	public String getGraParentId() {
+		return graParentId;
+	}
+	public void setGraParentId(String graParentId) {
+		this.graParentId = graParentId;
+	}
+	public String getParentId() {
 		return parentId;
 	}
     public void setParentId(String parentId) {

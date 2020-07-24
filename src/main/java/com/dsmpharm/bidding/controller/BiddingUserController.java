@@ -31,7 +31,7 @@ public class BiddingUserController {
 		String name = map.get("name").toString();
 		String email = map.get("email").toString();
 		String phoneNumber = map.get("phoneNumber").toString();
-		String role = map.get("role").toString();
+		String role = map.get("role").toString();//此处为role_id
 		biddingUser.setName(name);
 		biddingUser.setEmail(email);
 		biddingUser.setPhoneNumber(phoneNumber);
@@ -47,7 +47,7 @@ public class BiddingUserController {
 		String name = map.get("name").toString();
 		String email = map.get("email").toString();
 		String phoneNumber = map.get("phoneNumber").toString();
-		String role = map.get("role").toString();
+		String role = map.get("role").toString();//此处为role_id
 		biddingUser.setName(name);
 		biddingUser.setEmail(email);
 		biddingUser.setPhoneNumber(phoneNumber);
@@ -56,12 +56,12 @@ public class BiddingUserController {
 	}
 
 	/**
-	* 查询全部
+	* 查询全部用户，带参数
 	*/
-	@GetMapping
-	public Result findAll(){
-		List<BiddingUser> list = biddingUserService.selectAll();
-		return new Result<>(true, StatusCode.OK, "查询成功", list);
+	@GetMapping(value = "/list/{currentPage}/{pageSize}")
+	public Result findAll(@RequestBody Map map,@PathVariable int currentPage, @PathVariable int pageSize){
+		Result result = biddingUserService.selectAll(map,currentPage,pageSize);
+		return result;
 	}
 
 	/**

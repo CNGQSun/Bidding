@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.Map;
 
 /** 
  * <br/>
@@ -22,51 +23,87 @@ public class BiddingUserFrameworkController {
 	private BiddingUserFrameworkService biddingUserFrameworkService;
 
 	/**
-	* 添加
+	* 添加人员架构,点击提交
 	*/
-	@PostMapping
-	public Result insert(@RequestBody BiddingUserFramework biddingUserFramework){
-		biddingUserFrameworkService.insert(biddingUserFramework);
-		return new Result<>(true, StatusCode.OK, "保存成功");
+	@PostMapping("/sub")
+	public Result insertSub(@RequestBody BiddingUserFramework biddingUserFramework){
+		Result result=biddingUserFrameworkService.insertFrameSub(biddingUserFramework);
+		return result ;
+	}
+	/**
+	 * 添加人员架构,点击保存
+	 */
+	@PostMapping("/pre")
+	public Result insertPre(@RequestBody BiddingUserFramework biddingUserFramework){
+		Result result=biddingUserFrameworkService.insertFramePre(biddingUserFramework);
+		return result ;
 	}
 
 	/**
-	* 查询全部
-	*/
-	@GetMapping
-	public Result findAll(){
-		List<BiddingUserFramework> list = biddingUserFrameworkService.selectAll();
-		return new Result<>(true, StatusCode.OK, "查询成功", list);
+	 * 对已保存的架构关系进行修改，并提交
+	 */
+	@PutMapping(value = "/sub/{id}")
+	public Result updateSub(@PathVariable String id, @RequestBody BiddingUserFramework biddingUserFramework) {
+		biddingUserFramework.setId(id);
+		Result result = biddingUserFrameworkService.updateById(biddingUserFramework);
+		return result;
 	}
 
 	/**
-	* 根据ID查询
-	*/
+	 * 根据ID查询用户架构关系及用户信息
+	 */
 	@GetMapping(value = "/{id}")
 	public Result findById(@PathVariable String id){
-		BiddingUserFramework biddingUserFramework =  biddingUserFrameworkService.findById(id);
-		return new Result<>(true, StatusCode.OK, "查询成功", biddingUserFramework);
+		Result result=  biddingUserFrameworkService.findById(id);
+		return result;
 	}
 
 	/**
-	* 更新
+	* 查询全部未删除的用户架构关系
 	*/
-	@PutMapping(value = "/{id}")
-	public Result update(@PathVariable String id, @RequestBody BiddingUserFramework biddingUserFramework) {
-		biddingUserFramework.setId(id);
-		biddingUserFrameworkService.updateById(biddingUserFramework);
-		return new Result<>(true, StatusCode.OK, "修改成功");
+	@GetMapping(value = "/list/{currentPage}/{pageSize}")
+	public Result findAll(@RequestBody Map map,@PathVariable int currentPage, @PathVariable int pageSize){
+		Result result = biddingUserFrameworkService.selectAll(map,currentPage,pageSize);
+		return result;
 	}
 
-
 	/**
-	* 删除
-	*/
+	 * 根据id删除单个用户架构关系
+	 */
 	@DeleteMapping(value = "/{id}")
 	public Result deleteById(@PathVariable String id){
-		biddingUserFrameworkService.delete(id);
-		return new Result<>(true, StatusCode.OK, "删除成功");
+		Result result = biddingUserFrameworkService.delete(id);
+		return result;
 	}
+
+	/**
+	 * 根据id删除多个用户架构关系
+	 */
+	@DeleteMapping()
+	public Result deleteByIds(@RequestParam(value = "ids") String ids){
+		Result result = biddingUserFrameworkService.deleteIds(ids);
+		return result;
+	}
+
+	///**
+	//* 更新
+	//*/
+	//@PutMapping(value = "/{id}")
+	//public Result update(@PathVariable String id, @RequestBody BiddingUserFramework biddingUserFramework) {
+	//	biddingUserFramework.setId(id);
+	//	biddingUserFrameworkService.updateById(biddingUserFramework);
+	//	return new Result<>(true, StatusCode.OK, "修改成功");
+	//}
+
+
+	///**
+	//* 删除
+	//*/
+	//@DeleteMapping(value = "/{id}")
+	//public Result deleteById(@PathVariable String id){
+	//	biddingUserFrameworkService.delete(id);
+	//	return new Result<>(true, StatusCode.OK, "删除成功");
+	//}
 
 	/**
 	* 条件查询，无分页
