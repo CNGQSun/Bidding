@@ -12,7 +12,7 @@ import java.util.List;
 
 /** 
  * <br/>
- * Created by Grant on 2020/07/23
+ * Created by Grant on 2020/07/27
  */
 @RestController
 @RequestMapping("/biddingProvince")
@@ -43,7 +43,7 @@ public class BiddingProvinceController {
 	* 根据ID查询
 	*/
 	@GetMapping(value = "/{id}")
-	public Result findById(@PathVariable String id){
+	public Result findById(@PathVariable Integer id){
 		BiddingProvince biddingProvince =  biddingProvinceService.findById(id);
 		return new Result<>(true, StatusCode.OK, "查询成功", biddingProvince);
 	}
@@ -52,7 +52,7 @@ public class BiddingProvinceController {
 	* 更新
 	*/
 	@PutMapping(value = "/{id}")
-	public Result update(@PathVariable String id, @RequestBody BiddingProvince biddingProvince) {
+	public Result update(@PathVariable Integer id, @RequestBody BiddingProvince biddingProvince) {
 		biddingProvince.setId(id);
 		biddingProvinceService.updateById(biddingProvince);
 		return new Result<>(true, StatusCode.OK, "修改成功");
@@ -63,7 +63,7 @@ public class BiddingProvinceController {
 	* 删除
 	*/
 	@DeleteMapping(value = "/{id}")
-	public Result deleteById(@PathVariable String id){
+	public Result deleteById(@PathVariable Integer id){
 		biddingProvinceService.delete(id);
 		return new Result<>(true, StatusCode.OK, "删除成功");
 	}

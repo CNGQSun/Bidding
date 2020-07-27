@@ -1,25 +1,23 @@
 package com.dsmpharm.bidding.pojo;
 
 import javax.persistence.Entity;
-import javax.persistence.Id;
 import javax.persistence.Table;
 import java.io.Serializable;
 
 /** 
  * <br/>
- * Created by Grant on 2020/07/23
+ * Created by Grant on 2020/07/27
  */
 @Entity
 @Table(name="bidding_user_province")
 public class BiddingUserProvince implements Serializable {
-    private static final long serialVersionUID = -7649579718321236513L;
+    private static final long serialVersionUID = -9065152108141454586L;
 
-    @Id
     private String id;
 
     private String userId;
 
-    private String provinceId;
+    private Integer provinceId;
 
     private String status;
 
@@ -37,10 +35,10 @@ public class BiddingUserProvince implements Serializable {
     public void setUserId(String userId) {
 		this.userId = userId;
 	}
-    public String getProvinceId() {
+    public Integer getProvinceId() {
 		return provinceId;
 	}
-    public void setProvinceId(String provinceId) {
+    public void setProvinceId(Integer provinceId) {
 		this.provinceId = provinceId;
 	}
     public String getStatus() {

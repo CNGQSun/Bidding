@@ -11,7 +11,7 @@ import java.util.List;
 
 /** 
  * <br/>
- * Created by Grant on 2020/07/23
+ * Created by Grant on 2020/07/27
  */
 @Service
 public class BiddingCityService {
@@ -23,7 +23,6 @@ public class BiddingCityService {
 	private IdWorker idWorker;
 
 	public void insert(BiddingCity biddingCity){
-		biddingCity.setId(idWorker.nextId() + "");
 		biddingCityMapper.insert(biddingCity);
 	}
 
@@ -31,7 +30,7 @@ public class BiddingCityService {
 		return biddingCityMapper.selectAll();
 	}
 
-	public BiddingCity findById(String id){
+	public BiddingCity findById(Integer id){
 		return biddingCityMapper.selectByPrimaryKey(id);
 	}
 
@@ -39,7 +38,7 @@ public class BiddingCityService {
 		biddingCityMapper.updateByPrimaryKey(biddingCity);
 	}
 
-	public void delete(String id) {
+	public void delete(Integer id) {
 		biddingCityMapper.deleteByPrimaryKey(id);
 	}
 

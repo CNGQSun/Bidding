@@ -11,7 +11,7 @@ import java.util.List;
 
 /** 
  * <br/>
- * Created by Grant on 2020/07/23
+ * Created by Grant on 2020/07/27
  */
 @Service
 public class BiddingProvinceService {
@@ -23,7 +23,6 @@ public class BiddingProvinceService {
 	private IdWorker idWorker;
 
 	public void insert(BiddingProvince biddingProvince){
-		biddingProvince.setId(idWorker.nextId() + "");
 		biddingProvinceMapper.insert(biddingProvince);
 	}
 
@@ -31,7 +30,7 @@ public class BiddingProvinceService {
 		return biddingProvinceMapper.selectAll();
 	}
 
-	public BiddingProvince findById(String id){
+	public BiddingProvince findById(Integer id){
 		return biddingProvinceMapper.selectByPrimaryKey(id);
 	}
 
@@ -39,7 +38,7 @@ public class BiddingProvinceService {
 		biddingProvinceMapper.updateByPrimaryKey(biddingProvince);
 	}
 
-	public void delete(String id) {
+	public void delete(Integer id) {
 		biddingProvinceMapper.deleteByPrimaryKey(id);
 	}
 

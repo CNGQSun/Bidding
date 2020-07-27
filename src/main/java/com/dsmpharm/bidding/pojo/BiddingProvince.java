@@ -7,28 +7,44 @@ import java.io.Serializable;
 
 /** 
  * <br/>
- * Created by Grant on 2020/07/23
+ * Created by Grant on 2020/07/27
  */
 @Entity
 @Table(name="bidding_province")
 public class BiddingProvince implements Serializable {
-    private static final long serialVersionUID = -7110555321663642854L;
+    private static final long serialVersionUID = -6981395758260057455L;
 
     @Id
-    private String id;
+    private Integer id;
 
-    private String name;
+    private String proName;
 
-    public String getId() {
+    private Integer proSort;
+
+    private String proRemark;
+
+    public Integer getId() {
 		return id;
 	}
-    public void setId(String id) {
+    public void setId(Integer id) {
 		this.id = id;
 	}
-    public String getName() {
-		return name;
+    public String getProName() {
+		return proName;
 	}
-    public void setName(String name) {
-		this.name = name;
+    public void setProName(String proName) {
+		this.proName = proName;
+	}
+    public Integer getProSort() {
+		return proSort;
+	}
+    public void setProSort(Integer proSort) {
+		this.proSort = proSort;
+	}
+    public String getProRemark() {
+		return proRemark;
+	}
+    public void setProRemark(String proRemark) {
+		this.proRemark = proRemark;
 	}
 }
