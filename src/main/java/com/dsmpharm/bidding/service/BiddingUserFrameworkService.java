@@ -45,16 +45,16 @@ public class BiddingUserFrameworkService {
      * @return
      */
     public Result selectAll(Map map, int currentPage, int pageSize) {
-        PageResult pageResult=null;
+        PageResult pageResult = null;
         String userId = map.get("userId").toString();
         String parentId = map.get("parentId").toString();
         String graParentId = map.get("graParentId").toString();
         try {
-            List<BiddingUserFramework> frameworkList = biddingUserFrameworkMapper.selectAllNoDel(userId,parentId,graParentId);
+            List<BiddingUserFramework> frameworkList = biddingUserFrameworkMapper.selectAllNoDel(userId, parentId, graParentId);
             List<BiddingUser> userList = null;
             List list = new ArrayList<>();
             PageHelper.startPage(currentPage, pageSize);
-            List<BiddingUserFramework> frameworks = biddingUserFrameworkMapper.selectAllNoDel(userId,parentId,graParentId);
+            List<BiddingUserFramework> frameworks = biddingUserFrameworkMapper.selectAllNoDel(userId, parentId, graParentId);
             for (BiddingUserFramework biddingUserFramework : frameworks) {
                 userList = new ArrayList<>();
                 BiddingUser biddingUser = biddingUserMapper.selectByPrimaryKey(biddingUserFramework.getUserId());
@@ -67,7 +67,7 @@ public class BiddingUserFrameworkService {
             }
             PageInfo pageInfo = new PageInfo<>(list);
             pageInfo.setTotal(frameworkList.size());
-            pageResult=new PageResult(pageInfo.getTotal(), frameworks);
+            pageResult = new PageResult(pageInfo.getTotal(), frameworks);
             return new Result(true, StatusCode.OK, "查询成功", pageResult);
         } catch (Exception e) {
             e.printStackTrace();
@@ -230,6 +230,7 @@ public class BiddingUserFrameworkService {
 
     /**
      * 根据id删除多个用户架构关系，delflag置为1
+     *
      * @param ids
      * @return
      */

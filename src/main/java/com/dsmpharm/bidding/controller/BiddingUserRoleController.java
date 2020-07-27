@@ -31,16 +31,16 @@ public class BiddingUserRoleController {
 		Result result =biddingUserRoleService.findByRole(role);
 		return result;
 	}
-	///**
-	// * 查询所有商务经理的详细信息
-	// * @return
-	// */
-	//@GetMapping(value = "/role/3")
-	//public Result find3ByRole(){
-	//	String role="3";
-	//	Result result =biddingUserRoleService.findByRole(role);
-	//	return result;
-	//}
+	/**
+	 * 查询所有商务经理的详细信息
+	 * @return
+	 */
+	@GetMapping(value = "/role/3")
+	public Result find3ByRole(){
+		String role="3";
+		Result result =biddingUserRoleService.findByRole(role);
+		return result;
+	}
 	///**
 	// * 查询所有大区经理的详细信息
 	// * @return

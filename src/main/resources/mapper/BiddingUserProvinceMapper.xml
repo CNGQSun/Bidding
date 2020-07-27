@@ -2,6 +2,26 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.dsmpharm.bidding.mapper.BiddingUserProvinceMapper">
-
-
+<!--根据Id查询用户省份信息-->
+    <select id="selectById" resultType="java.util.Map">
+        select bup.id,bup.status, bu.name userName,bp.pro_name proName
+        from bidding_user_province bup
+        left join bidding_user bu on bup.user_id = bu.id
+        left join bidding_province bp on bup.province_id = bp.id
+        where bup.id=#{id}
+    </select>
+<!--    分页、条件查询所有用户省份信息-->
+    <select id="selectList" resultType="java.util.Map">
+        select bup.id,bup.status, bu.name userName,bp.pro_name proName
+        from bidding_user_province bup
+        left join bidding_user bu on bup.user_id = bu.id
+        left join bidding_province bp on bup.province_id = bp.id
+        where bup.delflag='0'
+        <if test="proId !=null and  proId!='' ">
+            and bp.id= #{proId}
+        </if>
+        <if test="name !=null and name !='' ">
+            and bu.name like concat('%',#{name},'%')
+        </if>
+    </select>
 </mapper>

@@ -56,7 +56,7 @@ public class BiddingUserController {
 	}
 
 	/**
-	* 查询全部用户，带参数
+	* 分页、条件查询全部用户，带参数
 	*/
 	@GetMapping(value = "/list/{currentPage}/{pageSize}")
 	public Result findAll(@RequestBody Map map,@PathVariable int currentPage, @PathVariable int pageSize){

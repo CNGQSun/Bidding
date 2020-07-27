@@ -59,7 +59,7 @@ public class BiddingUserFrameworkController {
 	}
 
 	/**
-	* 查询全部未删除的用户架构关系
+	* 分页、条件查询全部未删除的用户架构关系
 	*/
 	@GetMapping(value = "/list/{currentPage}/{pageSize}")
 	public Result findAll(@RequestBody Map map,@PathVariable int currentPage, @PathVariable int pageSize){
@@ -84,26 +84,6 @@ public class BiddingUserFrameworkController {
 		Result result = biddingUserFrameworkService.deleteIds(ids);
 		return result;
 	}
-
-	///**
-	//* 更新
-	//*/
-	//@PutMapping(value = "/{id}")
-	//public Result update(@PathVariable String id, @RequestBody BiddingUserFramework biddingUserFramework) {
-	//	biddingUserFramework.setId(id);
-	//	biddingUserFrameworkService.updateById(biddingUserFramework);
-	//	return new Result<>(true, StatusCode.OK, "修改成功");
-	//}
-
-
-	///**
-	//* 删除
-	//*/
-	//@DeleteMapping(value = "/{id}")
-	//public Result deleteById(@PathVariable String id){
-	//	biddingUserFrameworkService.delete(id);
-	//	return new Result<>(true, StatusCode.OK, "删除成功");
-	//}
 
 	/**
 	* 条件查询，无分页

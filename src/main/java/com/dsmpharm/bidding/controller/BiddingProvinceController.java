@@ -21,6 +21,16 @@ public class BiddingProvinceController {
 	@Resource
 	private BiddingProvinceService biddingProvinceService;
 
+
+	/**
+	 * 查询全部省份信息
+	 */
+	@GetMapping
+	public Result findAll(){
+		Result result= biddingProvinceService.selectAllPro();
+		return result;
+	}
+
 	/**
 	* 添加
 	*/
@@ -30,14 +40,7 @@ public class BiddingProvinceController {
 		return new Result<>(true, StatusCode.OK, "保存成功");
 	}
 
-	/**
-	* 查询全部
-	*/
-	@GetMapping
-	public Result findAll(){
-		List<BiddingProvince> list = biddingProvinceService.selectAll();
-		return new Result<>(true, StatusCode.OK, "查询成功", list);
-	}
+
 
 	/**
 	* 根据ID查询

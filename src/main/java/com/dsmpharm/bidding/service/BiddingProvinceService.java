@@ -3,6 +3,8 @@ package com.dsmpharm.bidding.service;
 import com.dsmpharm.bidding.mapper.BiddingProvinceMapper;
 import com.dsmpharm.bidding.pojo.BiddingProvince;
 import com.dsmpharm.bidding.utils.IdWorker;
+import com.dsmpharm.bidding.utils.Result;
+import com.dsmpharm.bidding.utils.StatusCode;
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.stereotype.Service;
 
@@ -63,4 +65,18 @@ public class BiddingProvinceService {
         }
         return 0;
     }
+
+	/**
+	 * 查询全部省份信息
+	 * @return
+	 */
+	public Result selectAllPro() {
+		try {
+			List<BiddingProvince> biddingProvinces = biddingProvinceMapper.selectAll();
+			return 	new Result<>(true, StatusCode.OK, "查询成功", biddingProvinces);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return 	new Result<>(false, StatusCode.ERROR, "服务器异常");
+		}
+	}
 }
