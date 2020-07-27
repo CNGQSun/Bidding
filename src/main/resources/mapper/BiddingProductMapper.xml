@@ -4,4 +4,11 @@
 <mapper namespace="com.dsmpharm.bidding.mapper.BiddingProductMapper">
 
 
+    <select id="selectAllByNoDel" resultType="com.dsmpharm.bidding.pojo.BiddingProduct">
+        select * from bidding_product
+        where delflag='0'
+        <if test="name !=null and name !='' ">
+            and name like concat('%',#{name},'%')
+        </if>
+    </select>
 </mapper>

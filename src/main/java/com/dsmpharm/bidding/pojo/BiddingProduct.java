@@ -21,8 +21,6 @@ public class BiddingProduct implements Serializable {
 
     private String code;
 
-    private String provinceId;
-
     private String commonName;
 
     private String standards;
@@ -48,12 +46,6 @@ public class BiddingProduct implements Serializable {
 	}
     public void setCode(String code) {
 		this.code = code;
-	}
-    public String getProvinceId() {
-		return provinceId;
-	}
-    public void setProvinceId(String provinceId) {
-		this.provinceId = provinceId;
 	}
     public String getCommonName() {
 		return commonName;
