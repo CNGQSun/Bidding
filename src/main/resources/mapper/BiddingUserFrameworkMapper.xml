@@ -4,16 +4,31 @@
 <mapper namespace="com.dsmpharm.bidding.mapper.BiddingUserFrameworkMapper">
 
 <!--    查询所有未删除的架构关系-->
-    <select id="selectAllNoDel" resultType="com.dsmpharm.bidding.pojo.BiddingUserFramework">
-        select * from bidding_user_framework where delflag='0'
+    <select id="selectAllNoDel" resultType="java.util.Map">
+        select bu1.name graParentName,bu1.id graParentId,bu2.id parentId,
+        bu2.name parentName,bu3.name name,bu3.id userId,buf.id id,buf.status status
+        from bidding_user_framework buf
+        left join bidding_user bu1 on bu1.id=buf.gra_parent_id
+        left join bidding_user bu2 on bu2.id=buf.parent_id
+        left join bidding_user bu3 on bu3.id=buf.user_id
+        where buf.delflag='0' and buf.gra_parent_id != ''
         <if test="userId !=null and  userId!='' ">
-            and user_id= #{userId}
+            and buf.user_id= #{userId}
         </if>
         <if test="parentId !=null and  parentId!='' ">
-            and parent_id= #{parentId}
+            and buf.parent_id= #{parentId}
         </if>
         <if test="graParentId !=null and  graParentId!='' ">
-            and gra_parent_id= #{graParentId}
+            and buf.gra_parent_id= #{graParentId}
         </if>
+    </select>
+    <select id="selectById" resultType="java.util.Map">
+        select bu1.name graParentName,bu1.id graParentId,bu2.id parentId,
+        bu2.name parentName,bu3.name name,bu3.id userId,buf.id id,buf.status status
+        from bidding_user_framework buf
+        left join bidding_user bu1 on bu1.id=buf.gra_parent_id
+        left join bidding_user bu2 on bu2.id=buf.parent_id
+        left join bidding_user bu3 on bu3.id=buf.user_id
+        where buf.delflag='0' and buf.id=#{id}
     </select>
 </mapper>

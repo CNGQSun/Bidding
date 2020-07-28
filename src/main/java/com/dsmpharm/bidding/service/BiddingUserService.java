@@ -51,7 +51,6 @@ public class BiddingUserService {
      * @return
      */
     public Result selectAll(Map map, int currentPage, int pageSize) {
-        PageResult pageResult = null;
         try {
             String name = map.get("name").toString();
             String roleId = map.get("roleId").toString();
@@ -60,7 +59,7 @@ public class BiddingUserService {
             List<Map> users = biddingUserMapper.selectAllNoDel(name, roleId);
             PageInfo pageInfo = new PageInfo<>(users);
             pageInfo.setTotal(userList.size());
-            pageResult = new PageResult(pageInfo.getTotal(), users);
+            PageResult pageResult = new PageResult(pageInfo.getTotal(), users);
             return new Result<>(true, StatusCode.OK, "查询成功", pageResult);
         } catch (Exception e) {
             e.printStackTrace();
@@ -68,12 +67,48 @@ public class BiddingUserService {
         }
     }
 
-    public BiddingUser findById(String id) {
-        return biddingUserMapper.selectByPrimaryKey(id);
+    /**
+     * 根据ID查询用户详情
+     * @param id
+     * @return
+     */
+    public Result findById(String id) {
+        try {
+            Map map = biddingUserMapper.selectById(id);
+            if (map != null) {
+                return new Result<>(true, StatusCode.OK, "查询成功",map);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new Result<>(false, StatusCode.ERROR, "服务器错误");
+        }
+        return new Result<>(false, StatusCode.ERROR, "查询失败");
     }
 
-    public void updateById(BiddingUser biddingUser) {
-        biddingUserMapper.updateByPrimaryKey(biddingUser);
+    /**
+     * 根据id修改用户信息
+     * @param biddingUser
+     * @param role
+     * @return
+     */
+    public Result updateById(BiddingUser biddingUser, String role) {
+        try {
+            biddingUser.setStatus("0");
+            int i = biddingUserMapper.updateByPrimaryKeySelective(biddingUser);
+            BiddingUserRole biddingUserRole=new BiddingUserRole();
+            biddingUserRole.setUserId(biddingUser.getId());
+            biddingUserRole.setDelflag("0");
+            BiddingUserRole biddingUserRole1 = biddingUserRoleMapper.selectOne(biddingUserRole);
+            biddingUserRole1.setRoleId(role);
+            int i1 = biddingUserRoleMapper.updateByPrimaryKeySelective(biddingUserRole1);
+            if (i>0&&i1>0){
+                return new Result<>(true, StatusCode.OK, "修改成功");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new Result<>(false, StatusCode.ERROR, "服务器错误");
+        }
+        return new Result<>(false, StatusCode.ERROR, "修改失败");
     }
 
     public void delete(String id) {

@@ -3,9 +3,10 @@
 
 <mapper namespace="com.dsmpharm.bidding.mapper.BiddingUserMapper">
 
-<!--查询所有未删除的用户-->
+    <!--查询所有未删除的用户-->
     <select id="selectAllNoDel" resultType="java.util.Map">
-        select bu.id userId,bu.name,bu.email,bu.phone_number phoneNumber,bu.status,bu.delflag,bur.id,bur.role_id roleId,br.name roleName
+        select bu.id userId,bu.name,bu.email,bu.phone_number phoneNumber,bu.status,bu.delflag,bur.id,bur.role_id
+        roleId,br.name roleName
         from bidding_user bu
         left join bidding_user_role bur on bu.id = bur.user_id
         left join bidding_role br on bur.role_id = br.id
@@ -16,5 +17,12 @@
         <if test="name !=null and name !='' ">
             and bu.name like concat('%',#{name},'%')
         </if>
+    </select>
+    <select id="selectById" resultType="java.util.Map">
+        select bu.id userId,bu.name,bu.email,bu.phone_number phoneNumber,bu.status,bu.delflag,bur.id,bur.role_id roleId,br.name roleName
+        from bidding_user bu
+        left join bidding_user_role bur on bu.id = bur.user_id
+        left join bidding_role br on bur.role_id = br.id
+        where bu.delflag ='0' and bur.delflag='0' and bu.id=#{id}
     </select>
 </mapper>

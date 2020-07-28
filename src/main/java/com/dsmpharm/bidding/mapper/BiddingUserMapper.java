@@ -20,4 +20,6 @@ public interface BiddingUserMapper extends Mapper<BiddingUser> {
      * @return
      */
     List<Map> selectAllNoDel(@Param("name") String name,@Param("roleId") String roleId);
+
+    Map selectById(@Param("id") String id);
 }

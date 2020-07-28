@@ -12,7 +12,7 @@
     </select>
 <!--    分页、条件查询所有用户省份信息-->
     <select id="selectList" resultType="java.util.Map">
-        select bup.id,bup.status, bu.name userName,bp.pro_name proName
+        select bup.id,bup.status, bu.id userId,bu.name userName,bp.pro_name proName
         from bidding_user_province bup
         left join bidding_user bu on bup.user_id = bu.id
         left join bidding_province bp on bup.province_id = bp.id

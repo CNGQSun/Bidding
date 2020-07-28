@@ -103,6 +103,18 @@
             <version>2.8.0</version>
         </dependency>
         <!--        swagger相关依赖结束-->
+<!--excel相关依赖开始-->
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi</artifactId>
+            <version>4.0.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi-ooxml</artifactId>
+            <version>4.0.1</version>
+        </dependency>
+<!--excel相关依赖结束-->
     </dependencies>
 
     <build>

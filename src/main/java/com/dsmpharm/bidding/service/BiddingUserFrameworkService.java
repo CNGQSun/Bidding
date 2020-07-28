@@ -2,7 +2,6 @@ package com.dsmpharm.bidding.service;
 
 import com.dsmpharm.bidding.mapper.BiddingUserFrameworkMapper;
 import com.dsmpharm.bidding.mapper.BiddingUserMapper;
-import com.dsmpharm.bidding.pojo.BiddingUser;
 import com.dsmpharm.bidding.pojo.BiddingUserFramework;
 import com.dsmpharm.bidding.utils.IdWorker;
 import com.dsmpharm.bidding.utils.PageResult;
@@ -41,40 +40,28 @@ public class BiddingUserFrameworkService {
 
     /**
      * 查询全部未删除的用户架构关系
-     *
+     * @param map
+     * @param currentPage
+     * @param pageSize
      * @return
      */
     public Result selectAll(Map map, int currentPage, int pageSize) {
-        PageResult pageResult = null;
-        String userId = map.get("userId").toString();
-        String parentId = map.get("parentId").toString();
-        String graParentId = map.get("graParentId").toString();
         try {
-            List<BiddingUserFramework> frameworkList = biddingUserFrameworkMapper.selectAllNoDel(userId, parentId, graParentId);
-            List<BiddingUser> userList = null;
-            List list = new ArrayList<>();
+            String userId = map.get("userId").toString();
+            String parentId = map.get("parentId").toString();
+            String graParentId = map.get("graParentId").toString();
+            List<Map> frameworkList = biddingUserFrameworkMapper.selectAllNoDel(userId, parentId, graParentId);
             PageHelper.startPage(currentPage, pageSize);
-            List<BiddingUserFramework> frameworks = biddingUserFrameworkMapper.selectAllNoDel(userId, parentId, graParentId);
-            for (BiddingUserFramework biddingUserFramework : frameworks) {
-                userList = new ArrayList<>();
-                BiddingUser biddingUser = biddingUserMapper.selectByPrimaryKey(biddingUserFramework.getUserId());
-                BiddingUser biddingUser1 = biddingUserMapper.selectByPrimaryKey(biddingUserFramework.getParentId());
-                BiddingUser biddingUser2 = biddingUserMapper.selectByPrimaryKey(biddingUserFramework.getGraParentId());
-                userList.add(biddingUser);
-                userList.add(biddingUser1);
-                userList.add(biddingUser2);
-                list.add(userList);
-            }
-            PageInfo pageInfo = new PageInfo<>(list);
+            List<Map> frameworks = biddingUserFrameworkMapper.selectAllNoDel(userId, parentId, graParentId);
+            PageInfo pageInfo = new PageInfo<>(frameworks);
             pageInfo.setTotal(frameworkList.size());
-            pageResult = new PageResult(pageInfo.getTotal(), frameworks);
+            PageResult pageResult = new PageResult(pageInfo.getTotal(), frameworks);
             return new Result(true, StatusCode.OK, "查询成功", pageResult);
         } catch (Exception e) {
             e.printStackTrace();
             return new Result<>(false, StatusCode.ERROR, "服务器错误");
         }
     }
-
     /**
      * 根据ID查询用户架构信息及用户关系
      *
@@ -83,20 +70,15 @@ public class BiddingUserFrameworkService {
      */
     public Result findById(String id) {
         try {
-            BiddingUserFramework biddingUserFramework = biddingUserFrameworkMapper.selectByPrimaryKey(id);
-            List<BiddingUser> userList = new ArrayList();
-            BiddingUser biddingUser = biddingUserMapper.selectByPrimaryKey(biddingUserFramework.getUserId());
-            BiddingUser biddingUser1 = biddingUserMapper.selectByPrimaryKey(biddingUserFramework.getParentId());
-            BiddingUser biddingUser2 = biddingUserMapper.selectByPrimaryKey(biddingUserFramework.getGraParentId());
-            userList.add(biddingUser);
-            userList.add(biddingUser1);
-            userList.add(biddingUser2);
-            return new Result<>(true, StatusCode.OK, "查询成功", userList);
+            Map map = biddingUserFrameworkMapper.selectById(id);
+            if (map!=null){
+                return new Result<>(true, StatusCode.OK, "查询成功", map);
+            }
         } catch (Exception e) {
             e.printStackTrace();
             return new Result<>(false, StatusCode.ERROR, "服务器错误");
         }
-
+        return new Result<>(false, StatusCode.ERROR, "查询失败");
     }
 
     /**
