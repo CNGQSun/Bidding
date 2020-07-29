@@ -15,6 +15,7 @@ import java.util.Map;
  * <br/>
  * Created by Grant on 2020/07/23
  */
+@CrossOrigin
 @RestController
 @RequestMapping("/biddingUserFramework")
 public class BiddingUserFrameworkController {
@@ -86,7 +87,7 @@ public class BiddingUserFrameworkController {
 			@ApiImplicitParam(name = "map", value = "查询参数（userId（用户id）：String;parentId（用户上一级Id）:String;graParentId（再上一级Id）:String）", required = true, paramType = "body", dataType = "Map")
 	})
 
-	@GetMapping(value = "/list/{currentPage}/{pageSize}")
+	@PostMapping(value = "/list/{currentPage}/{pageSize}")
 	public Result findAll(@RequestBody Map map, @PathVariable int currentPage, @PathVariable int pageSize){
 		Result result = biddingUserFrameworkService.selectAll(map,currentPage,pageSize);
 		return result;

@@ -15,6 +15,7 @@ import java.util.Map;
  * <br/>
  * Created by Grant on 2020/07/23
  */
+@CrossOrigin
 @RestController
 @RequestMapping("/biddingUser")
 public class BiddingUserController {
@@ -79,12 +80,11 @@ public class BiddingUserController {
 			@ApiImplicitParam(name = "pageSize", value = "每页展示条数", required = true, paramType = "path", dataType = "int"),
 			@ApiImplicitParam(name = "map", value = "查询参数（name（用户名）：String;roleId（角色Id）:String）", required = true, paramType = "body", dataType = "Map")
 	})
-	@GetMapping(value = "/list/{currentPage}/{pageSize}")
+	@PostMapping(value = "/list/{currentPage}/{pageSize}")
 	public Result findAll(@RequestBody Map map,@PathVariable int currentPage, @PathVariable int pageSize){
 		Result result = biddingUserService.selectAll(map,currentPage,pageSize);
 		return result;
 	}
-
 	/**
 	 * 根据ID查询用户详情
 	 * @param id

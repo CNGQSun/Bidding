@@ -15,6 +15,7 @@ import java.util.Map;
  * <br/>
  * Created by Grant on 2020/07/23
  */
+@CrossOrigin
 @RestController
 @RequestMapping("/biddingProduct")
 public class BiddingProductController {
