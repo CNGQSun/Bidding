@@ -12,6 +12,7 @@
         left join bidding_user bu2 on bu2.id=buf.parent_id
         left join bidding_user bu3 on bu3.id=buf.user_id
         where buf.delflag='0' and buf.gra_parent_id != ''
+        and bu1.delflag='0' and bu2.delflag='0' and bu3.delflag='0'
         <if test="userId !=null and  userId!='' ">
             and buf.user_id= #{userId}
         </if>
@@ -29,6 +30,6 @@
         left join bidding_user bu1 on bu1.id=buf.gra_parent_id
         left join bidding_user bu2 on bu2.id=buf.parent_id
         left join bidding_user bu3 on bu3.id=buf.user_id
-        where buf.delflag='0' and buf.id=#{id}
+        where buf.delflag='0' and bu1.delflag='0' and bu2.delflag='0' and bu3.delflag='0' and buf.id=#{id}
     </select>
 </mapper>

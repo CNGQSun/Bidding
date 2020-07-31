@@ -3,6 +3,7 @@ package com.dsmpharm.bidding.controller;
 import com.dsmpharm.bidding.pojo.BiddingUser;
 import com.dsmpharm.bidding.service.BiddingUserService;
 import com.dsmpharm.bidding.utils.Result;
+import com.dsmpharm.bidding.utils.StatusCode;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
@@ -29,10 +30,14 @@ public class BiddingUserController {
 	 * @return
 	 */
 	@ApiOperation(value="添加用户 提交" )
-	@ApiImplicitParam(name = "map", value = "添加参数（name(姓名)：String;email(邮箱)：String;phoneNumber(电话):String;role(角色id):String）", required = true, paramType = "body", dataType = "Map")
-
+	@ApiImplicitParams({
+			@ApiImplicitParam(name = "name", value = "用户名", required = true, paramType = "query", dataType = "String"),
+			@ApiImplicitParam(name = "email", value = "邮箱", required = true, paramType = "query", dataType = "String"),
+			@ApiImplicitParam(name = "phoneNumber", value = "手机号", required = true, paramType = "query", dataType = "String"),
+			@ApiImplicitParam(name = "role", value = "角色Id", required = true, paramType = "query", dataType = "String"),
+	})
 	@PostMapping("/sub")
-	public Result insertSub(@RequestBody Map map){
+	public Result insertSub(@RequestParam Map map){
 		BiddingUser biddingUser=new BiddingUser();
 		String name = map.get("name").toString();
 		String email = map.get("email").toString();
@@ -51,10 +56,14 @@ public class BiddingUserController {
 	 * @return
 	 */
 	@ApiOperation(value="添加用户 保存" )
-	@ApiImplicitParam(name = "map", value = "添加参数（name(姓名)：String;email(邮箱)：String;phoneNumber(电话):String;role(角色id):String）", required = true, paramType = "body", dataType = "Map")
-
+	@ApiImplicitParams({
+			@ApiImplicitParam(name = "name", value = "用户名", required = true, paramType = "query", dataType = "String"),
+			@ApiImplicitParam(name = "email", value = "邮箱", required = true, paramType = "query", dataType = "String"),
+			@ApiImplicitParam(name = "phoneNumber", value = "手机号", required = true, paramType = "query", dataType = "String"),
+			@ApiImplicitParam(name = "role", value = "角色Id", required = true, paramType = "query", dataType = "String"),
+	})
 	@PostMapping("/pre")
-	public Result insertPre(@RequestBody Map map){
+	public Result insertPre(@RequestParam Map map){
 		BiddingUser biddingUser=new BiddingUser();
 		String name = map.get("name").toString();
 		String email = map.get("email").toString();
@@ -70,19 +79,18 @@ public class BiddingUserController {
 	/**
 	 * 分页、条件查询全部用户，带参数
 	 * @param map
-	 * @param currentPage
-	 * @param pageSize
 	 * @return
 	 */
 	@ApiOperation(value="分页、条件查询全部用户，带参数" )
 	@ApiImplicitParams({
-			@ApiImplicitParam(name = "currentPage", value = "当前页", required = true, paramType = "path", dataType = "int"),
-			@ApiImplicitParam(name = "pageSize", value = "每页展示条数", required = true, paramType = "path", dataType = "int"),
-			@ApiImplicitParam(name = "map", value = "查询参数（name（用户名）：String;roleId（角色Id）:String）", required = true, paramType = "body", dataType = "Map")
+			@ApiImplicitParam(name = "currentPage", value = "当前页", required = true, paramType = "query", dataType = "String"),
+			@ApiImplicitParam(name = "pageSize", value = "每页展示条数", required = true, paramType = "query", dataType = "String"),
+			@ApiImplicitParam(name = "name", value = "用户名", required = true, paramType = "query", dataType = "String"),
+			@ApiImplicitParam(name = "roleId", value = "角色Id", required = true, paramType = "query", dataType = "String"),
 	})
-	@PostMapping(value = "/list/{currentPage}/{pageSize}")
-	public Result findAll(@RequestBody Map map,@PathVariable int currentPage, @PathVariable int pageSize){
-		Result result = biddingUserService.selectAll(map,currentPage,pageSize);
+	@PostMapping(value = "/list")
+	public Result findAll(@RequestParam Map map){
+		Result result = biddingUserService.selectAll(map);
 		return result;
 	}
 	/**
@@ -91,28 +99,31 @@ public class BiddingUserController {
 	 * @return
 	 */
 	@ApiOperation(value="根据ID查询用户详情" )
-	@ApiImplicitParam(name = "id", value = "id作为拼接路径", required = true, paramType = "path", dataType = "String")
+	@ApiImplicitParam(name = "id", value = "用户id", required = true, paramType = "query", dataType = "String")
 
-	@GetMapping(value = "/{id}")
-	public Result findById(@PathVariable String id){
+	@GetMapping
+	public Result findById(@RequestParam String id){
 		Result result =  biddingUserService.findById(id);
 		return result;
 	}
 
 	/**
 	 * 根据id修改用户信息
-	 * @param id
 	 * @param map
 	 * @return
 	 */
 	@ApiOperation(value="根据id修改用户信息" )
 	@ApiImplicitParams({
-			@ApiImplicitParam(name = "id", value = "id作为拼接路径", required = true, paramType = "path", dataType = "String"),
-			@ApiImplicitParam(name = "map", value = "添加参数（name(姓名)：String;email(邮箱)：String;phoneNumber(电话):String;role(角色id):String）", required = true, paramType = "body", dataType = "Map")
+			@ApiImplicitParam(name = "id", value = "userId", required = true, paramType = "query", dataType = "String"),
+			@ApiImplicitParam(name = "name", value = "用户名", required = true, paramType = "query", dataType = "String"),
+			@ApiImplicitParam(name = "email", value = "邮箱", required = true, paramType = "query", dataType = "String"),
+			@ApiImplicitParam(name = "phoneNumber", value = "手机号", required = true, paramType = "query", dataType = "String"),
+			@ApiImplicitParam(name = "role", value = "角色Id", required = true, paramType = "query", dataType = "String"),
 	})
-	@PutMapping(value = "/{id}")
-	public Result update(@PathVariable String id, @RequestBody Map map) {
+	@PostMapping("/update")
+	public Result update(@RequestParam Map map) {
 		BiddingUser biddingUser=new BiddingUser();
+		String id = map.get("id").toString();
 		String name = map.get("name").toString();
 		String email = map.get("email").toString();
 		String phoneNumber = map.get("phoneNumber").toString();
@@ -125,15 +136,20 @@ public class BiddingUserController {
 		return result;
 	}
 
-	//
-	///**
-	//* 删除
-	//*/
-	//@DeleteMapping(value = "/{id}")
-	//public Result deleteById(@PathVariable String id){
-	//	biddingUserService.delete(id);
-	//	return new Result<>(true, StatusCode.OK, "删除成功");
-	//}
+
+
+	/**
+	 * 根据ID删除用户信息
+	 * @param id
+	 * @return
+	 */
+	@ApiOperation(value="根据ID删除用户信息" )
+	@ApiImplicitParam(name = "id", value = "用户ID", required = true, paramType = "query", dataType = "String")
+	@PostMapping("/del")
+	public Result deleteById(@RequestParam String id){
+		Result result=biddingUserService.deleteById(id);
+		return new Result<>(true, StatusCode.OK, "删除成功");
+	}
 	//
 	///**
 	//* 条件查询，无分页

@@ -1,6 +1,5 @@
 package com.dsmpharm.bidding.controller;
 
-import com.dsmpharm.bidding.pojo.BiddingUserFramework;
 import com.dsmpharm.bidding.service.BiddingUserFrameworkService;
 import com.dsmpharm.bidding.utils.Result;
 import io.swagger.annotations.ApiImplicitParam;
@@ -27,48 +26,61 @@ public class BiddingUserFrameworkController {
 	* 添加人员架构,点击提交
 	*/
 	@ApiOperation(value="添加人员架构,点击提交" )
-	@ApiImplicitParam(name = "biddingUserFramework", value = "人员架构实体（只需提供页面输入的参数）", required = true, paramType = "body", dataType = "BiddingUserFramework")
-
+	@ApiImplicitParams({
+			@ApiImplicitParam(name = "userId", value = "商务经理ID", required = true, paramType = "query", dataType = "String"),
+			@ApiImplicitParam(name = "parentId", value = "大区经理ID", required = true, paramType = "query", dataType = "String"),
+			@ApiImplicitParam(name = "graParentId", value = "商务统括ID", required = true, paramType = "query", dataType = "String"),
+	})
 	@PostMapping("/sub")
-	public Result insertSub(@RequestBody BiddingUserFramework biddingUserFramework){
-		Result result=biddingUserFrameworkService.insertFrameSub(biddingUserFramework);
+	public Result insertSub(@RequestParam Map map){
+		Result result=biddingUserFrameworkService.insertFrameSub(map);
 		return result ;
 	}
+
 	/**
 	 * 添加人员架构,点击保存
+	 * @param map
+	 * @return
 	 */
 	@ApiOperation(value="添加人员架构,点击保存" )
-	@ApiImplicitParam(name = "biddingUserFramework", value = "人员架构实体（只需提供页面输入的参数）", required = true, paramType = "body", dataType = "BiddingUserFramework")
-
+	@ApiImplicitParams({
+			@ApiImplicitParam(name = "userId", value = "商务经理ID", required = true, paramType = "query", dataType = "String"),
+			@ApiImplicitParam(name = "parentId", value = "大区经理ID", required = true, paramType = "query", dataType = "String"),
+			@ApiImplicitParam(name = "graParentId", value = "商务统括ID", required = true, paramType = "query", dataType = "String"),
+	})
 	@PostMapping("/pre")
-	public Result insertPre(@RequestBody BiddingUserFramework biddingUserFramework){
-		Result result=biddingUserFrameworkService.insertFramePre(biddingUserFramework);
+	public Result insertPre(@RequestParam Map map){
+		Result result=biddingUserFrameworkService.insertFramePre(map);
 		return result ;
 	}
 
 	/**
 	 * 对已保存的架构关系进行修改，并提交
+	 * @param map
+	 * @return
 	 */
 	@ApiOperation(value="对已保存的架构关系进行修改，并提交" )
 	@ApiImplicitParams({
-			@ApiImplicitParam(name = "id", value = "id作为拼接路径", required = true, paramType = "path", dataType = "String"),
-			@ApiImplicitParam(name = "biddingUserFramework", value = "人员架构实体（只需提供页面输入的参数）", required = true, paramType = "body", dataType = "BiddingUserFramework")
+			@ApiImplicitParam(name = "id", value = "UserFramework的ID", required = true, paramType = "query", dataType = "String"),
+			@ApiImplicitParam(name = "userId", value = "商务经理ID", required = true, paramType = "query", dataType = "String"),
+			@ApiImplicitParam(name = "parentId", value = "大区经理ID", required = true, paramType = "query", dataType = "String"),
+			@ApiImplicitParam(name = "graParentId", value = "商务统括ID", required = true, paramType = "query", dataType = "String"),
 	})
-	@PutMapping(value = "/sub/{id}")
-	public Result updateSub(@PathVariable String id, @RequestBody BiddingUserFramework biddingUserFramework) {
-		biddingUserFramework.setId(id);
-		Result result = biddingUserFrameworkService.updateById(biddingUserFramework);
+	@PostMapping("/update")
+	public Result updateSub(@RequestParam Map map) {
+		Result result = biddingUserFrameworkService.updateById(map);
 		return result;
 	}
 
 	/**
 	 * 根据ID查询用户架构关系及用户信息
+	 * @param id
+	 * @return
 	 */
 	@ApiOperation(value="根据ID查询用户架构关系及用户信息" )
-	@ApiImplicitParam(name = "id", value = "id作为拼接路径", required = true, paramType = "path", dataType = "String")
-
-	@GetMapping(value = "/{id}")
-	public Result findById(@PathVariable String id){
+	@ApiImplicitParam(name = "id", value = "UserFramework的ID", required = true, paramType = "query", dataType = "String")
+	@GetMapping
+	public Result findById(@RequestParam String id){
 		Result result=  biddingUserFrameworkService.findById(id);
 		return result;
 	}
@@ -76,42 +88,43 @@ public class BiddingUserFrameworkController {
 	/**
 	 * 分页、条件查询全部未删除的用户架构关系
 	 * @param map
-	 * @param currentPage
-	 * @param pageSize
 	 * @return
 	 */
 	@ApiOperation(value="分页、条件查询全部未删除的用户架构关系" )
 	@ApiImplicitParams({
-			@ApiImplicitParam(name = "currentPage", value = "当前页", required = true, paramType = "path", dataType = "int"),
-			@ApiImplicitParam(name = "pageSize", value = "每页展示条数", required = true, paramType = "path", dataType = "int"),
-			@ApiImplicitParam(name = "map", value = "查询参数（userId（用户id）：String;parentId（用户上一级Id）:String;graParentId（再上一级Id）:String）", required = true, paramType = "body", dataType = "Map")
+			@ApiImplicitParam(name = "currentPage", value = "当前页", required = true, paramType = "query", dataType = "String"),
+			@ApiImplicitParam(name = "pageSize", value = "每页展示条数", required = true, paramType = "query", dataType = "String"),
+			@ApiImplicitParam(name = "userId", value = "商务经理ID", required = true, paramType = "query", dataType = "String"),
+			@ApiImplicitParam(name = "parentId", value = "大区经理ID", required = true, paramType = "query", dataType = "String"),
+			@ApiImplicitParam(name = "graParentId", value = "商务统括ID", required = true, paramType = "query", dataType = "String"),
 	})
-
-	@PostMapping(value = "/list/{currentPage}/{pageSize}")
-	public Result findAll(@RequestBody Map map, @PathVariable int currentPage, @PathVariable int pageSize){
-		Result result = biddingUserFrameworkService.selectAll(map,currentPage,pageSize);
+	@PostMapping(value = "/list")
+	public Result findAll(@RequestParam Map map){
+		Result result = biddingUserFrameworkService.selectAll(map);
 		return result;
 	}
 
 	/**
 	 * 根据id删除单个用户架构关系
+	 * @param id
+	 * @return
 	 */
 	@ApiOperation(value="根据ID删除单个用户架构关系" )
-	@ApiImplicitParam(name = "id", value = "id作为拼接路径", required = true, paramType = "path", dataType = "String")
-
-	@DeleteMapping(value = "/{id}")
-	public Result deleteById(@PathVariable String id){
+	@ApiImplicitParam(name = "id", value = "UserFramework的ID", required = true, paramType = "query", dataType = "String")
+	@PostMapping("/del")
+	public Result deleteById(@RequestParam String id){
 		Result result = biddingUserFrameworkService.delete(id);
 		return result;
 	}
 
 	/**
 	 * 根据id删除多个用户架构关系
+	 * @param ids
+	 * @return
 	 */
 	@ApiOperation(value="根据IDS批量删除用户架构关系" )
 	@ApiImplicitParam(name = "ids", value = "ids为id组成的字符串,','分割,例：1,2,3", required = true, paramType = "query", dataType = "String")
-
-	@DeleteMapping()
+	@PostMapping("/del/batch")
 	public Result deleteByIds(@RequestParam(value = "ids") String ids){
 		Result result = biddingUserFrameworkService.deleteIds(ids);
 		return result;

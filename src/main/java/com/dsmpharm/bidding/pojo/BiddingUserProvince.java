@@ -19,7 +19,7 @@ public class BiddingUserProvince implements Serializable {
 
     private String userId;
 
-    private Integer provinceId;
+    private Integer proId;
 
     private String status;
 
@@ -37,13 +37,13 @@ public class BiddingUserProvince implements Serializable {
     public void setUserId(String userId) {
 		this.userId = userId;
 	}
-    public Integer getProvinceId() {
-		return provinceId;
+	public Integer getProId() {
+		return proId;
 	}
-    public void setProvinceId(Integer provinceId) {
-		this.provinceId = provinceId;
+	public void setProId(Integer proId) {
+		this.proId = proId;
 	}
-    public String getStatus() {
+	public String getStatus() {
 		return status;
 	}
     public void setStatus(String status) {

@@ -1,6 +1,5 @@
 package com.dsmpharm.bidding.controller;
 
-import com.dsmpharm.bidding.pojo.BiddingProduct;
 import com.dsmpharm.bidding.service.BiddingProductService;
 import com.dsmpharm.bidding.utils.Result;
 import io.swagger.annotations.ApiImplicitParam;
@@ -25,29 +24,37 @@ public class BiddingProductController {
 
 	/**
 	 * 添加产品 提交
-	 * @param biddingProduct
+	 * @param map
 	 * @return
 	 */
 	@ApiOperation(value="添加产品 提交" )
-	@ApiImplicitParam(name = "biddingProduct", value = "产品实体（只需提供页面输入的参数）", required = true, paramType = "body", dataType = "BiddingProduct")
-
+	@ApiImplicitParams({
+			@ApiImplicitParam(name = "name", value = "产品名称", required = true, paramType = "query", dataType = "String"),
+			@ApiImplicitParam(name = "code", value = "产品code", required = true, paramType = "query", dataType = "String"),
+			@ApiImplicitParam(name = "commonName", value = "通用名", required = true, paramType = "query", dataType = "String"),
+			@ApiImplicitParam(name = "standards", value = "规格", required = true, paramType = "query", dataType = "String"),
+	})
 	@PostMapping("/sub")
-	public Result insertSub(@RequestBody BiddingProduct biddingProduct){
-		Result result=biddingProductService.insertSub(biddingProduct);
+	public Result insertSub(@RequestParam Map map){
+		Result result=biddingProductService.insertSub(map);
 		return result;
 	}
 
 	/**
 	 * 添加产品 保存
-	 * @param biddingProduct
+	 * @param map
 	 * @return
 	 */
 	@ApiOperation(value="添加产品 保存" )
-	@ApiImplicitParam(name = "biddingProduct", value = "产品实体（只需提供页面输入的参数）", required = true, paramType = "body", dataType = "BiddingProduct")
-
+	@ApiImplicitParams({
+			@ApiImplicitParam(name = "name", value = "产品名称", required = true, paramType = "query", dataType = "String"),
+			@ApiImplicitParam(name = "code", value = "产品code", required = true, paramType = "query", dataType = "String"),
+			@ApiImplicitParam(name = "commonName", value = "通用名", required = true, paramType = "query", dataType = "String"),
+			@ApiImplicitParam(name = "standards", value = "规格", required = true, paramType = "query", dataType = "String"),
+	})
 	@PostMapping("/pre")
-	public Result insertPro(@RequestBody BiddingProduct biddingProduct){
-		Result result=biddingProductService.insertPro(biddingProduct);
+	public Result insertPro(@RequestParam Map map){
+		Result result=biddingProductService.insertPro(map);
 		return result;
 	}
 
@@ -57,10 +64,9 @@ public class BiddingProductController {
 	 * @return
 	 */
 	@ApiOperation(value="根据ID查询产品信息" )
-	@ApiImplicitParam(name = "id", value = "id作为拼接路径", required = true, paramType = "path", dataType = "String")
-
-	@GetMapping(value = "/{id}")
-	public Result findById(@PathVariable String id){
+	@ApiImplicitParam(name = "id", value = "产品ID", required = true, paramType = "query", dataType = "String")
+	@GetMapping
+	public Result findById(@RequestParam String id){
 		Result result =biddingProductService.findById(id);
 		return result;
 	}
@@ -71,10 +77,10 @@ public class BiddingProductController {
 	 * @return
 	 */
 	@ApiOperation(value="根据ID删除产品信息" )
-	@ApiImplicitParam(name = "id", value = "id作为拼接路径", required = true, paramType = "path", dataType = "String")
+	@ApiImplicitParam(name = "id", value = "产品ID", required = true, paramType = "query", dataType = "String")
 
-	@DeleteMapping(value = "/{id}")
-	public Result deleteById(@PathVariable String id){
+	@PostMapping("/del")
+	public Result deleteById(@RequestParam String id){
 		Result result =biddingProductService.delete(id);
 		return result;
 	}
@@ -85,9 +91,9 @@ public class BiddingProductController {
 	 * @return
 	 */
 	@ApiOperation(value="根据IDS批量删除产品信息" )
-	@ApiImplicitParam(name = "ids", value = "ids为id组成的字符串,','分割,例：1,2,3", required = true, paramType = "query", dataType = "String")
+	@ApiImplicitParam(name = "ids", value = "ids为产品id组成的字符串,','分割,例：1,2,3", required = true, paramType = "query", dataType = "String")
 
-	@DeleteMapping
+	@PostMapping("/del/batch")
 	public Result deleteByIds(@RequestParam(value = "ids") String ids){
 		Result result =biddingProductService.deleteIds(ids);
 		return result;
@@ -95,17 +101,20 @@ public class BiddingProductController {
 
 	/**
 	 * 根据ID更新产品信息
-	 * @param id
-	 * @param biddingProduct
+	 * @param map
 	 * @return
 	 */
 	@ApiOperation(value="根据ID更新产品信息" )
-	@ApiImplicitParam(name = "id", value = "id作为拼接路径", required = true, paramType = "path", dataType = "String")
-
-	@PutMapping(value = "/{id}")
-	public Result update(@PathVariable String id, @RequestBody BiddingProduct biddingProduct) {
-		biddingProduct.setId(id);
-		Result result =biddingProductService.updateById(biddingProduct);
+	@ApiImplicitParams({
+			@ApiImplicitParam(name = "id", value = "产品ID", required = true, paramType = "query", dataType = "String"),
+			@ApiImplicitParam(name = "name", value = "产品名称", required = true, paramType = "query", dataType = "String"),
+			@ApiImplicitParam(name = "code", value = "产品code", required = true, paramType = "query", dataType = "String"),
+			@ApiImplicitParam(name = "commonName", value = "通用名", required = true, paramType = "query", dataType = "String"),
+			@ApiImplicitParam(name = "standards", value = "规格", required = true, paramType = "query", dataType = "String"),
+	})
+	@PostMapping("/update")
+	public Result update(@RequestParam Map map) {
+		Result result =biddingProductService.updateById(map);
 		return result;
 	}
 
@@ -114,15 +123,13 @@ public class BiddingProductController {
 	 */
 	@ApiOperation(value="分页、条件查询全部未删除产品信息" )
 	@ApiImplicitParams({
-			@ApiImplicitParam(name = "currentPage", value = "当前页", required = true, paramType = "path", dataType = "int"),
-			@ApiImplicitParam(name = "pageSize", value = "每页展示条数", required = true, paramType = "path", dataType = "int"),
-			@ApiImplicitParam(name = "map", value = "查询参数（name：String）", required = true, paramType = "body", dataType = "Map")
+			@ApiImplicitParam(name = "currentPage", value = "当前页", required = true, paramType = "query", dataType = "String"),
+			@ApiImplicitParam(name = "pageSize", value = "每页展示条数", required = true, paramType = "query", dataType = "String"),
+			@ApiImplicitParam(name = "name", value = "产品名", required = true, paramType = "query", dataType = "String"),
 	})
-
-
-	@PostMapping(value = "/list/{currentPage}/{pageSize}")
-	public Result findSearch(@RequestBody Map map, @PathVariable int currentPage, @PathVariable int pageSize) {
-		Result result = biddingProductService.list(map, currentPage, pageSize);
+	@PostMapping(value = "/list")
+	public Result findSearch(@RequestParam Map map) {
+		Result result = biddingProductService.list(map);
 		return result;
 	}
 

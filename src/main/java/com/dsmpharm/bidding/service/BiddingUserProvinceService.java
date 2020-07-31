@@ -29,11 +29,15 @@ public class BiddingUserProvinceService {
 
     /**
      * 添加用户省份，点击提交
-     *
-     * @param biddingUserProvince
+     * @param map
      * @return
      */
-    public Result insertSub(BiddingUserProvince biddingUserProvince) {
+    public Result insertSub(Map map) {
+        String userId = map.get("userId").toString();
+        Integer proId = Integer.valueOf(map.get("proId").toString());
+        BiddingUserProvince biddingUserProvince=new BiddingUserProvince();
+        biddingUserProvince.setUserId(userId);
+        biddingUserProvince.setProId(proId);
         try {
             biddingUserProvince.setDelflag("0");
             int i = biddingUserProvinceMapper.selectCount(biddingUserProvince);
@@ -56,10 +60,15 @@ public class BiddingUserProvinceService {
     /**
      * 添加用户省份，点击保存
      *
-     * @param biddingUserProvince
+     * @param map
      * @return
      */
-    public Result insertPro(BiddingUserProvince biddingUserProvince) {
+    public Result insertPro(Map map) {
+        String userId = map.get("userId").toString();
+        Integer proId = Integer.valueOf(map.get("proId").toString());
+        BiddingUserProvince biddingUserProvince=new BiddingUserProvince();
+        biddingUserProvince.setUserId(userId);
+        biddingUserProvince.setProId(proId);
         try {
             biddingUserProvince.setDelflag("0");
             int i = biddingUserProvinceMapper.selectCount(biddingUserProvince);
@@ -101,10 +110,17 @@ public class BiddingUserProvinceService {
 
 	/**
 	 * 根据id修改用户省份信息
-	 * @param biddingUserProvince
+	 * @param map
 	 * @return
 	 */
-	public Result updateById(BiddingUserProvince biddingUserProvince) {
+	public Result updateById(Map map) {
+        String id = map.get("id").toString();
+        String userId = map.get("userId").toString();
+        Integer proId = Integer.valueOf(map.get("proId").toString());
+        BiddingUserProvince biddingUserProvince=new BiddingUserProvince();
+        biddingUserProvince.setId(id);
+        biddingUserProvince.setUserId(userId);
+        biddingUserProvince.setProId(proId);
 		try {
             BiddingUserProvince biddingUserProvince1 = biddingUserProvinceMapper.selectByPrimaryKey(biddingUserProvince.getId());
             if (biddingUserProvince1==null||(biddingUserProvince1.getDelflag()).equals("1")) {
@@ -133,12 +149,12 @@ public class BiddingUserProvinceService {
     /**
      * 分页、条件查询所有用户省份信息
      * @param map
-     * @param currentPage
-     * @param pageSize
      * @return
      */
-    public Result list(Map map, int currentPage, int pageSize) {
+    public Result list(Map map) {
         try {
+            Integer currentPage = Integer.valueOf(map.get("currentPage").toString());
+            Integer pageSize = Integer.valueOf(map.get("pageSize").toString());
             String name = map.get("name").toString();
             String proId = map.get("proId").toString();
             List<Map> list=biddingUserProvinceMapper.selectList(name,proId);

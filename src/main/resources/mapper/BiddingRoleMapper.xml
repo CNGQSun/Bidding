@@ -4,4 +4,8 @@
 <mapper namespace="com.dsmpharm.bidding.mapper.BiddingRoleMapper">
 
 
+    <select id="selectAllNoDel" resultType="com.dsmpharm.bidding.pojo.BiddingRole">
+        select * from bidding_role
+        where delflag='0'
+    </select>
 </mapper>

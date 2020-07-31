@@ -3,6 +3,8 @@ package com.dsmpharm.bidding.service;
 import com.dsmpharm.bidding.mapper.BiddingRoleMapper;
 import com.dsmpharm.bidding.pojo.BiddingRole;
 import com.dsmpharm.bidding.utils.IdWorker;
+import com.dsmpharm.bidding.utils.Result;
+import com.dsmpharm.bidding.utils.StatusCode;
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.stereotype.Service;
 
@@ -27,8 +29,18 @@ public class BiddingRoleService {
 		biddingRoleMapper.insert(biddingRole);
 	}
 
-	public List<BiddingRole> selectAll() {
-		return biddingRoleMapper.selectAll();
+	public Result selectAll() {
+		List<BiddingRole> biddingRoles= null;
+		try {
+			biddingRoles = biddingRoleMapper.selectAllNoDel();
+			if (biddingRoles!=null){
+				return new Result<>(true, StatusCode.OK, "查询成功", biddingRoles);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new Result<>(true, StatusCode.ERROR, "服务器错误");
+		}
+		return new Result<>(true, StatusCode.ERROR, "查询失败");
 	}
 
 	public BiddingRole findById(String id){

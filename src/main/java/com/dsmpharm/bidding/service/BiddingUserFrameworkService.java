@@ -41,12 +41,12 @@ public class BiddingUserFrameworkService {
     /**
      * 查询全部未删除的用户架构关系
      * @param map
-     * @param currentPage
-     * @param pageSize
      * @return
      */
-    public Result selectAll(Map map, int currentPage, int pageSize) {
+    public Result selectAll(Map map) {
         try {
+            Integer currentPage = Integer.valueOf(map.get("currentPage").toString());
+            Integer pageSize = Integer.valueOf(map.get("pageSize").toString());
             String userId = map.get("userId").toString();
             String parentId = map.get("parentId").toString();
             String graParentId = map.get("graParentId").toString();
@@ -87,9 +87,18 @@ public class BiddingUserFrameworkService {
      * @param biddingUserFramework
      * @return
      */
-    public Result updateById(BiddingUserFramework biddingUserFramework) {
+    public Result updateById(Map map) {
+        String id = map.get("id").toString();
+        String userId = map.get("userId").toString();
+        String parentId = map.get("parentId").toString();
+        String graParentId = map.get("graParentId").toString();
+        BiddingUserFramework biddingUserFramework=new BiddingUserFramework();
         int i = 0;
         try {
+            biddingUserFramework.setId(id);
+            biddingUserFramework.setUserId(userId);
+            biddingUserFramework.setParentId(parentId);
+            biddingUserFramework.setGraParentId(graParentId);
             biddingUserFramework.setStatus("0");
             BiddingUserFramework biddingUserFramework1 = new BiddingUserFramework();
             biddingUserFramework1.setStatus("0");
@@ -158,13 +167,19 @@ public class BiddingUserFrameworkService {
 
     /**
      * 提交用户架构关系
-     *
-     * @param biddingUserFramework
+     * @param map
      * @return
      */
-    public Result insertFrameSub(BiddingUserFramework biddingUserFramework) {
+    public Result insertFrameSub(Map map) {
+        String userId = map.get("userId").toString();
+        String parentId = map.get("parentId").toString();
+        String graParentId = map.get("graParentId").toString();
+        BiddingUserFramework biddingUserFramework=new BiddingUserFramework();
         int i = 0;
         try {
+            biddingUserFramework.setUserId(userId);
+            biddingUserFramework.setParentId(parentId);
+            biddingUserFramework.setGraParentId(graParentId);
             biddingUserFramework.setDelflag("0");
             biddingUserFramework.setStatus("0");
             int i1 = biddingUserFrameworkMapper.selectCount(biddingUserFramework);
@@ -185,13 +200,19 @@ public class BiddingUserFrameworkService {
 
     /**
      * 保存用户架构关系
-     *
-     * @param biddingUserFramework
+     * @param map
      * @return
      */
-    public Result insertFramePre(BiddingUserFramework biddingUserFramework) {
+    public Result insertFramePre(Map map) {
+        String userId = map.get("userId").toString();
+        String parentId = map.get("parentId").toString();
+        String graParentId = map.get("graParentId").toString();
+        BiddingUserFramework biddingUserFramework=new BiddingUserFramework();
         int i = 0;
         try {
+            biddingUserFramework.setUserId(userId);
+            biddingUserFramework.setParentId(parentId);
+            biddingUserFramework.setGraParentId(graParentId);
             biddingUserFramework.setDelflag("0");
             biddingUserFramework.setStatus("1");
             int i1 = biddingUserFrameworkMapper.selectCount(biddingUserFramework);

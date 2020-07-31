@@ -1,7 +1,10 @@
 package com.dsmpharm.bidding.controller;
 
 import com.dsmpharm.bidding.service.BiddingRoleService;
+import com.dsmpharm.bidding.utils.Result;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -30,14 +33,15 @@ public class BiddingRoleController {
 	//	return new Result<>(true, StatusCode.OK, "保存成功");
 	//}
 	//
-	///**
-	//* 查询全部
-	//*/
-	//@GetMapping
-	//public Result findAll(){
-	//	List<BiddingRole> list = biddingRoleService.selectAll();
-	//	return new Result<>(true, StatusCode.OK, "查询成功", list);
-	//}
+	/**
+	* 查询全部
+	*/
+	@ApiOperation(value="查询所有角色名称" )
+	@GetMapping
+	public Result findAll(){
+		Result result = biddingRoleService.selectAll();
+		return result;
+	}
 	//
 	///**
 	//* 根据ID查询

@@ -29,11 +29,19 @@ public class BiddingProductService {
 
     /**
      * 添加产品 提交
-     *
-     * @param biddingProduct
+     * @param map
      * @return
      */
-    public Result insertSub(BiddingProduct biddingProduct) {
+    public Result insertSub(Map map) {
+        String name =map.get("name").toString();
+        String code =map.get("code").toString();
+        String commonName =map.get("commonName").toString();
+        String standards =map.get("standards").toString();
+        BiddingProduct biddingProduct=new BiddingProduct();
+        biddingProduct.setCode(code);
+        biddingProduct.setName(name);
+        biddingProduct.setCommonName(commonName);
+        biddingProduct.setStandards(standards);
         try {
             biddingProduct.setDelflag("0");
             int i = biddingProductMapper.selectCount(biddingProduct);
@@ -75,11 +83,21 @@ public class BiddingProductService {
 
     /**
      * 根据ID更新产品信息
-     *
-     * @param biddingProduct
+     * @param map
      * @return
      */
-    public Result updateById(BiddingProduct biddingProduct) {
+    public Result updateById(Map map) {
+        String id =map.get("id").toString();
+        String name =map.get("name").toString();
+        String code =map.get("code").toString();
+        String commonName =map.get("commonName").toString();
+        String standards =map.get("standards").toString();
+        BiddingProduct biddingProduct=new BiddingProduct();
+        biddingProduct.setId(id);
+        biddingProduct.setCode(code);
+        biddingProduct.setName(name);
+        biddingProduct.setCommonName(commonName);
+        biddingProduct.setStandards(standards);
         try {
             BiddingProduct biddingProduct1 = biddingProductMapper.selectByPrimaryKey(biddingProduct.getId());
             if (biddingProduct1 == null || (biddingProduct1.getDelflag().equals("1"))) {
@@ -129,8 +147,10 @@ public class BiddingProductService {
         return biddingProductMapper.select(biddingProduct);
     }
 
-    public Result list(Map map, int currentPage, int pageSize) {
+    public Result list(Map map) {
         try {
+            Integer currentPage = Integer.valueOf(map.get("currentPage").toString());
+            Integer pageSize = Integer.valueOf(map.get("pageSize").toString());
             String name = map.get("name").toString();
             List<BiddingProduct> productList = biddingProductMapper.selectAllByNoDel(name);
             PageHelper.startPage(currentPage, pageSize);
@@ -158,11 +178,19 @@ public class BiddingProductService {
 
     /**
      * 添加产品 保存
-     *
-     * @param biddingProduct
+     * @param map
      * @return
      */
-    public Result insertPro(BiddingProduct biddingProduct) {
+    public Result insertPro(Map map) {
+        String name =map.get("name").toString();
+        String code =map.get("code").toString();
+        String commonName =map.get("commonName").toString();
+        String standards =map.get("standards").toString();
+        BiddingProduct biddingProduct=new BiddingProduct();
+        biddingProduct.setCode(code);
+        biddingProduct.setName(name);
+        biddingProduct.setCommonName(commonName);
+        biddingProduct.setStandards(standards);
         try {
             biddingProduct.setDelflag("0");
             int i = biddingProductMapper.selectCount(biddingProduct);

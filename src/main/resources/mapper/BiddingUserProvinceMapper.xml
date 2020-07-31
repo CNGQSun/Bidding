@@ -7,7 +7,7 @@
         select bup.id,bup.status, bu.name userName,bp.pro_name proName
         from bidding_user_province bup
         left join bidding_user bu on bup.user_id = bu.id
-        left join bidding_province bp on bup.province_id = bp.id
+        left join bidding_province bp on bup.pro_id = bp.id
         where bup.id=#{id}
     </select>
 <!--    分页、条件查询所有用户省份信息-->
@@ -15,8 +15,8 @@
         select bup.id,bup.status, bu.id userId,bu.name userName,bp.pro_name proName
         from bidding_user_province bup
         left join bidding_user bu on bup.user_id = bu.id
-        left join bidding_province bp on bup.province_id = bp.id
-        where bup.delflag='0'
+        left join bidding_province bp on bup.pro_id = bp.id
+        where bup.delflag='0' and bu.delflag='0'
         <if test="proId !=null and  proId!='' ">
             and bp.id= #{proId}
         </if>

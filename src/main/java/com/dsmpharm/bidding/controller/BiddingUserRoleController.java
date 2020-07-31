@@ -26,25 +26,24 @@ public class BiddingUserRoleController {
 	 * @return
 	 */
 	@ApiOperation(value="根据角色去查询用户的详细信息")
-	@ApiImplicitParam(name = "role", value = "role作为拼接路径", required = true, paramType = "path", dataType = "String")
-
-	@GetMapping(value = "/role/{role}")
-	public Result findByRole(@PathVariable String role){
-		Result result =biddingUserRoleService.findByRole(role);
+	@ApiImplicitParam(name = "roleId", value = "角色ID", required = true, paramType = "query", dataType = "String")
+	@GetMapping(value = "/role")
+	public Result findByRole(@RequestParam String roleId){
+		Result result =biddingUserRoleService.findByRole(roleId);
 		return result;
 	}
 	/**
 	 * 查询所有商务经理的详细信息
 	 * @return
 	 */
-	@ApiOperation(value="查询所有商务经理的详细信息")
+	@ApiOperation(value="查询所有商务经理的详细信息（用户省份中姓名下拉框）")
 	@GetMapping(value = "/role/3")
 	public Result find3ByRole(){
 		String role="3";
 		Result result =biddingUserRoleService.findByRole(role);
 		return result;
 	}
-	///**
+	/////**
 	// * 查询所有大区经理的详细信息
 	// * @return
 	// */

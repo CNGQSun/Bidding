@@ -44,14 +44,13 @@ public class BiddingUserService {
 
     /**
      * 查询所有未删除的用户
-     *
      * @param map
-     * @param currentPage
-     * @param pageSize
      * @return
      */
-    public Result selectAll(Map map, int currentPage, int pageSize) {
+    public Result selectAll(Map map) {
         try {
+            Integer currentPage = Integer.valueOf(map.get("currentPage").toString());
+            Integer pageSize = Integer.valueOf(map.get("pageSize").toString());
             String name = map.get("name").toString();
             String roleId = map.get("roleId").toString();
             List<Map> userList = biddingUserMapper.selectAllNoDel(name, roleId);
@@ -145,12 +144,18 @@ public class BiddingUserService {
      * @return
      */
     public Result insertUserSub(BiddingUser biddingUser, String role) {
-        biddingUser.setId(idWorker.nextId() + "");
+
         biddingUser.setStatus("0");
         biddingUser.setDelflag("0");
         int insertUser = 0;
         int insertRole = 0;
         try {
+            int i = biddingUserMapper.selectCount(biddingUser);
+            if (i>0){
+                return new Result<>(false, StatusCode.ERROR, "该用户已存在");
+            }
+            biddingUser.setId(idWorker.nextId() + "");
+            biddingUser.setDept("市场准入及商务部");
             insertUser = biddingUserMapper.insert(biddingUser);
             BiddingUserRole biddingUserRole = new BiddingUserRole();
             biddingUserRole.setId(idWorker.nextId() + "");
@@ -179,6 +184,7 @@ public class BiddingUserService {
         biddingUser.setId(idWorker.nextId() + "");
         biddingUser.setStatus("1");
         biddingUser.setDelflag("0");
+        biddingUser.setDept("市场准入及商务部");
         int insertUser = 0;
         int insertRole = 0;
         try {
@@ -197,5 +203,26 @@ public class BiddingUserService {
             return new Result<>(true, StatusCode.OK, "已保存");
         }
         return new Result<>(false, StatusCode.ERROR, "保存失败");
+    }
+
+    public Result deleteById(String id) {
+        try {
+            BiddingUser biddingUser=new BiddingUser();
+            biddingUser.setId(id);
+            biddingUser.setDelflag("0");
+            int i = biddingUserMapper.selectCount(biddingUser);
+            if (i<=0){
+                return new Result<>(false, StatusCode.ERROR, "该记录不存在");
+            }
+            biddingUser.setDelflag("1");
+            int i1 = biddingUserMapper.updateByPrimaryKeySelective(biddingUser);
+            if (i1>0){
+                return new Result<>(true, StatusCode.OK, "删除成功");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new Result<>(false, StatusCode.ERROR, "服务器错误");
+        }
+        return new Result<>(false, StatusCode.ERROR, "删除失败");
     }
 }
