@@ -5,6 +5,8 @@ import com.dsmpharm.bidding.utils.Result;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -18,6 +20,8 @@ import java.util.Map;
 @RestController
 @RequestMapping("/biddingUserFramework")
 public class BiddingUserFrameworkController {
+
+	private static Logger log = LoggerFactory.getLogger(BiddingUserFrameworkController.class);
 
 	@Resource
 	private BiddingUserFrameworkService biddingUserFrameworkService;

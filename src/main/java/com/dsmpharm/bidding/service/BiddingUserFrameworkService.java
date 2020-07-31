@@ -10,6 +10,8 @@ import com.dsmpharm.bidding.utils.StatusCode;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.apache.ibatis.session.RowBounds;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -23,6 +25,7 @@ import java.util.Map;
  */
 @Service
 public class BiddingUserFrameworkService {
+    private static Logger log = LoggerFactory.getLogger(BiddingUserFrameworkService.class);
 
     @Resource
     private BiddingUserFrameworkMapper biddingUserFrameworkMapper;
@@ -56,6 +59,7 @@ public class BiddingUserFrameworkService {
             PageInfo pageInfo = new PageInfo<>(frameworks);
             pageInfo.setTotal(frameworkList.size());
             PageResult pageResult = new PageResult(pageInfo.getTotal(), frameworks);
+            log.info("用户架构列表获取成功！");
             return new Result(true, StatusCode.OK, "查询成功", pageResult);
         } catch (Exception e) {
             e.printStackTrace();
@@ -84,7 +88,7 @@ public class BiddingUserFrameworkService {
     /**
      * 根据id修改架构关系
      *
-     * @param biddingUserFramework
+     * @param map
      * @return
      */
     public Result updateById(Map map) {
