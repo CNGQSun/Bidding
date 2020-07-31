@@ -5,9 +5,15 @@ import com.dsmpharm.bidding.utils.Result;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
+import java.io.File;
+import java.io.IOException;
 import java.util.Map;
 
 /** 
@@ -19,6 +25,11 @@ import java.util.Map;
 @RequestMapping("/biddingProduct")
 public class BiddingProductController {
 
+	@Value("${upload.localtion.product}")
+	private String uploadLocation;//上传文件保存的本地目录，使用@Value获取全局配置文件中配置的属性值
+
+
+	private static Logger log = LoggerFactory.getLogger(BiddingProductController.class);
 	@Resource
 	private BiddingProductService biddingProductService;
 
@@ -131,6 +142,24 @@ public class BiddingProductController {
 	public Result findSearch(@RequestParam Map map) {
 		Result result = biddingProductService.list(map);
 		return result;
+	}
+	@PostMapping("/upload")
+	public String upload(@RequestParam("file") MultipartFile file) {
+
+		if (file.isEmpty()) {
+			return "上传失败，请选择文件";
+		}
+
+		String fileName = file.getOriginalFilename();
+		File filePath = new File(uploadLocation, fileName);
+		try {
+			file.transferTo(filePath);
+			log.info("上传成功");
+			return "上传成功";
+		} catch (IOException e) {
+			log.error(e.toString(), e);
+		}
+		return "上传失败！";
 	}
 
 	///**
