@@ -174,10 +174,16 @@
             <artifactId>commons-collections4</artifactId>
             <version>4.2</version>
         </dependency>
-
         <!--        poi相关依赖结束-->
 
-
+<!--        热部署相关依赖开始-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-devtools</artifactId>
+            <scope>runtime</scope>
+            <optional>true</optional>
+        </dependency>
+<!--        热部署相关依赖结束-->
     </dependencies>
 
     <build>
@@ -185,6 +191,10 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <fork>true</fork>
+                    <addResources>true</addResources>
+                </configuration>
             </plugin>
         </plugins>
     </build>

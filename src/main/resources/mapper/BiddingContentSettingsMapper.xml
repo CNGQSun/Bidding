@@ -10,7 +10,7 @@
         from bidding_content_settings bcs
         left join bidding_content_type bct on bcs.content_type_id = bct.id
         left join bidding_project_phase bpp on bcs.project_phase_id = bpp.id
-        where bcs.delflag='0' and bct.delflag='0' and bpp.delfalg='0'
+        where bcs.delflag='0' and bct.delflag='0' and bpp.delfalg='0' and bcs.id=#{id}
     </select>
 
 <!--    分页、条件查询所有内容设置-->

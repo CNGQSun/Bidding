@@ -67,7 +67,7 @@ public class BiddingContentSettingsService {
             String id = map.get("id").toString();
             BiddingContentSettings biddingContentSettings1 = biddingContentSettingsMapper.selectByPrimaryKey(id);
             if (biddingContentSettings1.getDelflag().equals("1")) {
-                return new Result<>(false, StatusCode.ERROR, "改条记录不存在");
+                return new Result<>(false, StatusCode.ERROR, "该条记录不存在");
             }
             String name = map.get("name").toString();
             String isNull = map.get("isNull").toString();
@@ -81,7 +81,7 @@ public class BiddingContentSettingsService {
             biddingContentSettings.setDelflag("0");
             int i1 = biddingContentSettingsMapper.selectCount(biddingContentSettings);
             if (i1 > 0) {
-                return new Result<>(false, StatusCode.ERROR, "改条记录已存在");
+                return new Result<>(false, StatusCode.ERROR, "该条记录已存在");
             }
             int i = biddingContentSettingsMapper.updateByPrimaryKeySelective(biddingContentSettings);
             if (i > 0) {
@@ -140,6 +140,11 @@ public class BiddingContentSettingsService {
         return 0;
     }
 
+    /**
+     * 新增内容设置
+     * @param map
+     * @return
+     */
     public Result insertSet(Map map) {
         try {
             String name = map.get("name").toString();
@@ -177,8 +182,8 @@ public class BiddingContentSettingsService {
         try {
 
             BiddingContentSettings biddingContentSettings = biddingContentSettingsMapper.selectByPrimaryKey(id);
-            if (biddingContentSettings.getDelflag().equals("1")){
-                return new Result<>(false, StatusCode.ERROR, "该记录不存在");
+            if (biddingContentSettings==null||biddingContentSettings.getDelflag().equals("1")){
+                return new Result<>(false, StatusCode.ERROR, "该条记录不存在");
             }
             biddingContentSettings.setDelflag("1");
             int i = biddingContentSettingsMapper.updateByPrimaryKeySelective(biddingContentSettings);
