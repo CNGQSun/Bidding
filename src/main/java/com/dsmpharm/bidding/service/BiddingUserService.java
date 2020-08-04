@@ -205,6 +205,11 @@ public class BiddingUserService {
         return new Result<>(false, StatusCode.ERROR, "保存失败");
     }
 
+    /**
+     * 根据ID删除用户信息
+     * @param id
+     * @return
+     */
     public Result deleteById(String id) {
         try {
             BiddingUser biddingUser=new BiddingUser();
@@ -224,5 +229,33 @@ public class BiddingUserService {
             return new Result<>(false, StatusCode.ERROR, "服务器错误");
         }
         return new Result<>(false, StatusCode.ERROR, "删除失败");
+    }
+
+    /**
+     * 根据IDS批量删除用户信息
+     * @param ids
+     * @return
+     */
+    public Result deleteByIdS(String ids) {
+        String[] split = ids.split(",");
+        try {
+            for (int i = 0; i < split.length; i++) {
+                String id=split[i];
+                BiddingUser biddingUser=new BiddingUser();
+                biddingUser.setId(id);
+                biddingUser.setDelflag("0");
+                int j = biddingUserMapper.selectCount(biddingUser);
+                if (j<=0){
+                    return new Result<>(false, StatusCode.ERROR, "有记录不存在");
+                }
+                biddingUser.setDelflag("1");
+                biddingUserMapper.updateByPrimaryKeySelective(biddingUser);
+            }
+            return new Result<>(true, StatusCode.OK, "删除成功");
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new Result<>(false, StatusCode.ERROR, "服务器错误");
+        }
     }
 }

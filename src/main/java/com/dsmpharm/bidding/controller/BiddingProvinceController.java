@@ -2,6 +2,7 @@ package com.dsmpharm.bidding.controller;
 
 import com.dsmpharm.bidding.service.BiddingProvinceService;
 import com.dsmpharm.bidding.utils.Result;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,6 +18,7 @@ import javax.annotation.Resource;
 @CrossOrigin
 @RestController
 @RequestMapping("/biddingProvince")
+@Api(tags = "省份相关接口")
 public class BiddingProvinceController {
 
 	@Resource

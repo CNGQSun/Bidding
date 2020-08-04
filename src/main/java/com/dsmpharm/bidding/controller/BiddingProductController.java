@@ -2,6 +2,7 @@ package com.dsmpharm.bidding.controller;
 
 import com.dsmpharm.bidding.service.BiddingProductService;
 import com.dsmpharm.bidding.utils.Result;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
@@ -23,6 +24,7 @@ import java.util.Map;
 @CrossOrigin
 @RestController
 @RequestMapping("/biddingProduct")
+@Api(tags = "产品主数据相关接口")
 public class BiddingProductController {
 
 	@Value("${upload.localtion.product}")

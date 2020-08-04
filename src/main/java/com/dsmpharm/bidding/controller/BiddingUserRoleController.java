@@ -2,6 +2,7 @@ package com.dsmpharm.bidding.controller;
 
 import com.dsmpharm.bidding.service.BiddingUserRoleService;
 import com.dsmpharm.bidding.utils.Result;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
@@ -15,6 +16,7 @@ import javax.annotation.Resource;
 @CrossOrigin
 @RestController
 @RequestMapping("/biddingUserRole")
+@Api(tags = "用户角色相关接口")
 public class BiddingUserRoleController {
 
 	@Resource
@@ -22,11 +24,11 @@ public class BiddingUserRoleController {
 
 	/**
 	 * 根据角色去查询用户的详细信息
-	 * @param role
+	 * @param roleId
 	 * @return
 	 */
 	@ApiOperation(value="根据角色去查询用户的详细信息")
-	@ApiImplicitParam(name = "roleId", value = "角色ID", required = true, paramType = "query", dataType = "String")
+	@ApiImplicitParam(name = "roleId", value = "角色ID(1为商务统括，2为大区经理，3为商务经理)", required = true, paramType = "query", dataType = "String")
 	@GetMapping(value = "/role")
 	public Result findByRole(@RequestParam String roleId){
 		Result result =biddingUserRoleService.findByRole(roleId);

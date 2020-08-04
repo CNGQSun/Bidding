@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.dsmpharm.bidding.mapper.BiddingContentSettingsMapper">
+
+<!--    根据ID查询内容设置详细信息-->
+    <select id="selectByIdNoDel" resultType="java.util.Map">
+        select bcs.id,bcs.name,bct.name contentTypeName,bcs.project_phase_id projectPhaseId,
+        bpp.name projectPhaseName,bcs.is_null isNull
+        from bidding_content_settings bcs
+        left join bidding_content_type bct on bcs.content_type_id = bct.id
+        left join bidding_project_phase bpp on bcs.project_phase_id = bpp.id
+        where bcs.delflag='0' and bct.delflag='0' and bpp.delfalg='0'
+    </select>
+
+<!--    分页、条件查询所有内容设置-->
+    <select id="selectList" resultType="java.util.Map">
+        select bcs.id,bcs.name,bct.name contentTypeName,bcs.project_phase_id projectPhaseId,
+        bpp.name projectPhaseName,bcs.is_null isNull
+        from bidding_content_settings bcs
+        left join bidding_content_type bct on bcs.content_type_id = bct.id
+        left join bidding_project_phase bpp on bcs.project_phase_id = bpp.id
+        where bcs.delflag='0' and bct.delflag='0' and bpp.delfalg='0'
+        and bcs.project_phase_id=#{projectPhaseId}
+        <if test="name !=null and name !='' ">
+            and bcs.name like concat('%',#{name},'%')
+        </if>
+    </select>
+</mapper>

@@ -2,6 +2,7 @@ package com.dsmpharm.bidding.controller;
 
 import com.dsmpharm.bidding.service.BiddingUserFrameworkService;
 import com.dsmpharm.bidding.utils.Result;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
@@ -19,6 +20,7 @@ import java.util.Map;
 @CrossOrigin
 @RestController
 @RequestMapping("/biddingUserFramework")
+@Api(tags = "组织架构信息维护相关接口")
 public class BiddingUserFrameworkController {
 
 	private static Logger log = LoggerFactory.getLogger(BiddingUserFrameworkController.class);

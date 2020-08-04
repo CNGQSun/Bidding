@@ -4,6 +4,7 @@ import com.dsmpharm.bidding.pojo.BiddingUser;
 import com.dsmpharm.bidding.service.BiddingUserService;
 import com.dsmpharm.bidding.utils.Result;
 import com.dsmpharm.bidding.utils.StatusCode;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
@@ -19,6 +20,7 @@ import java.util.Map;
 @CrossOrigin
 @RestController
 @RequestMapping("/biddingUser")
+@Api(tags = "各部门人员主数据相关接口")
 public class BiddingUserController {
 
 	@Resource
@@ -149,6 +151,19 @@ public class BiddingUserController {
 	public Result deleteById(@RequestParam String id){
 		Result result=biddingUserService.deleteById(id);
 		return new Result<>(true, StatusCode.OK, "删除成功");
+	}
+
+	/**
+	 * 根据IDS批量删除用户信息
+	 * @param ids
+	 * @return
+	 */
+	@ApiOperation(value="根据IDS批量删除用户信息" )
+	@ApiImplicitParam(name = "ids", value = "ids为用户id组成的字符串,','分割,例：1,2,3", required = true, paramType = "query", dataType = "String")
+	@PostMapping("/del/batch")
+	public Result deleteByIdS(@RequestParam String ids){
+		Result result=biddingUserService.deleteByIdS(ids);
+		return result;
 	}
 	//
 	///**
