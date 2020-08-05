@@ -4,6 +4,7 @@ import com.dsmpharm.bidding.service.BiddingContentTypeService;
 import com.dsmpharm.bidding.utils.Result;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -14,6 +15,7 @@ import javax.annotation.Resource;
  * <br/>
  * Created by Grant on 2020/08/03
  */
+@CrossOrigin
 @Api(tags = "内容设置新增中的类型接口")
 @RestController
 @RequestMapping("/biddingContentType")

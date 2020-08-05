@@ -187,6 +187,9 @@
     </dependencies>
 
     <build>
+        <!--jar包重命名开始-->
+        <finalName>bidding</finalName>
+        <!--jar包重命名结束-->
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>

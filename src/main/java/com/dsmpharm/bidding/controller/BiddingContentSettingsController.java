@@ -16,6 +16,7 @@ import java.util.Map;
  * Created by Grant on 2020/08/03
  */
 @Api(tags = "内容设置相关接口")
+@CrossOrigin
 @RestController
 @RequestMapping("/biddingContentSettings")
 public class BiddingContentSettingsController {
