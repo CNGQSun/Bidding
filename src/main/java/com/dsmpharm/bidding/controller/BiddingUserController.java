@@ -165,23 +165,16 @@ public class BiddingUserController {
 		Result result=biddingUserService.deleteByIdS(ids);
 		return result;
 	}
-	//
-	///**
-	//* 条件查询，无分页
-	//*/
-	//@PostMapping(value = "/list")
-	//public Result findSearch(@RequestBody BiddingUser biddingUser) {
-	//List<BiddingUser> biddingUsers = biddingUserService.list(biddingUser);
-	//	return new Result<>(true, StatusCode.OK, "查询成功", biddingUsers);
-	//}
-	//
-	///**
-	//* 条件查询，无分页
-	//*/
-	//@PostMapping(value = "/list/{currentPage}/{pageSize}")
-	//public Result findSearch(@RequestBody BiddingUser biddingUser, @PathVariable int currentPage, @PathVariable int pageSize) {
-	//	List<BiddingUser> biddingUsers = biddingUserService.list(biddingUser, currentPage, pageSize);
-	//	Integer count = biddingUserService.selectCount(biddingUser);
-	//	return new Result<>(true, StatusCode.OK, "查询成功", new PageResult<BiddingUser>(count, biddingUsers));
-	//}
+
+
+	/**
+	 * 登录
+	 * @param map
+	 * @return
+	 */
+	@PostMapping(value = "/login")
+	private Result login(@RequestParam Map map){
+		Result result=biddingUserService.login(map);
+		return result;
+	}
 }

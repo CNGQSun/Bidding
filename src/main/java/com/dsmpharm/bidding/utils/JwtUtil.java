@@ -14,11 +14,11 @@ public class JwtUtil {
 
     public final static String ACCOUNT = "account";
 
-    private String key = "jfjfjf";
+    private String key = "aasgrant";
 
     // 有效期 10 秒
 //    private long expirationTime = 10;
-    private long expirationTime = 300;
+    private long expirationTime = 3600;
 
     // 生成JWT
     public String createJWT(String id, String subject) {

@@ -1,17 +1,20 @@
 package com.dsmpharm.bidding.service;
 
+import com.dsmpharm.bidding.entity.BiddingLoginUser;
 import com.dsmpharm.bidding.mapper.BiddingRoleMapper;
 import com.dsmpharm.bidding.mapper.BiddingUserMapper;
 import com.dsmpharm.bidding.mapper.BiddingUserRoleMapper;
 import com.dsmpharm.bidding.pojo.BiddingUser;
 import com.dsmpharm.bidding.pojo.BiddingUserRole;
 import com.dsmpharm.bidding.utils.IdWorker;
+import com.dsmpharm.bidding.utils.JwtUtil;
 import com.dsmpharm.bidding.utils.PageResult;
 import com.dsmpharm.bidding.utils.Result;
 import com.dsmpharm.bidding.utils.StatusCode;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.apache.ibatis.session.RowBounds;
+import org.apache.shiro.crypto.hash.Md5Hash;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -36,7 +39,8 @@ public class BiddingUserService {
 
     @Resource
     private IdWorker idWorker;
-
+    @Resource
+    private JwtUtil jwtUtil;
     public void insert(BiddingUser biddingUser) {
         biddingUser.setId(idWorker.nextId() + "");
         biddingUserMapper.insert(biddingUser);
@@ -145,6 +149,15 @@ public class BiddingUserService {
      */
     public Result insertUserSub(BiddingUser biddingUser, String role) {
 
+        biddingUser.setPassword(biddingUser.getPhoneNumber());
+        //加盐,第一个参数是密码,第二个参数是所加盐(本项目用手机号作为盐)
+        Md5Hash md5HashStudent = new Md5Hash(biddingUser.getPassword(), biddingUser.getPhoneNumber());
+        //设置迭代次数
+        md5HashStudent.setIterations(1);
+        //将加密后的密码转化为string类型
+        String password = md5HashStudent.toString();
+        //设置加密后的password
+        biddingUser.setPassword(password);
         biddingUser.setStatus("0");
         biddingUser.setDelflag("0");
         int insertUser = 0;
@@ -257,5 +270,42 @@ public class BiddingUserService {
             e.printStackTrace();
             return new Result<>(false, StatusCode.ERROR, "服务器错误");
         }
+    }
+    public Result login(Map map) {
+        try {
+            String userId = map.get("userId").toString();
+            String password = map.get("password").toString();
+            BiddingUser biddingUser = biddingUserMapper.selectByPrimaryKey(userId);
+            if (biddingUser==null||biddingUser.getDelflag().equals("1")||biddingUser.getStatus().equals("1")){
+                return new Result<>(false, StatusCode.ERROR, "账号不存在或未启用，请联系管理员");
+            }
+            //给用户输入的密码加密
+            Md5Hash md5HashPassword = new Md5Hash(password,biddingUser.getPhoneNumber());
+            //迭代一次
+            md5HashPassword.setIterations(1);
+
+            //开始比较用户输入的密码加密后是否与数据库里存储的加密密码一致
+            if ((md5HashPassword.toString()).equals(biddingUser.getPassword())){
+                //密码正确
+                BiddingLoginUser biddingLoginUser=new BiddingLoginUser();
+                biddingLoginUser.setId(biddingUser.getId());
+                biddingLoginUser.setDelflag(biddingUser.getDelflag());
+                biddingLoginUser.setDept(biddingUser.getDept());
+                biddingLoginUser.setEmail(biddingUser.getEmail());
+                biddingLoginUser.setName(biddingUser.getName());
+                biddingLoginUser.setParentId(biddingUser.getParentId());
+                biddingLoginUser.setPassword(biddingUser.getPassword());
+                biddingLoginUser.setPhoneNumber(biddingUser.getPhoneNumber());
+                biddingLoginUser.setStatus(biddingUser.getStatus());
+                // 登陆成功，返回令牌给用户
+                String token = jwtUtil.createJWT(biddingUser.getId(),biddingUser.getPhoneNumber());
+                biddingLoginUser.setToken(token);
+                return new Result<>(true, StatusCode.OK, "登录成功",biddingLoginUser);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new Result<>(false, StatusCode.ERROR, "服务器错误");
+        }
+        return new Result<>(false, StatusCode.ERROR, "登录失败，请联系管理员");
     }
 }

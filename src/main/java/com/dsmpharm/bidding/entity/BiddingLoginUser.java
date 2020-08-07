@@ -1,4 +1,4 @@
-package com.dsmpharm.bidding.pojo;
+package com.dsmpharm.bidding.entity;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -11,7 +11,7 @@ import java.io.Serializable;
  */
 @Entity
 @Table(name="bidding_user")
-public class BiddingUser implements Serializable {
+public class BiddingLoginUser implements Serializable {
     private static final long serialVersionUID = -5807458707857459622L;
 
     @Id
@@ -32,6 +32,8 @@ public class BiddingUser implements Serializable {
     private String status;
 
     private String delflag;
+
+    private String token;
 
 
 	public String getId() {
@@ -90,5 +92,13 @@ public class BiddingUser implements Serializable {
 	}
     public void setDelflag(String delflag) {
 		this.delflag = delflag;
+	}
+
+	public String getToken() {
+		return token;
+	}
+
+	public void setToken(String token) {
+		this.token = token;
 	}
 }
