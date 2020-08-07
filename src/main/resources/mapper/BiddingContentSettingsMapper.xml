@@ -6,7 +6,7 @@
 <!--    根据ID查询内容设置详细信息-->
     <select id="selectByIdNoDel" resultType="java.util.Map">
         select bcs.id,bcs.name,bct.name contentTypeName,bcs.project_phase_id projectPhaseId,
-        bpp.name projectPhaseName,bcs.is_null isNull
+        bpp.name projectPhaseName,bcs.is_null isNull,bcs.content_type_id contentTypeId
         from bidding_content_settings bcs
         left join bidding_content_type bct on bcs.content_type_id = bct.id
         left join bidding_project_phase bpp on bcs.project_phase_id = bpp.id
@@ -16,8 +16,7 @@
 <!--    分页、条件查询所有内容设置-->
     <select id="selectList" resultType="java.util.Map">
         select bcs.id,bcs.name,bct.name contentTypeName,bcs.project_phase_id projectPhaseId,
-        bpp.name projectPhaseName,bcs.is_null isNull
-        from bidding_content_settings bcs
+        bpp.name projectPhaseName,bcs.is_null isNull,bcs.content_type_id contentTypeId        from bidding_content_settings bcs
         left join bidding_content_type bct on bcs.content_type_id = bct.id
         left join bidding_project_phase bpp on bcs.project_phase_id = bpp.id
         where bcs.delflag='0' and bct.delflag='0' and bpp.delfalg='0'
