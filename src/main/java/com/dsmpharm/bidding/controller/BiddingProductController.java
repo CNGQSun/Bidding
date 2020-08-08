@@ -151,7 +151,6 @@ public class BiddingProductController {
 		if (file.isEmpty()) {
 			return "上传失败，请选择文件";
 		}
-
 		String fileName = file.getOriginalFilename();
 		File filePath = new File(uploadLocation, fileName);
 		try {

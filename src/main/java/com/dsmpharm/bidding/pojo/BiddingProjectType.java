@@ -19,6 +19,8 @@ public class BiddingProjectType implements Serializable {
 
     private String name;
 
+	private String projectPhaseId;
+
     private String delflag;
 
     public String getId() {
@@ -33,7 +35,16 @@ public class BiddingProjectType implements Serializable {
     public void setName(String name) {
 		this.name = name;
 	}
-    public String getDelflag() {
+
+	public String getProjectPhaseId() {
+		return projectPhaseId;
+	}
+
+	public void setProjectPhaseId(String projectPhaseId) {
+		this.projectPhaseId = projectPhaseId;
+	}
+
+	public String getDelflag() {
 		return delflag;
 	}
     public void setDelflag(String delflag) {

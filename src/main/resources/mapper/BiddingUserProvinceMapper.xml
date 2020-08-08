@@ -4,7 +4,7 @@
 <mapper namespace="com.dsmpharm.bidding.mapper.BiddingUserProvinceMapper">
 <!--根据Id查询用户省份信息-->
     <select id="selectById" resultType="java.util.Map">
-        select bup.id,bup.status, bu.name userName,bp.pro_name proName
+        select bup.id,bup.status, bu.name userName,bp.pro_name proName,bp.id proId,bu.id userId
         from bidding_user_province bup
         left join bidding_user bu on bup.user_id = bu.id
         left join bidding_province bp on bup.pro_id = bp.id
@@ -12,7 +12,7 @@
     </select>
 <!--    分页、条件查询所有用户省份信息-->
     <select id="selectList" resultType="java.util.Map">
-        select bup.id,bup.status, bu.id userId,bu.name userName,bp.pro_name proName
+        select bup.id,bup.status, bu.id userId,bu.name userName,bp.pro_name proName,bp.id proId
         from bidding_user_province bup
         left join bidding_user bu on bup.user_id = bu.id
         left join bidding_province bp on bup.pro_id = bp.id
