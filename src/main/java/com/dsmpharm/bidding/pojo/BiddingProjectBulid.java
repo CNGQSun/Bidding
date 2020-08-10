@@ -19,8 +19,6 @@ public class BiddingProjectBulid implements Serializable {
 
     private String docPublicTime;
 
-    private String typeId;
-
     private String name;
 
     private String source;
@@ -62,12 +60,6 @@ public class BiddingProjectBulid implements Serializable {
 	}
     public void setDocPublicTime(String docPublicTime) {
 		this.docPublicTime = docPublicTime;
-	}
-    public String getTypeId() {
-		return typeId;
-	}
-    public void setTypeId(String typeId) {
-		this.typeId = typeId;
 	}
     public String getName() {
 		return name;

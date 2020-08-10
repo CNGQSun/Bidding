@@ -29,8 +29,6 @@ public class BiddingProductController {
 
 	@Value("${upload.localtion.product}")
 	private String uploadLocation;//上传文件保存的本地目录，使用@Value获取全局配置文件中配置的属性值
-
-
 	private static Logger log = LoggerFactory.getLogger(BiddingProductController.class);
 	@Resource
 	private BiddingProductService biddingProductService;

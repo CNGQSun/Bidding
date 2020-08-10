@@ -2,13 +2,20 @@ package com.dsmpharm.bidding.controller;
 
 import com.dsmpharm.bidding.pojo.BiddingProject;
 import com.dsmpharm.bidding.service.BiddingProjectService;
+import com.dsmpharm.bidding.utils.JwtUtil;
 import com.dsmpharm.bidding.utils.PageResult;
 import com.dsmpharm.bidding.utils.Result;
 import com.dsmpharm.bidding.utils.StatusCode;
+import org.springframework.http.HttpHeaders;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /** 
  * <br/>
@@ -21,13 +28,32 @@ public class BiddingProjectController {
 	@Resource
 	private BiddingProjectService biddingProjectService;
 
+	@Resource
+	private JwtUtil jwtUtil;
+
+	/**
+	 * 点击新增加载内容设置
+	 * @param projectPhaseId
+	 * @return
+	 */
+	@GetMapping(value = "/content")
+	public Result findById(@RequestParam String projectPhaseId){
+
+		Result result =  biddingProjectService.findContent(projectPhaseId);
+		return result;
+	}
+
 	/**
 	* 添加
 	*/
-	@PostMapping
-	public Result insert(@RequestBody BiddingProject biddingProject){
-		biddingProjectService.insert(biddingProject);
-		return new Result<>(true, StatusCode.OK, "保存成功");
+	@PostMapping("/sub")
+	public Result insert(HttpServletRequest request, @RequestParam Map map){
+		MultipartHttpServletRequest params=((MultipartHttpServletRequest) request);
+		Map<String, MultipartFile> fileMap = params.getFileMap();
+		String authorization = request.getHeader("Authorization");
+		String userId = jwtUtil.parseJWT(authorization).getId();
+		Result result=biddingProjectService.insert(map,userId,fileMap);
+		return result;
 	}
 
 	/**
@@ -39,14 +65,7 @@ public class BiddingProjectController {
 		return new Result<>(true, StatusCode.OK, "查询成功", list);
 	}
 
-	/**
-	* 根据ID查询
-	*/
-	@GetMapping(value = "/{id}")
-	public Result findById(@PathVariable String id){
-		BiddingProject biddingProject =  biddingProjectService.findById(id);
-		return new Result<>(true, StatusCode.OK, "查询成功", biddingProject);
-	}
+
 
 	/**
 	* 更新

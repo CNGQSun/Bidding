@@ -19,6 +19,8 @@ public class BiddingContentBak implements Serializable {
 
     private String name;
 
+	private String enName;
+
     private String isNull;
 
     private String contentTypeId;
@@ -41,7 +43,16 @@ public class BiddingContentBak implements Serializable {
     public void setName(String name) {
 		this.name = name;
 	}
-    public String getIsNull() {
+
+	public String getEnName() {
+		return enName;
+	}
+
+	public void setEnName(String enName) {
+		this.enName = enName;
+	}
+
+	public String getIsNull() {
 		return isNull;
 	}
     public void setIsNull(String isNull) {

@@ -26,4 +26,13 @@ public interface BiddingContentSettingsMapper extends Mapper<BiddingContentSetti
      * @return
      */
     List<Map> selectList(@Param("name") String name,@Param("projectPhaseId")String projectPhaseId);
+
+    /**
+     * 设置所有内容设置版本号
+     * @param versionNum
+     * @return
+     */
+    int updateAllNum(@Param("versionNum") String versionNum);
+
+    int updateAllNumNull(@Param("versionNum")String versionNum);
 }

@@ -16,8 +16,8 @@ public class BiddingProject implements Serializable {
 
     @Id
     private String id;
-
-    private String projectApprovalId;
+	private String typeId;
+    private String projectBulidId;
 
     private String docInterpretationId;
 
@@ -47,13 +47,24 @@ public class BiddingProject implements Serializable {
     public void setId(String id) {
 		this.id = id;
 	}
-    public String getProjectApprovalId() {
-		return projectApprovalId;
+
+	public String getProjectBulidId() {
+		return projectBulidId;
 	}
-    public void setProjectApprovalId(String projectApprovalId) {
-		this.projectApprovalId = projectApprovalId;
+
+	public String getTypeId() {
+		return typeId;
 	}
-    public String getDocInterpretationId() {
+
+	public void setTypeId(String typeId) {
+		this.typeId = typeId;
+	}
+
+	public void setProjectBulidId(String projectBulidId) {
+		this.projectBulidId = projectBulidId;
+	}
+
+	public String getDocInterpretationId() {
 		return docInterpretationId;
 	}
     public void setDocInterpretationId(String docInterpretationId) {

@@ -2,8 +2,15 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.dsmpharm.bidding.mapper.BiddingContentSettingsMapper">
+<!--    设置所有内容设置版本号-->
+    <update id="updateAllNum">
+        update bidding_content_settings set version_num=#{versionNum}
+    </update>
+    <update id="updateAllNumNull">
+        update bidding_content_settings set version_num=null
+    </update>
 
-<!--    根据ID查询内容设置详细信息-->
+    <!--    根据ID查询内容设置详细信息-->
     <select id="selectByIdNoDel" resultType="java.util.Map">
         select bcs.id,bcs.name,bct.name contentTypeName,bcs.project_phase_id projectPhaseId,
         bpp.name projectPhaseName,bcs.is_null isNull,bcs.content_type_id contentTypeId
