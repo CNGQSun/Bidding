@@ -42,8 +42,12 @@ public class BiddingProjectController {
 	}
 
 	/**
-	* 添加
-	*/
+	 * 立项
+	 * @param request
+	 * @param map
+	 * @param addContent
+	 * @return
+	 */
 	@PostMapping("/build")
 	public Result insert(HttpServletRequest request, @RequestParam Map map,@RequestParam(value = "addContent") List<List<String>> addContent){
 		MultipartHttpServletRequest params=((MultipartHttpServletRequest) request);

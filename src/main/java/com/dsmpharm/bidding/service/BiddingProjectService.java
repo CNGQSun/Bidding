@@ -55,6 +55,14 @@ public class BiddingProjectService {
     @Resource
     private IdWorker idWorker;
 
+    /**
+     * 立项
+     * @param map
+     * @param userId
+     * @param fileMap
+     * @param addContent
+     * @return
+     */
     public Result insert(Map<String, String> map, String userId, Map<String, MultipartFile> fileMap,List<List<String>> addContent) {
         //根据userId查询用户角色
        BiddingUserRole biddingUserRole= biddingUserRoleMapper.selectByUserId(userId);
@@ -80,6 +88,7 @@ public class BiddingProjectService {
             biddingProjectData.setContentSettingsId(biddingContentBak.getId());
             biddingProjectData.setProjectId(biddingProject.getId());
             biddingProjectData.setValue(value);
+            //获取内容设置表里的属性值，并插入project_data
             biddingProjectDataMapper.insert(biddingProjectData);
         }
         biddingProjectBulid.setId(idWorker.nextId() + "");
@@ -168,6 +177,7 @@ public class BiddingProjectService {
             appFlowApply.setStatus("3");
             appFlowApply.setProjectId(biddingProject.getId());
             appFlowApply.setUserId(userId);
+            //往申请表里插数据
             appFlowApplyMapper.insert(appFlowApply);
             //查找下一个审批用户
             BiddingUser biddingUser=appFlowNodeMapper.selectAppUser(appFlowApply.getFlowId(),appFlowApply.getCurrentNode());
@@ -178,6 +188,7 @@ public class BiddingProjectService {
             String nextNode=(Integer.valueOf(appFlowApply.getCurrentNode())+1)+"";
             appFlowApproval.setFlowNodeId(nextNode);
             appFlowApproval.setApplyId(appFlowApply.getId());
+            //往审批表里插数据，为了后续查看是否有待审批的记录
             appFlowApprovalMapper.insert(appFlowApproval);
             //如果角色是商务经理
         }else if (biddingUserRole.getRoleId().equals("3")){
@@ -191,6 +202,8 @@ public class BiddingProjectService {
             appFlowApply.setStatus("3");
             appFlowApply.setProjectId(biddingProject.getId());
             appFlowApply.setUserId(userId);
+            //往申请表里插数据
+            appFlowApplyMapper.insert(appFlowApply);
             //查找下一个审批用户
             BiddingUser biddingUser=appFlowNodeMapper.selectAppUserSw(appFlowApply.getFlowId(),appFlowApply.getCurrentNode(),userId);
             appFlowApproval=new AppFlowApproval();
@@ -200,8 +213,10 @@ public class BiddingProjectService {
             String nextNode=(Integer.valueOf(appFlowApply.getCurrentNode())+1)+"";
             appFlowApproval.setFlowNodeId(nextNode);
             appFlowApproval.setApplyId(appFlowApply.getId());
+            //往审批表里插数据，为了后续查看是否有待审批的记录
             appFlowApprovalMapper.insert(appFlowApproval);
         }
+        //将项目数据插入
         biddingProjectMapper.insert(biddingProject);
         for (List<String> list : addContent) {
             BiddingSettingsExtra biddingSettingsExtra=new BiddingSettingsExtra();
@@ -217,6 +232,7 @@ public class BiddingProjectService {
             biddingSettingsExtra.setName(name1);
             biddingSettingsExtra.setValue(value);
             biddingSettingsExtra.setProjectPhaseId(biddingProject.getProjectBulidId());
+            //往额外设置表里插数据
             biddingSettingsExtraMapper.insert(biddingSettingsExtra);
         }
         BiddingProjectType biddingProjectType = biddingProjectTypeMapper.selectByPrimaryKey(typeId);
