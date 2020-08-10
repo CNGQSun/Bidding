@@ -14,6 +14,7 @@ import java.util.List;
  * <br/>
  * Created by Grant on 2020/08/08
  */
+@CrossOrigin
 @RestController
 @RequestMapping("/biddingSettingsExtra")
 public class BiddingSettingsExtraController {

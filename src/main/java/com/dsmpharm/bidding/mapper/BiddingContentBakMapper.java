@@ -15,7 +15,8 @@ public interface BiddingContentBakMapper extends Mapper<BiddingContentBak> {
      * 将内容设置的数据从内容设置表复制到内容设置备份表
      * @return
      */
-    void copySetting();
+    void copySetting(@Param("projectPhaseId") String projectPhaseId);
 
-    List<BiddingContentBak> selctByPhaseId(@Param("projectPhaseId") String projectPhaseId,@Param("versionNum") String versionNum);
+
+    List<BiddingContentBak> selectByPhaseId(@Param("projectPhaseId") String projectPhaseId, @Param("versionNum") String versionNum);
 }

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.dsmpharm.bidding.mapper.AppFlowNodeMapper">
+
+<!--    查找下一个审批用户（招标专员）-->
+    <select id="selectAppUser" resultType="com.dsmpharm.bidding.pojo.BiddingUser">
+    select DISTINCT bu.* from bidding_user bu
+    left JOIN bidding_user_role bur on bur.user_id=bu.id
+    left JOIN app_flow_node afn on afn.flow_node_role=bur.role_id
+    left JOIN app_flow_line afl on afl.next_node_id =afn.id
+    left JOIN app_flow_apply afa on afa.current_node =afl.prev_node_id
+    where bu.delflag='0' and bur.delflag='0' and afn.delflag='0' and afl.delflag='0'
+    and afa.delflag='0' and afa.current_node=#{currentNode} and afa.flow_id=#{flowId}
+    </select>
+<!--    查找下一个审批用户(商务经理)-->
+    <select id="selectAppUserSw" resultType="com.dsmpharm.bidding.pojo.BiddingUser">
+    select DISTINCT bu.*  from bidding_user bu
+    left JOIN bidding_user_framework buf on buf.parent_id=bu.id
+    left JOIN bidding_user_role bur on bur.user_id=bu.id
+    left JOIN app_flow_node afn on afn.flow_node_role=bur.role_id
+    left JOIN app_flow_line afl on afl.next_node_id =afn.id
+    left JOIN app_flow_apply afa on afa.current_node =afl.prev_node_id
+    where bu.delflag='0' and bur.delflag='0' and afn.delflag='0' and afl.delflag='0' and buf.delflag='0'
+    and afa.delflag='0' and afa.current_node=#{currentNode} and afa.flow_id=#{flowId} and buf.user_id=#{userId}
+    </select>
+</mapper>

@@ -32,7 +32,9 @@ public interface BiddingContentSettingsMapper extends Mapper<BiddingContentSetti
      * @param versionNum
      * @return
      */
-    int updateAllNum(@Param("versionNum") String versionNum);
+    int updateAllNum(@Param("versionNum") String versionNum,@Param("projectPhaseId") String projectPhaseId );
 
     int updateAllNumNull(@Param("versionNum")String versionNum);
+
+    List<BiddingContentSettings> selectByPhaseId(@Param("projectPhaseId") String projectPhaseId);
 }

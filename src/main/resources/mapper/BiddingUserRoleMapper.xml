@@ -3,5 +3,8 @@
 
 <mapper namespace="com.dsmpharm.bidding.mapper.BiddingUserRoleMapper">
 
-
+<!--    根据userId查询其角色-->
+    <select id="selectByUserId" resultType="com.dsmpharm.bidding.pojo.BiddingUserRole">
+        select * from bidding_user_role where delflag='0' and user_id=#{userId}
+    </select>
 </mapper>

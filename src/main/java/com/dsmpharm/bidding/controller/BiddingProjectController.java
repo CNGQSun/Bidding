@@ -6,14 +6,12 @@ import com.dsmpharm.bidding.utils.JwtUtil;
 import com.dsmpharm.bidding.utils.PageResult;
 import com.dsmpharm.bidding.utils.Result;
 import com.dsmpharm.bidding.utils.StatusCode;
-import org.springframework.http.HttpHeaders;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -21,6 +19,7 @@ import java.util.Map;
  * <br/>
  * Created by Grant on 2020/08/08
  */
+@CrossOrigin
 @RestController
 @RequestMapping("/biddingProject")
 public class BiddingProjectController {
@@ -32,13 +31,12 @@ public class BiddingProjectController {
 	private JwtUtil jwtUtil;
 
 	/**
-	 * 点击新增加载内容设置
+	 * 点击新增 加载内容设置
 	 * @param projectPhaseId
 	 * @return
 	 */
 	@GetMapping(value = "/content")
 	public Result findById(@RequestParam String projectPhaseId){
-
 		Result result =  biddingProjectService.findContent(projectPhaseId);
 		return result;
 	}
@@ -46,13 +44,13 @@ public class BiddingProjectController {
 	/**
 	* 添加
 	*/
-	@PostMapping("/sub")
-	public Result insert(HttpServletRequest request, @RequestParam Map map){
+	@PostMapping("/build")
+	public Result insert(HttpServletRequest request, @RequestParam Map map,@RequestParam(value = "addContent") List<List<String>> addContent){
 		MultipartHttpServletRequest params=((MultipartHttpServletRequest) request);
 		Map<String, MultipartFile> fileMap = params.getFileMap();
 		String authorization = request.getHeader("Authorization");
 		String userId = jwtUtil.parseJWT(authorization).getId();
-		Result result=biddingProjectService.insert(map,userId,fileMap);
+		Result result=biddingProjectService.insert(map,userId,fileMap,addContent);
 		return result;
 	}
 

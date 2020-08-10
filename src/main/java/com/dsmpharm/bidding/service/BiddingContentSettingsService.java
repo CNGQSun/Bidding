@@ -162,6 +162,7 @@ public class BiddingContentSettingsService {
                 return new Result<>(false, StatusCode.ERROR, "该内容已存在");
             }
             biddingContentSettings.setId(idWorker.nextId() + "");
+            biddingContentSettings.setEnName(biddingContentSettings.getId());
             int insert = biddingContentSettingsMapper.insert(biddingContentSettings);
             if (insert > 0) {
                 return new Result<>(true, StatusCode.OK, "添加成功");

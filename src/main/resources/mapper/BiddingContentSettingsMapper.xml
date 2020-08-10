@@ -4,7 +4,7 @@
 <mapper namespace="com.dsmpharm.bidding.mapper.BiddingContentSettingsMapper">
 <!--    设置所有内容设置版本号-->
     <update id="updateAllNum">
-        update bidding_content_settings set version_num=#{versionNum}
+        update bidding_content_settings set version_num=#{versionNum} where delflag='0' and project_phase_id=#{projectPhaseId}
     </update>
     <update id="updateAllNumNull">
         update bidding_content_settings set version_num=null
@@ -31,5 +31,8 @@
         <if test="name !=null and name !='' ">
             and bcs.name like concat('%',#{name},'%')
         </if>
+    </select>
+    <select id="selectByPhaseId" resultType="com.dsmpharm.bidding.pojo.BiddingContentSettings">
+        select * from bidding_content_settings where delflag ='0' and  project_phase_id=#{projectPhaseId}
     </select>
 </mapper>
