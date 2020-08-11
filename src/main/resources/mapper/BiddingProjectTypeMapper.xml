@@ -3,5 +3,9 @@
 
 <mapper namespace="com.dsmpharm.bidding.mapper.BiddingProjectTypeMapper">
 
-
+<!--获取所有未删除的项目类型-->
+    <select id="selectNoDel" resultType="com.dsmpharm.bidding.pojo.BiddingProjectType">
+        select * from bidding_project_type
+        where delflag='0'
+    </select>
 </mapper>

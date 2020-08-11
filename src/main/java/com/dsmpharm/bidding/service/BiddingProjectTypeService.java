@@ -3,6 +3,8 @@ package com.dsmpharm.bidding.service;
 import com.dsmpharm.bidding.mapper.BiddingProjectTypeMapper;
 import com.dsmpharm.bidding.pojo.BiddingProjectType;
 import com.dsmpharm.bidding.utils.IdWorker;
+import com.dsmpharm.bidding.utils.Result;
+import com.dsmpharm.bidding.utils.StatusCode;
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.stereotype.Service;
 
@@ -64,4 +66,21 @@ public class BiddingProjectTypeService {
         }
         return 0;
     }
+
+	/**
+	 * 获取所有未删除的项目类型
+	 * @return
+	 */
+	public Result selectNoDel() {
+		try {
+			List<BiddingProjectType> projectTypes=biddingProjectTypeMapper.selectNoDel();
+			if (projectTypes!=null){
+				return new Result<>(true, StatusCode.OK, "查询成功",projectTypes);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new Result<>(false, StatusCode.ERROR, "服务器错误");
+		}
+		return new Result<>(false, StatusCode.ERROR, "查询失败");
+	}
 }

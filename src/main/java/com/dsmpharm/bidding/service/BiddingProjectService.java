@@ -57,188 +57,198 @@ public class BiddingProjectService {
 
     /**
      * 立项
+     *
      * @param map
      * @param userId
      * @param fileMap
      * @param addContent
      * @return
      */
-    public Result insert(Map<String, String> map, String userId, Map<String, MultipartFile> fileMap,List<List<String>> addContent) {
-        //根据userId查询用户角色
-       BiddingUserRole biddingUserRole= biddingUserRoleMapper.selectByUserId(userId);
-        BiddingProject biddingProject = new BiddingProject();
-        BiddingProjectBulid biddingProjectBulid = new BiddingProjectBulid();
-        biddingProject.setId(idWorker.nextId() + "");
-        biddingProject.setStatus("0");
-        biddingProject.setDelflag("0");
-        String projectPhaseId = map.get("projectPhaseId").toString();
-        //List<BiddingContentSettings> settingsList = biddingContentSettingsMapper.selectByPhaseId(projectPhaseId);
-            String versionNum=idWorker.nextId()+"";
-        biddingProject.setVersionNum(versionNum);
-        //设置所有内容设置版本号
-        int i=biddingContentSettingsMapper.updateAllNum(versionNum,projectPhaseId);
-        //将内容设置数据备份到内容设置备份表
-        biddingContentBakMapper.copySetting(projectPhaseId);
-        //获取内容设置表中的字段信息
-        List<BiddingContentBak> settingsList = biddingContentBakMapper.selectByPhaseId(projectPhaseId,versionNum);
-        for (BiddingContentBak biddingContentBak : settingsList) {
-            String value = map.get(biddingContentBak.getEnName());
-            BiddingProjectData biddingProjectData=new BiddingProjectData();
-            biddingProjectData.setId(idWorker.nextId()+"");
-            biddingProjectData.setContentSettingsId(biddingContentBak.getId());
-            biddingProjectData.setProjectId(biddingProject.getId());
-            biddingProjectData.setValue(value);
-            //获取内容设置表里的属性值，并插入project_data
-            biddingProjectDataMapper.insert(biddingProjectData);
-        }
-        biddingProjectBulid.setId(idWorker.nextId() + "");
-        biddingProject.setProjectBulidId(biddingProjectBulid.getId());
-        biddingProject.setProjectPhaseNow("1");
-        //判断文件夹是否存在，不存在则新建
-        String docPath1 = uploadBuild + "/" + biddingProject.getId();
-        File  docPath= new File(docPath1);
-        if (!docPath.exists() && !docPath.isDirectory()) {
-            docPath.mkdirs();
-        }
-        String docPublicTime = map.get("docPublicTime").toString();
-        biddingProjectBulid.setDocPublicTime(docPublicTime);
-        String typeId = map.get("typeId").toString();
-        biddingProject.setTypeId(typeId);
-        String name = map.get("name").toString();
-        biddingProjectBulid.setName(name);
-        String source = map.get("source").toString();
-        biddingProjectBulid.setSource(source);
-        String provinceId = map.get("provinceId").toString();
-        biddingProjectBulid.setProductId(provinceId);
-        String cityId = map.get("cityId").toString();
-        biddingProjectBulid.setCityId(cityId);
-        //产品ID有多个，需重点关注
-        String productId = map.get("productId").toString();
-        if (map.get("fileFormal") != null) {
-            String fileFormal = map.get("fileFormal").toString();
-            biddingProjectBulid.setFileFormal(fileFormal);
-        } else {
-            MultipartFile fileFormal = fileMap.get("fileFormal");
-            String fileName1 = fileFormal.getOriginalFilename();
-            String fileName = DateUtils.format(new Date(), "yyyy-MM-dd-HH-mm-ss") + fileName1;
-            File filePath = new File(docPath, fileName);
-            try {
-                fileFormal.transferTo(filePath);
-            } catch (IOException e) {
-                log.error(e.toString(), e);
-                return new Result<>(false, StatusCode.ERROR, "服务器错误");
+    public Result insert(Map<String, String> map, String userId, Map<String, MultipartFile> fileMap, List<List<String>> addContent) {
+        try {
+            //根据userId查询用户角色
+            BiddingUserRole biddingUserRole = biddingUserRoleMapper.selectByUserId(userId);
+            BiddingProject biddingProject = new BiddingProject();
+            BiddingProjectBulid biddingProjectBulid = new BiddingProjectBulid();
+            biddingProject.setId(idWorker.nextId() + "");
+            biddingProject.setStatus("0");
+            biddingProject.setDelflag("0");
+            String projectPhaseId = map.get("projectPhaseId").toString();
+            //List<BiddingContentSettings> settingsList = biddingContentSettingsMapper.selectByPhaseId(projectPhaseId);
+            String versionNum = idWorker.nextId() + "";
+            biddingProject.setVersionNum(versionNum);
+            //设置所有内容设置版本号
+            int i = biddingContentSettingsMapper.updateAllNum(versionNum, projectPhaseId);
+            //将内容设置数据备份到内容设置备份表
+            biddingContentBakMapper.copySetting(projectPhaseId);
+            //获取内容设置表中的字段信息
+            List<BiddingContentBak> settingsList = biddingContentBakMapper.selectByPhaseId(projectPhaseId, versionNum);
+            for (BiddingContentBak biddingContentBak : settingsList) {
+                String value = map.get(biddingContentBak.getEnName());
+                BiddingProjectData biddingProjectData = new BiddingProjectData();
+                biddingProjectData.setId(idWorker.nextId() + "");
+                biddingProjectData.setContentSettingsId(biddingContentBak.getId());
+                biddingProjectData.setProjectId(biddingProject.getId());
+                biddingProjectData.setValue(value);
+                //获取内容设置表里的属性值，并插入project_data
+                biddingProjectDataMapper.insert(biddingProjectData);
             }
-            biddingProjectBulid.setFileFormal(filePath.getPath());
-        }
-        if (map.get("fileAsk") != null) {
-            String fileAsk = map.get("fileAsk").toString();
-            biddingProjectBulid.setFileAsk(fileAsk);
-        } else {
-            MultipartFile fileAsk = fileMap.get("fileAsk");
-            String fileName1 = fileAsk.getOriginalFilename();
-            String fileName = DateUtils.format(new Date(), "yyyy-MM-dd-HH-mm-ss") + fileName1;
-            File filePath = new File(docPath, fileName);
-            try {
-                fileAsk.transferTo(filePath);
-            } catch (IOException e) {
-                log.error(e.toString(), e);
-                return new Result<>(false, StatusCode.ERROR, "服务器错误");
+            biddingProjectBulid.setId(idWorker.nextId() + "");
+            biddingProject.setProjectBulidId(biddingProjectBulid.getId());
+            biddingProject.setProjectPhaseNow("1");
+            //判断文件夹是否存在，不存在则新建
+            String docPath1 = uploadBuild + "/" + biddingProject.getId();
+            File docPath = new File(docPath1);
+            if (!docPath.exists() && !docPath.isDirectory()) {
+                docPath.mkdirs();
             }
-            biddingProjectBulid.setFileAsk(filePath.getPath());
+            String docPublicTime = map.get("docPublicTime").toString();
+            biddingProjectBulid.setDocPublicTime(docPublicTime);
+            String typeId = map.get("typeId").toString();
+            biddingProject.setTypeId(typeId);
+            String name = map.get("name").toString();
+            biddingProjectBulid.setName(name);
+            String source = map.get("source").toString();
+            biddingProjectBulid.setSource(source);
+            String provinceId = map.get("provinceId").toString();
+            biddingProjectBulid.setProductId(provinceId);
+            String cityId = map.get("cityId").toString();
+            biddingProjectBulid.setCityId(cityId);
+            //产品ID有多个，需重点关注
+            String productId = map.get("productId").toString();
+            if (map.get("fileFormal") != null) {
+                String fileFormal = map.get("fileFormal").toString();
+                biddingProjectBulid.setFileFormal(fileFormal);
+            } else {
+                MultipartFile fileFormal = fileMap.get("fileFormal");
+                String fileName1 = fileFormal.getOriginalFilename();
+                String fileName = DateUtils.format(new Date(), "yyyy-MM-dd-HH-mm-ss") + fileName1;
+                File filePath = new File(docPath, fileName);
+                try {
+                    fileFormal.transferTo(filePath);
+                } catch (IOException e) {
+                    log.error(e.toString(), e);
+                    return new Result<>(false, StatusCode.ERROR, "服务器错误");
+                }
+                biddingProjectBulid.setFileFormal(filePath.getPath());
+            }
+            if (map.get("fileAsk") != null) {
+                String fileAsk = map.get("fileAsk").toString();
+                biddingProjectBulid.setFileAsk(fileAsk);
+            } else {
+                MultipartFile fileAsk = fileMap.get("fileAsk");
+                String fileName1 = fileAsk.getOriginalFilename();
+                String fileName = DateUtils.format(new Date(), "yyyy-MM-dd-HH-mm-ss") + fileName1;
+                File filePath = new File(docPath, fileName);
+                try {
+                    fileAsk.transferTo(filePath);
+                } catch (IOException e) {
+                    log.error(e.toString(), e);
+                    return new Result<>(false, StatusCode.ERROR, "服务器错误");
+                }
+                biddingProjectBulid.setFileAsk(filePath.getPath());
+            }
+            String docInterTime = map.get("docInterTime").toString();
+            biddingProjectBulid.setDocInterTime(docInterTime);
+            String submitTime = map.get("submitTime").toString();
+            biddingProjectBulid.setSubmitTime(submitTime);
+            String publicTime = map.get("publicTime").toString();
+            biddingProjectBulid.setPublicTime(publicTime);
+            String appealTime = map.get("appealTime").toString();
+            biddingProjectBulid.setAppealTime(appealTime);
+            String noticeTime = map.get("noticeTime").toString();
+            biddingProjectBulid.setNoticeTime(noticeTime);
+            String proLabel = map.get("proLabel").toString();
+            biddingProjectBulid.setProLabel(proLabel);
+            String suggestion = map.get("suggestion").toString();
+            biddingProjectBulid.setSuggestion(suggestion);
+            String goStatus = map.get("goStatus").toString();
+            biddingProjectBulid.setGoStatus(goStatus);
+            //开始走审批流程
+            //如果角色是招标专员
+            AppFlowApply appFlowApply = null;
+            AppFlowApproval appFlowApproval = null;
+            if (biddingUserRole.getRoleId().equals("6")) {
+                appFlowApply = new AppFlowApply();
+                appFlowApply.setId(idWorker.nextId() + "");
+                appFlowApply.setAddDate(DateUtils.format(new Date(), "yyyy-MM-dd HH:mm:ss"));
+                appFlowApply.setDelflag("0");
+                appFlowApply.setPhaseId(biddingProject.getProjectBulidId());
+                appFlowApply.setCurrentNode("0");
+                appFlowApply.setFlowId("0");
+                appFlowApply.setStatus("3");
+                appFlowApply.setProjectId(biddingProject.getId());
+                appFlowApply.setUserId(userId);
+                //往申请表里插数据
+                appFlowApplyMapper.insert(appFlowApply);
+                //查找下一个审批用户
+                BiddingUser biddingUser = appFlowNodeMapper.selectAppUser(appFlowApply.getFlowId(), appFlowApply.getCurrentNode());
+                appFlowApproval = new AppFlowApproval();
+                appFlowApproval.setId(idWorker.nextId() + "");
+                appFlowApproval.setProjectPhaseId(biddingProject.getProjectBulidId());
+                appFlowApproval.setDelflag("0");
+                String nextNode = (Integer.valueOf(appFlowApply.getCurrentNode()) + 1) + "";
+                appFlowApproval.setFlowNodeId(nextNode);
+                appFlowApproval.setApplyId(appFlowApply.getId());
+                appFlowApproval.setUserId(biddingUser.getId());
+                //往审批表里插数据，为了后续查看是否有待审批的记录
+                appFlowApprovalMapper.insert(appFlowApproval);
+                //如果角色是商务经理
+            } else if (biddingUserRole.getRoleId().equals("3")) {
+                appFlowApply = new AppFlowApply();
+                appFlowApply.setId(idWorker.nextId() + "");
+                appFlowApply.setAddDate(DateUtils.format(new Date(), "yyyy-MM-dd HH:mm:ss"));
+                appFlowApply.setDelflag("0");
+                appFlowApply.setPhaseId(biddingProject.getProjectBulidId());
+                appFlowApply.setCurrentNode("3");
+                appFlowApply.setFlowId("1");
+                appFlowApply.setStatus("3");
+                appFlowApply.setProjectId(biddingProject.getId());
+                appFlowApply.setUserId(userId);
+                //往申请表里插数据
+                appFlowApplyMapper.insert(appFlowApply);
+                //查找下一个审批用户
+                BiddingUser biddingUser = appFlowNodeMapper.selectAppUserSw(appFlowApply.getFlowId(), appFlowApply.getCurrentNode(), userId);
+                appFlowApproval = new AppFlowApproval();
+                appFlowApproval.setId(idWorker.nextId() + "");
+                appFlowApproval.setProjectPhaseId(biddingProject.getProjectBulidId());
+                appFlowApproval.setDelflag("0");
+                String nextNode = (Integer.valueOf(appFlowApply.getCurrentNode()) + 1) + "";
+                appFlowApproval.setFlowNodeId(nextNode);
+                appFlowApproval.setApplyId(appFlowApply.getId());
+                //往审批表里插数据，为了后续查看是否有待审批的记录
+                appFlowApprovalMapper.insert(appFlowApproval);
+            }
+            //将项目数据插入
+            biddingProjectMapper.insert(biddingProject);
+            for (List<String> list : addContent) {
+                BiddingSettingsExtra biddingSettingsExtra = new BiddingSettingsExtra();
+                String name1 = list.get(0);
+                String contentTypeId = list.get(1);
+                String isNull = list.get(2);
+                String value = list.get(3);
+                biddingSettingsExtra.setId(idWorker.nextId() + "");
+                biddingSettingsExtra.setDelflag("0");
+                biddingSettingsExtra.setProjectId(biddingProject.getId());
+                biddingSettingsExtra.setContentTypeId(contentTypeId);
+                biddingSettingsExtra.setIsNull(isNull);
+                biddingSettingsExtra.setName(name1);
+                biddingSettingsExtra.setValue(value);
+                biddingSettingsExtra.setProjectPhaseId(biddingProject.getProjectBulidId());
+                //往额外设置表里插数据
+                biddingSettingsExtraMapper.insert(biddingSettingsExtra);
+            }
+            BiddingProjectType biddingProjectType = biddingProjectTypeMapper.selectByPrimaryKey(typeId);
+            Map resultMap = new HashMap();
+            resultMap.put("projectPhase", biddingProjectType.getProjectPhaseId());
+            return new Result<>(true, StatusCode.OK, "保存成功", resultMap);
+        } catch (IllegalStateException e) {
+            e.printStackTrace();
+            return new Result<>(false, StatusCode.ERROR, "服务器错误");
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+            return new Result<>(false, StatusCode.ERROR, "服务器错误");
         }
-        String docInterTime = map.get("docInterTime").toString();
-        biddingProjectBulid.setDocInterTime(docInterTime);
-        String submitTime = map.get("submitTime").toString();
-        biddingProjectBulid.setSubmitTime(submitTime);
-        String publicTime = map.get("publicTime").toString();
-        biddingProjectBulid.setPublicTime(publicTime);
-        String appealTime = map.get("appealTime").toString();
-        biddingProjectBulid.setAppealTime(appealTime);
-        String noticeTime = map.get("noticeTime").toString();
-        biddingProjectBulid.setNoticeTime(noticeTime);
-        String proLabel = map.get("proLabel").toString();
-        biddingProjectBulid.setProLabel(proLabel);
-        String suggestion = map.get("suggestion").toString();
-        biddingProjectBulid.setSuggestion(suggestion);
-        String goStatus = map.get("goStatus").toString();
-        biddingProjectBulid.setGoStatus(goStatus);
-        //开始走审批流程
-        //如果角色是招标专员
-        AppFlowApply appFlowApply=null;
-        AppFlowApproval appFlowApproval=null;
-        if (biddingUserRole.getRoleId().equals("6")){
-            appFlowApply=new AppFlowApply();
-            appFlowApply.setId(idWorker.nextId()+"");
-            appFlowApply.setAddDate(DateUtils.format(new Date(), "yyyy-MM-dd HH:mm:ss"));
-            appFlowApply.setDelflag("0");
-            appFlowApply.setPhaseId(biddingProject.getProjectBulidId());
-            appFlowApply.setCurrentNode("0");
-            appFlowApply.setFlowId("0");
-            appFlowApply.setStatus("3");
-            appFlowApply.setProjectId(biddingProject.getId());
-            appFlowApply.setUserId(userId);
-            //往申请表里插数据
-            appFlowApplyMapper.insert(appFlowApply);
-            //查找下一个审批用户
-            BiddingUser biddingUser=appFlowNodeMapper.selectAppUser(appFlowApply.getFlowId(),appFlowApply.getCurrentNode());
-            appFlowApproval=new AppFlowApproval();
-            appFlowApproval.setId(idWorker.nextId()+"");
-            appFlowApproval.setProjectPhaseId(biddingProject.getProjectBulidId());
-            appFlowApproval.setDelflag("0");
-            String nextNode=(Integer.valueOf(appFlowApply.getCurrentNode())+1)+"";
-            appFlowApproval.setFlowNodeId(nextNode);
-            appFlowApproval.setApplyId(appFlowApply.getId());
-            //往审批表里插数据，为了后续查看是否有待审批的记录
-            appFlowApprovalMapper.insert(appFlowApproval);
-            //如果角色是商务经理
-        }else if (biddingUserRole.getRoleId().equals("3")){
-            appFlowApply=new AppFlowApply();
-            appFlowApply.setId(idWorker.nextId()+"");
-            appFlowApply.setAddDate(DateUtils.format(new Date(), "yyyy-MM-dd HH:mm:ss"));
-            appFlowApply.setDelflag("0");
-            appFlowApply.setPhaseId(biddingProject.getProjectBulidId());
-            appFlowApply.setCurrentNode("3");
-            appFlowApply.setFlowId("1");
-            appFlowApply.setStatus("3");
-            appFlowApply.setProjectId(biddingProject.getId());
-            appFlowApply.setUserId(userId);
-            //往申请表里插数据
-            appFlowApplyMapper.insert(appFlowApply);
-            //查找下一个审批用户
-            BiddingUser biddingUser=appFlowNodeMapper.selectAppUserSw(appFlowApply.getFlowId(),appFlowApply.getCurrentNode(),userId);
-            appFlowApproval=new AppFlowApproval();
-            appFlowApproval.setId(idWorker.nextId()+"");
-            appFlowApproval.setProjectPhaseId(biddingProject.getProjectBulidId());
-            appFlowApproval.setDelflag("0");
-            String nextNode=(Integer.valueOf(appFlowApply.getCurrentNode())+1)+"";
-            appFlowApproval.setFlowNodeId(nextNode);
-            appFlowApproval.setApplyId(appFlowApply.getId());
-            //往审批表里插数据，为了后续查看是否有待审批的记录
-            appFlowApprovalMapper.insert(appFlowApproval);
-        }
-        //将项目数据插入
-        biddingProjectMapper.insert(biddingProject);
-        for (List<String> list : addContent) {
-            BiddingSettingsExtra biddingSettingsExtra=new BiddingSettingsExtra();
-            String name1 = list.get(0);
-            String contentTypeId = list.get(1);
-            String isNull = list.get(2);
-            String value = list.get(3);
-            biddingSettingsExtra.setId(idWorker.nextId()+"");
-            biddingSettingsExtra.setDelflag("0");
-            biddingSettingsExtra.setProjectId(biddingProject.getId());
-            biddingSettingsExtra.setContentTypeId(contentTypeId);
-            biddingSettingsExtra.setIsNull(isNull);
-            biddingSettingsExtra.setName(name1);
-            biddingSettingsExtra.setValue(value);
-            biddingSettingsExtra.setProjectPhaseId(biddingProject.getProjectBulidId());
-            //往额外设置表里插数据
-            biddingSettingsExtraMapper.insert(biddingSettingsExtra);
-        }
-        BiddingProjectType biddingProjectType = biddingProjectTypeMapper.selectByPrimaryKey(typeId);
-        Map resultMap=new HashMap();
-        resultMap.put("projectPhase",biddingProjectType.getProjectPhaseId());
-        return new Result<>(true, StatusCode.OK, "保存成功",resultMap);
     }
 
     public List<BiddingProject> selectAll() {
@@ -257,8 +267,15 @@ public class BiddingProjectService {
         biddingProjectMapper.deleteByPrimaryKey(id);
     }
 
-    public List<BiddingProject> list(BiddingProject biddingProject) {
-        return biddingProjectMapper.select(biddingProject);
+    public Result list(Map map) {
+        Integer currentPage = Integer.valueOf(map.get("currentPage").toString());
+        Integer pageSize = Integer.valueOf(map.get("pageSize").toString());
+        String name = map.get("name").toString();
+        String status = map.get("status").toString();
+        List<Map> mapList=biddingProjectMapper.selectByNoDel(name,status);
+        BiddingProject biddingProject = null;
+        biddingProjectMapper.select(biddingProject);
+        return null;
     }
 
     public List<BiddingProject> list(BiddingProject biddingProject, int currentPage, int pageSize) {
@@ -279,11 +296,7 @@ public class BiddingProjectService {
         return 0;
     }
 
-    /**
-     * 点击新增加载内容设置                                                                                                                                                                                                                                                                                                                                                                                                         o
-     * @param projectPhaseId
-     * @return
-     */
+
     //public Result findContent(String projectPhaseId) {
     //    //BiddingProject biddingProject=new BiddingProject();
     //    //biddingProject.setId(idWorker.nextId()+"");
@@ -299,8 +312,19 @@ public class BiddingProjectService {
     //    List<BiddingContentBak> list=biddingContentBakMapper.selctByPhaseId(projectPhaseId,versionNum);
     //    return new Result<>(true, StatusCode.OK, "查询成功",list);
     //}
+    /**
+     * 点击新增加载内容设置                                                                                                                                                                                                                                                                                                                                                                                                         o
+     *
+     * @param projectPhaseId
+     * @return
+     */
     public Result findContent(String projectPhaseId) {
-        List <BiddingContentSettings> settingsList= biddingContentSettingsMapper.selectByPhaseId(projectPhaseId);
-        return new Result<>(true, StatusCode.OK, "查询成功",settingsList);
+        try {
+            List<BiddingContentSettings> settingsList = biddingContentSettingsMapper.selectByPhaseId(projectPhaseId);
+            return new Result<>(true, StatusCode.OK, "查询成功", settingsList);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new Result<>(false, StatusCode.ERROR, "服务器错误");
+        }
     }
 }

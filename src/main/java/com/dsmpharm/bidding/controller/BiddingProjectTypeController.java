@@ -1,7 +1,11 @@
 package com.dsmpharm.bidding.controller;
 
 import com.dsmpharm.bidding.service.BiddingProjectTypeService;
+import com.dsmpharm.bidding.utils.Result;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -14,11 +18,22 @@ import javax.annotation.Resource;
 @CrossOrigin
 @RestController
 @RequestMapping("/biddingProjectType")
+@Api(tags = "项目类型相关接口")
 public class BiddingProjectTypeController {
 
 	@Resource
 	private BiddingProjectTypeService biddingProjectTypeService;
 
+	/**
+	 * 获取所有未删除的项目类型
+	 * @return
+	 */
+	@ApiOperation(value="立项中“项目类型”接口" )
+	@GetMapping
+	public Result findAll(){
+		Result result = biddingProjectTypeService.selectNoDel();
+		return result;
+	}
 	///**
 	//* 添加
 	//*/
@@ -28,14 +43,7 @@ public class BiddingProjectTypeController {
 	//	return new Result<>(true, StatusCode.OK, "保存成功");
 	//}
 	//
-	///**
-	//* 查询全部
-	//*/
-	//@GetMapping
-	//public Result findAll(){
-	//	List<BiddingProjectType> list = biddingProjectTypeService.selectAll();
-	//	return new Result<>(true, StatusCode.OK, "查询成功", list);
-	//}
+
 	//
 	///**
 	//* 根据ID查询

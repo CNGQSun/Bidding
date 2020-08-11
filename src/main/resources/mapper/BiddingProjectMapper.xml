@@ -4,4 +4,10 @@
 <mapper namespace="com.dsmpharm.bidding.mapper.BiddingProjectMapper">
 
 
+    <select id="selectByNoDel" resultType="java.util.Map">
+        select * from bidding_project bp
+        left join app_flow_apply afa on bp.id = afa.project_id
+        left join app_flow_approval afap on afap.phase_id =afa.id
+        where bp.delflag='0' and afa.delflag='0' and afap.delflag='0' and afap.user_id='' and
+    </select>
 </mapper>

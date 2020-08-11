@@ -143,9 +143,14 @@ public class BiddingProductController {
 		Result result = biddingProductService.list(map);
 		return result;
 	}
+
+	/**
+	 * 测试上传
+	 * @param file
+	 * @return
+	 */
 	@PostMapping("/upload")
 	public String upload(@RequestParam("file") MultipartFile file) {
-
 		if (file.isEmpty()) {
 			return "上传失败，请选择文件";
 		}
