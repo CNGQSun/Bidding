@@ -172,6 +172,12 @@ public class BiddingUserController {
 	 * @param map
 	 * @return
 	 */
+	@ApiOperation(value="用户登录" )
+	@ApiImplicitParams({
+			@ApiImplicitParam(name = "userId", value = "userId，这些用户已设置密码：80010645，80016105，80017179，80018118，80018208，80019042，80019176", required = true, paramType = "query", dataType = "String"),
+			@ApiImplicitParam(name = "password", value = "登录密码（该用户对应的手机号）", required = true, paramType = "query", dataType = "String"),
+			@ApiImplicitParam(name = "Authorization", value = "不是参数，登录成功之后，需在此请求头中存入token", required = true, paramType = "query", dataType = "String"),
+	})
 	@PostMapping(value = "/login")
 	private Result login(@RequestParam Map map){
 		Result result=biddingUserService.login(map);

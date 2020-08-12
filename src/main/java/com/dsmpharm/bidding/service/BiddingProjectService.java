@@ -158,17 +158,16 @@ public class BiddingProjectService {
             biddingProjectBulid.setAppealTime(appealTime);
             String noticeTime = map.get("noticeTime").toString();
             biddingProjectBulid.setNoticeTime(noticeTime);
-            String proLabel = map.get("proLabel").toString();
-            biddingProjectBulid.setProLabel(proLabel);
+
             String suggestion = map.get("suggestion").toString();
             biddingProjectBulid.setSuggestion(suggestion);
-            String goStatus = map.get("goStatus").toString();
-            biddingProjectBulid.setGoStatus(goStatus);
+            biddingProjectBulid.setGoStatus("3");//0 进行中 1 未进行 2 草稿 3 待审核 4 审核通过 5 审核驳回 6跳过此阶段
             //开始走审批流程
             //如果角色是招标专员
             AppFlowApply appFlowApply = null;
             AppFlowApproval appFlowApproval = null;
             if (biddingUserRole.getRoleId().equals("6")) {
+                biddingProjectBulid.setProLabel("国标");
                 appFlowApply = new AppFlowApply();
                 appFlowApply.setId(idWorker.nextId() + "");
                 appFlowApply.setAddDate(DateUtils.format(new Date(), "yyyy-MM-dd HH:mm:ss"));
@@ -195,6 +194,12 @@ public class BiddingProjectService {
                 appFlowApprovalMapper.insert(appFlowApproval);
                 //如果角色是商务经理
             } else if (biddingUserRole.getRoleId().equals("3")) {
+                //商务经理城市为空 则为省标，城市不为空则为地市标
+                if (biddingProjectBulid.getCityId()==null){
+                    biddingProjectBulid.setProLabel("省标");
+                }else {
+                    biddingProjectBulid.setProLabel("地市标");
+                }
                 appFlowApply = new AppFlowApply();
                 appFlowApply.setId(idWorker.nextId() + "");
                 appFlowApply.setAddDate(DateUtils.format(new Date(), "yyyy-MM-dd HH:mm:ss"));

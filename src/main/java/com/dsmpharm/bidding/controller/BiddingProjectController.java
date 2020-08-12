@@ -72,9 +72,8 @@ public class BiddingProjectController {
 			@ApiImplicitParam(name = "publicTime", value = "公示期", required = true, paramType = "query", dataType = "String"),
 			@ApiImplicitParam(name = "appealTime", value = "申诉期", required = true, paramType = "query", dataType = "String"),
 			@ApiImplicitParam(name = "noticeTime", value = "公告期", required = true, paramType = "query", dataType = "String"),
-			@ApiImplicitParam(name = "proLabel", value = "项目标签", required = true, paramType = "query", dataType = "String"),
 			@ApiImplicitParam(name = "suggestion", value = "意见", required = true, paramType = "query", dataType = "String"),
-			@ApiImplicitParam(name = "goStatus", value = "阶段状态", required = true, paramType = "query", dataType = "String"),
+			@ApiImplicitParam(name = "Authorization", value = "请求头中存储token", required = true, paramType = "query", dataType = "String"),
 	})
 	@PostMapping("/build")
 	public Result insert(HttpServletRequest request, @RequestParam Map map,@RequestParam(value = "addContent") List<List<String>> addContent){
