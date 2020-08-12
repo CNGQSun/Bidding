@@ -12,5 +12,22 @@ import java.util.Map;
  * Created by Grant on 2020/08/08
  */
 public interface BiddingProjectMapper extends Mapper<BiddingProject> {
-    List<Map> selectByNoDel(@Param("name") String name, @Param("status") String status);
+    /**
+     * 查询所有登录用户创建的项目
+     * @param name
+     * @param status
+     * @param userId
+     * @return
+     */
+    List<Map> selectByNoDel(@Param("name") String name, @Param("status") String status,@Param("userId") String userId);
+
+    /**
+     * 查询所有登录用户创建的项目
+     * @param name
+     * @param status
+     * @param userId
+     * @return
+     */
+    List<Map> selectDealByNoDel(@Param("name") String name, @Param("status") String status,@Param("userId") String userId);
+
 }

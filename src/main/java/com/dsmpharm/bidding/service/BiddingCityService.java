@@ -3,6 +3,8 @@ package com.dsmpharm.bidding.service;
 import com.dsmpharm.bidding.mapper.BiddingCityMapper;
 import com.dsmpharm.bidding.pojo.BiddingCity;
 import com.dsmpharm.bidding.utils.IdWorker;
+import com.dsmpharm.bidding.utils.Result;
+import com.dsmpharm.bidding.utils.StatusCode;
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.stereotype.Service;
 
@@ -63,4 +65,19 @@ public class BiddingCityService {
         }
         return 0;
     }
+
+	public Result findByProId(String proId) {
+		try {
+			BiddingCity biddingCity=new BiddingCity();
+			biddingCity.setProId(Integer.valueOf(proId));
+			List<BiddingCity> cityList = biddingCityMapper.select(biddingCity);
+			if (cityList!=null){
+				return new Result<>(true, StatusCode.OK, "查询成功", cityList);
+			}
+		} catch (NumberFormatException e) {
+			e.printStackTrace();
+			return new Result<>(false, StatusCode.ERROR, "服务器错误");
+		}
+		return new Result<>(false, StatusCode.ERROR, "查询失败");
+	}
 }

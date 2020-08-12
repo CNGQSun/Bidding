@@ -2,9 +2,12 @@ package com.dsmpharm.bidding.controller;
 
 
 import com.dsmpharm.bidding.service.BiddingCityService;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.dsmpharm.bidding.utils.Result;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 
@@ -15,11 +18,23 @@ import javax.annotation.Resource;
 @CrossOrigin
 @RestController
 @RequestMapping("/biddingCity")
+@Api(tags = "城市相关接口")
 public class BiddingCityController {
 
 	@Resource
 	private BiddingCityService biddingCityService;
-
+	/**
+	* 根据省份ID查询城市信息
+	*/
+	@ApiOperation(value="根据省份ID查询对应城市" )
+	@ApiImplicitParams({
+			@ApiImplicitParam(name = "proId", value = "省份ID", required = true, paramType = "query", dataType = "String"),
+	})
+	@GetMapping("/city")
+	public Result findById(@RequestParam String proId){
+		Result result= biddingCityService.findByProId(proId);
+		return result;
+	}
 	///**
 	//* 添加
 	//*/

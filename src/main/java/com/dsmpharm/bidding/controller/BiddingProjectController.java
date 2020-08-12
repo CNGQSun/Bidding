@@ -84,16 +84,48 @@ public class BiddingProjectController {
 		Result result=biddingProjectService.insert(map,userId,fileMap,addContent);
 		return result;
 	}
+	/**
+	 * 查询所有登录用户创建的项目
+	 * @param request
+	 * @param map
+	 * @return
+	 */
+	@ApiOperation(value="分页、条件查询全部登录用户创建的项目" )
+	@ApiImplicitParams({
+			@ApiImplicitParam(name = "currentPage", value = "当前页", required = true, paramType = "query", dataType = "String"),
+			@ApiImplicitParam(name = "pageSize", value = "每页展示条数", required = true, paramType = "query", dataType = "String"),
+			@ApiImplicitParam(name = "name", value = "项目名", required = true, paramType = "query", dataType = "String"),
+			@ApiImplicitParam(name = "status", value = "项目状态", required = true, paramType = "query", dataType = "String"),
+	})
+	@PostMapping(value = "/list")
+	public Result findSearch(HttpServletRequest request, @RequestParam Map map) {
+		String authorization = request.getHeader("Authorization");
+		String userId = jwtUtil.parseJWT(authorization).getId();
+		Result result = biddingProjectService.list(map,userId);
+		return result;
+	}
 
 	/**
-	* 条件查询，无分页
-	*/
-	@PostMapping(value = "/list")
-	public Result findSearch(@RequestParam Map map) {
-		Result result = biddingProjectService.list(map);
+	 * 查询所有登录用户待办的项目
+	 * @param request
+	 * @param map
+	 * @return
+	 */
+	@ApiOperation(value="分页、条件查询全部登录用户待办的项目" )
+	@ApiImplicitParams({
+			@ApiImplicitParam(name = "currentPage", value = "当前页", required = true, paramType = "query", dataType = "String"),
+			@ApiImplicitParam(name = "pageSize", value = "每页展示条数", required = true, paramType = "query", dataType = "String"),
+			@ApiImplicitParam(name = "name", value = "项目名", required = true, paramType = "query", dataType = "String"),
+			@ApiImplicitParam(name = "status", value = "项目状态", required = true, paramType = "query", dataType = "String"),
+	})
+	@PostMapping(value = "/list/deal")
+	public Result findSearchDeal(HttpServletRequest request, @RequestParam Map map) {
+		String authorization = request.getHeader("Authorization");
+		String userId = jwtUtil.parseJWT(authorization).getId();
+		Result result = biddingProjectService.listDeal(map,userId);
 		return result;
-		//new Result<>(true, StatusCode.OK, "查询成功", new PageResult<BiddingProject>(count, biddingProjects));
 	}
+
 
 	///**
 	//* 查询全部

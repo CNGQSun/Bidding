@@ -3,10 +3,9 @@ package com.dsmpharm.bidding.service;
 import com.dsmpharm.bidding.controller.BiddingProductController;
 import com.dsmpharm.bidding.mapper.*;
 import com.dsmpharm.bidding.pojo.*;
-import com.dsmpharm.bidding.utils.DateUtils;
-import com.dsmpharm.bidding.utils.IdWorker;
-import com.dsmpharm.bidding.utils.Result;
-import com.dsmpharm.bidding.utils.StatusCode;
+import com.dsmpharm.bidding.utils.*;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import org.apache.ibatis.session.RowBounds;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -53,6 +52,10 @@ public class BiddingProjectService {
     @Resource
     private BiddingSettingsExtraMapper biddingSettingsExtraMapper;
     @Resource
+    private BiddingProjectBulidMapper biddingProjectBulidMapper;
+    @Resource
+    private BiddingProjectProductMapper biddingProjectProductMapper;
+    @Resource
     private IdWorker idWorker;
 
     /**
@@ -72,9 +75,9 @@ public class BiddingProjectService {
             BiddingProjectBulid biddingProjectBulid = new BiddingProjectBulid();
             biddingProject.setId(idWorker.nextId() + "");
             biddingProject.setStatus("0");
+            biddingProject.setUserId(userId);
             biddingProject.setDelflag("0");
             String projectPhaseId = map.get("projectPhaseId").toString();
-            //List<BiddingContentSettings> settingsList = biddingContentSettingsMapper.selectByPhaseId(projectPhaseId);
             String versionNum = idWorker.nextId() + "";
             biddingProject.setVersionNum(versionNum);
             //设置所有内容设置版本号
@@ -111,11 +114,21 @@ public class BiddingProjectService {
             String source = map.get("source").toString();
             biddingProjectBulid.setSource(source);
             String provinceId = map.get("provinceId").toString();
-            biddingProjectBulid.setProductId(provinceId);
+            biddingProjectBulid.setProvinceId(provinceId);
             String cityId = map.get("cityId").toString();
             biddingProjectBulid.setCityId(cityId);
             //产品ID有多个，需重点关注
             String productId = map.get("productId").toString();
+            String[] split = productId.split(",");
+            for (int j = 0; j <split.length; j++) {
+                String pproductId=split[j];
+                BiddingProjectProduct biddingProjectProduct=new BiddingProjectProduct();
+                biddingProjectProduct.setId(idWorker.nextId()+"");
+                biddingProjectProduct.setProjectId(biddingProject.getId());
+                biddingProjectProduct.setProductId(pproductId);
+                biddingProjectProduct.setDelflag("0");
+                biddingProjectProductMapper.insert(biddingProjectProduct);
+            }
             if (map.get("fileFormal") != null) {
                 String fileFormal = map.get("fileFormal").toString();
                 biddingProjectBulid.setFileFormal(fileFormal);
@@ -158,7 +171,6 @@ public class BiddingProjectService {
             biddingProjectBulid.setAppealTime(appealTime);
             String noticeTime = map.get("noticeTime").toString();
             biddingProjectBulid.setNoticeTime(noticeTime);
-
             String suggestion = map.get("suggestion").toString();
             biddingProjectBulid.setSuggestion(suggestion);
             biddingProjectBulid.setGoStatus("3");//0 进行中 1 未进行 2 草稿 3 待审核 4 审核通过 5 审核驳回 6跳过此阶段
@@ -189,6 +201,7 @@ public class BiddingProjectService {
                 String nextNode = (Integer.valueOf(appFlowApply.getCurrentNode()) + 1) + "";
                 appFlowApproval.setFlowNodeId(nextNode);
                 appFlowApproval.setApplyId(appFlowApply.getId());
+                appFlowApproval.setApproveResult("0");
                 appFlowApproval.setUserId(biddingUser.getId());
                 //往审批表里插数据，为了后续查看是否有待审批的记录
                 appFlowApprovalMapper.insert(appFlowApproval);
@@ -220,6 +233,8 @@ public class BiddingProjectService {
                 appFlowApproval.setDelflag("0");
                 String nextNode = (Integer.valueOf(appFlowApply.getCurrentNode()) + 1) + "";
                 appFlowApproval.setFlowNodeId(nextNode);
+                appFlowApproval.setUserId(biddingUser.getId());
+                appFlowApproval.setApproveResult("0");
                 appFlowApproval.setApplyId(appFlowApply.getId());
                 //往审批表里插数据，为了后续查看是否有待审批的记录
                 appFlowApprovalMapper.insert(appFlowApproval);
@@ -243,6 +258,8 @@ public class BiddingProjectService {
                 //往额外设置表里插数据
                 biddingSettingsExtraMapper.insert(biddingSettingsExtra);
             }
+            //将立项数据插入
+            biddingProjectBulidMapper.insert(biddingProjectBulid);
             BiddingProjectType biddingProjectType = biddingProjectTypeMapper.selectByPrimaryKey(typeId);
             Map resultMap = new HashMap();
             resultMap.put("projectPhase", biddingProjectType.getProjectPhaseId());
@@ -272,15 +289,29 @@ public class BiddingProjectService {
         biddingProjectMapper.deleteByPrimaryKey(id);
     }
 
-    public Result list(Map map) {
-        Integer currentPage = Integer.valueOf(map.get("currentPage").toString());
-        Integer pageSize = Integer.valueOf(map.get("pageSize").toString());
-        String name = map.get("name").toString();
-        String status = map.get("status").toString();
-        List<Map> mapList=biddingProjectMapper.selectByNoDel(name,status);
-        BiddingProject biddingProject = null;
-        biddingProjectMapper.select(biddingProject);
-        return null;
+    /**
+     *查询所有登录用户创建的项目
+     * @param map
+     * @param userId
+     * @return
+     */
+    public Result list(Map map,String userId) {
+        try {
+            Integer currentPage = Integer.valueOf(map.get("currentPage").toString());
+            Integer pageSize = Integer.valueOf(map.get("pageSize").toString());
+            String name = map.get("name").toString();
+            String status = map.get("status").toString();
+            List<Map> mapList=biddingProjectMapper.selectByNoDel(name,status,userId);
+            PageHelper.startPage(currentPage, pageSize);
+            List<Map> maps = biddingProjectMapper.selectByNoDel(name,status,userId);
+            PageInfo pageInfo = new PageInfo<>(maps);
+            pageInfo.setTotal(mapList.size());
+            PageResult pageResult = new PageResult(pageInfo.getTotal(), maps);
+            return new Result<>(true, StatusCode.OK, "查询成功",pageResult);
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+            return new Result<>(false, StatusCode.ERROR, "服务器错误");
+        }
     }
 
     public List<BiddingProject> list(BiddingProject biddingProject, int currentPage, int pageSize) {
@@ -328,6 +359,31 @@ public class BiddingProjectService {
             List<BiddingContentSettings> settingsList = biddingContentSettingsMapper.selectByPhaseId(projectPhaseId);
             return new Result<>(true, StatusCode.OK, "查询成功", settingsList);
         } catch (Exception e) {
+            e.printStackTrace();
+            return new Result<>(false, StatusCode.ERROR, "服务器错误");
+        }
+    }
+
+    /**
+     * 查询所有登录用户创建的项目
+     * @param map
+     * @param userId
+     * @return
+     */
+    public Result listDeal(Map map, String userId) {
+        try {
+            Integer currentPage = Integer.valueOf(map.get("currentPage").toString());
+            Integer pageSize = Integer.valueOf(map.get("pageSize").toString());
+            String name = map.get("name").toString();
+            String status = map.get("status").toString();
+            List<Map> mapList=biddingProjectMapper.selectDealByNoDel(name,status,userId);
+            PageHelper.startPage(currentPage, pageSize);
+            List<Map> maps = biddingProjectMapper.selectDealByNoDel(name,status,userId);
+            PageInfo pageInfo = new PageInfo<>(maps);
+            pageInfo.setTotal(mapList.size());
+            PageResult pageResult = new PageResult(pageInfo.getTotal(), maps);
+            return new Result<>(true, StatusCode.OK, "查询成功",pageResult);
+        } catch (NumberFormatException e) {
             e.printStackTrace();
             return new Result<>(false, StatusCode.ERROR, "服务器错误");
         }
