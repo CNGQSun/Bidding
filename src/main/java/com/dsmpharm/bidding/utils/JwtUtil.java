@@ -17,8 +17,8 @@ public class JwtUtil {
     private String key = "aasgrant";
 
     // 有效期 10 秒
-//    private long expirationTime = 10;
-    private long expirationTime = 3600;
+    //private long expirationTime = 60;
+    private long expirationTime = 36000000;
 
     // 生成JWT
     public String createJWT(String id, String subject) {
@@ -29,7 +29,7 @@ public class JwtUtil {
                 .setIssuedAt(now)
                 .claim(JwtUtil.ACCOUNT, subject)
                 .signWith(SignatureAlgorithm.HS256, key);
-        builder.setExpiration(new Date(System.currentTimeMillis() + (expirationTime * 100000)));
+        builder.setExpiration(new Date(System.currentTimeMillis() + (expirationTime * 1000)));
         return builder.compact();
     }
 

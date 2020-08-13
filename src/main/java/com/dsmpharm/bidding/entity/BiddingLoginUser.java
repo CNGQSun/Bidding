@@ -33,6 +33,10 @@ public class BiddingLoginUser implements Serializable {
 
     private String delflag;
 
+	private String roleId;
+
+	private String roleName;
+
     private String token;
 
 
@@ -100,5 +104,21 @@ public class BiddingLoginUser implements Serializable {
 
 	public void setToken(String token) {
 		this.token = token;
+	}
+
+	public String getRoleId() {
+		return roleId;
+	}
+
+	public void setRoleId(String roleId) {
+		this.roleId = roleId;
+	}
+
+	public String getRoleName() {
+		return roleName;
+	}
+
+	public void setRoleName(String roleName) {
+		this.roleName = roleName;
 	}
 }

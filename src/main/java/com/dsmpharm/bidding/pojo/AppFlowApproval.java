@@ -1,6 +1,7 @@
 package com.dsmpharm.bidding.pojo;
 
 import javax.persistence.Entity;
+import javax.persistence.Id;
 import javax.persistence.Table;
 import java.io.Serializable;
 
@@ -13,6 +14,7 @@ import java.io.Serializable;
 public class AppFlowApproval implements Serializable {
     private static final long serialVersionUID = -8509442156873434528L;
 
+    @Id
     private String id;
 
     private String projectPhaseId;

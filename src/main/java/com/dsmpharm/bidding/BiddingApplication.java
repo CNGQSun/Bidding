@@ -42,24 +42,4 @@ public class BiddingApplication extends SpringBootServletInitializer {
     }
 
 }
-//public class BiddingApplication {
-//
-//    public static void main(String[] args) {
-//        SpringApplication.run(BiddingApplication.class, args);
-//    }
-//    /**
-//     * 新建id生成器对象
-//     */
-//    @Bean
-//    public IdWorker idWorker(){
-//        return new IdWorker(1, 1);
-//    }
-//    /**
-//     * 新建JWT对象
-//     */
-//    @Bean
-//    public JwtUtil getJwtUtil(){
-//        return new JwtUtil();
-//    }
-//
-//}
+

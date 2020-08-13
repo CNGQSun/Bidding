@@ -4,6 +4,7 @@ import com.dsmpharm.bidding.entity.BiddingLoginUser;
 import com.dsmpharm.bidding.mapper.BiddingRoleMapper;
 import com.dsmpharm.bidding.mapper.BiddingUserMapper;
 import com.dsmpharm.bidding.mapper.BiddingUserRoleMapper;
+import com.dsmpharm.bidding.pojo.BiddingRole;
 import com.dsmpharm.bidding.pojo.BiddingUser;
 import com.dsmpharm.bidding.pojo.BiddingUserRole;
 import com.dsmpharm.bidding.utils.IdWorker;
@@ -287,6 +288,8 @@ public class BiddingUserService {
             //开始比较用户输入的密码加密后是否与数据库里存储的加密密码一致
             if ((md5HashPassword.toString()).equals(biddingUser.getPassword())){
                 //密码正确
+                BiddingUserRole biddingUserRole = biddingUserRoleMapper.selectByUserId(biddingUser.getId());
+                BiddingRole biddingRole = biddingRoleMapper.selectByPrimaryKey(biddingUserRole.getRoleId());
                 BiddingLoginUser biddingLoginUser=new BiddingLoginUser();
                 biddingLoginUser.setId(biddingUser.getId());
                 biddingLoginUser.setDelflag(biddingUser.getDelflag());
@@ -297,6 +300,8 @@ public class BiddingUserService {
                 biddingLoginUser.setPassword(biddingUser.getPassword());
                 biddingLoginUser.setPhoneNumber(biddingUser.getPhoneNumber());
                 biddingLoginUser.setStatus(biddingUser.getStatus());
+                biddingLoginUser.setRoleId(biddingUserRole.getRoleId());
+                biddingLoginUser.setRoleName(biddingRole.getName());
                 // 登陆成功，返回令牌给用户
                 String token = jwtUtil.createJWT(biddingUser.getId(),biddingUser.getPhoneNumber());
                 biddingLoginUser.setToken(token);

@@ -23,7 +23,7 @@
             and bpb.name like concat('%',#{name},'%')
         </if>
     </select>
-<!--    查询所有登录用户创建的项目-->
+<!--    查询所有登录用户待办的项目-->
     <select id="selectDealByNoDel" resultType="java.util.Map">
         select DISTINCT bp.*,bpb.name projectName,bpph.name phaseName,bpt.name typeName,afap.approve_result approveResult,afa.id applyId,afap.id approveId
         from app_flow_approval afap
@@ -39,7 +39,7 @@
         LEFT JOIN bidding_project_product bpp on bpp.project_id=bp.id
         LEFT JOIN bidding_project_phase bpph on bpph.id=bp.project_phase_now
         LEFT JOIN bidding_project_type bpt on bpt.id =bp.type_id
-        WHERE bp.user_id=#{userId}
+        WHERE afap.user_id=#{userId}
         <if test="status !=null and  status!='' ">
             and bp.status= #{status}
         </if>
