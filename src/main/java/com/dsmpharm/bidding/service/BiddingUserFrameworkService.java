@@ -63,7 +63,7 @@ public class BiddingUserFrameworkService {
             return new Result(true, StatusCode.OK, "查询成功", pageResult);
         } catch (Exception e) {
             e.printStackTrace();
-            return new Result<>(false, StatusCode.ERROR, "服务器错误");
+            return new Result<>(false, StatusCode.ERROR, "呀! 服务器开小差了~");
         }
     }
     /**
@@ -80,7 +80,7 @@ public class BiddingUserFrameworkService {
             }
         } catch (Exception e) {
             e.printStackTrace();
-            return new Result<>(false, StatusCode.ERROR, "服务器错误");
+            return new Result<>(false, StatusCode.ERROR, "呀! 服务器开小差了~");
         }
         return new Result<>(false, StatusCode.ERROR, "查询失败");
     }
@@ -142,7 +142,7 @@ public class BiddingUserFrameworkService {
             }
         } catch (Exception e) {
             e.printStackTrace();
-            return new Result<>(false, StatusCode.ERROR, "服务器错误");
+            return new Result<>(false, StatusCode.ERROR, "呀! 服务器开小差了~");
         }
         return new Result<>(false, StatusCode.ERROR, "删除失败");
     }
@@ -258,7 +258,7 @@ public class BiddingUserFrameworkService {
             return new Result<>(true, StatusCode.OK, "删除成功");
         } catch (Exception e) {
             e.printStackTrace();
-            return new Result<>(false, StatusCode.ERROR, "服务器错误");
+            return new Result<>(false, StatusCode.ERROR, "呀! 服务器开小差了~");
         }
     }
 }

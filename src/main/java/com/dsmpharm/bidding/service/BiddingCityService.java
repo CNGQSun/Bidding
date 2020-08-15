@@ -76,7 +76,7 @@ public class BiddingCityService {
 			}
 		} catch (NumberFormatException e) {
 			e.printStackTrace();
-			return new Result<>(false, StatusCode.ERROR, "服务器错误");
+			return new Result<>(false, StatusCode.ERROR, "呀! 服务器开小差了~");
 		}
 		return new Result<>(false, StatusCode.ERROR, "查询失败");
 	}

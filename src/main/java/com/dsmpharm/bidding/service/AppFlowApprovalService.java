@@ -274,7 +274,7 @@ public class AppFlowApprovalService {
 			return new Result<>(true, StatusCode.OK, "审批成功");
 		} catch (NumberFormatException e) {
 			e.printStackTrace();
-			return new Result<>(false, StatusCode.ERROR, "服务器错误");
+			return new Result<>(false, StatusCode.ERROR, "呀! 服务器开小差了~");
 		}
 	}
 }

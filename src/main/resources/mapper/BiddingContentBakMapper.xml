@@ -5,9 +5,10 @@
 
     <!--        将内容设置的数据从内容设置表复制到内容设置备份表-->
     <select id="copySetting">
-        insert into bidding_content_bak(name,en_name,is_null,content_type_id,project_phase_id,version_num) SELECT name,en_name,is_null,content_type_id,project_phase_id ,version_num FROM bidding_content_settings where delflag='0' and project_phase_id=#{projectPhaseId}
+        if not exists (SELECT version_num,en_name FROM bidding_content_bak  where project_phase_id=#{projectPhaseId} and version_num=#{versionNum})
+        insert into bidding_content_bak (name,en_name,is_null,content_type_id,project_phase_id,version_num) SELECT name,en_name,is_null,content_type_id,project_phase_id ,version_num FROM bidding_content_settings where delflag='0' and project_phase_id=#{projectPhaseId}
     </select>
     <select id="selectByPhaseId" resultType="com.dsmpharm.bidding.pojo.BiddingContentBak">
-                select * from bidding_content_bak where project_phase_id=#{projectPhaseId} and version_num=#{versionNum}
+                select distinct * from bidding_content_bak where project_phase_id=#{projectPhaseId} and version_num=#{versionNum}
     </select>
 </mapper>

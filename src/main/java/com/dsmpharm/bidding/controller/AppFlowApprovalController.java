@@ -20,7 +20,7 @@ import java.util.Map;
 @CrossOrigin
 @RestController
 @RequestMapping("/appFlowApproval")
-@Api("项目审批相关接口")
+@Api(tags = "项目审批相关接口")
 public class AppFlowApprovalController {
 
     @Resource

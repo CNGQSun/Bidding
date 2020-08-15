@@ -67,7 +67,7 @@ public class BiddingUserService {
             return new Result<>(true, StatusCode.OK, "查询成功", pageResult);
         } catch (Exception e) {
             e.printStackTrace();
-            return new Result<>(false, StatusCode.ERROR, "服务器错误");
+            return new Result<>(false, StatusCode.ERROR, "呀! 服务器开小差了~");
         }
     }
 
@@ -84,7 +84,7 @@ public class BiddingUserService {
             }
         } catch (Exception e) {
             e.printStackTrace();
-            return new Result<>(false, StatusCode.ERROR, "服务器错误");
+            return new Result<>(false, StatusCode.ERROR, "呀! 服务器开小差了~");
         }
         return new Result<>(false, StatusCode.ERROR, "查询失败");
     }
@@ -110,7 +110,7 @@ public class BiddingUserService {
             }
         } catch (Exception e) {
             e.printStackTrace();
-            return new Result<>(false, StatusCode.ERROR, "服务器错误");
+            return new Result<>(false, StatusCode.ERROR, "呀! 服务器开小差了~");
         }
         return new Result<>(false, StatusCode.ERROR, "修改失败");
     }
@@ -179,7 +179,7 @@ public class BiddingUserService {
             insertRole = biddingUserRoleMapper.insert(biddingUserRole);
         } catch (Exception e) {
             e.printStackTrace();
-            return new Result<>(false, StatusCode.ERROR, "服务器错误");
+            return new Result<>(false, StatusCode.ERROR, "呀! 服务器开小差了~");
         }
         if (insertRole > 0 && insertUser > 0) {
             return new Result<>(true, StatusCode.OK, "添加用户成功");
@@ -211,7 +211,7 @@ public class BiddingUserService {
             insertRole = biddingUserRoleMapper.insert(biddingUserRole);
         } catch (Exception e) {
             e.printStackTrace();
-            return new Result<>(false, StatusCode.ERROR, "服务器错误");
+            return new Result<>(false, StatusCode.ERROR, "呀! 服务器开小差了~");
         }
         if (insertRole > 0 && insertUser > 0) {
             return new Result<>(true, StatusCode.OK, "已保存");
@@ -240,7 +240,7 @@ public class BiddingUserService {
             }
         } catch (Exception e) {
             e.printStackTrace();
-            return new Result<>(false, StatusCode.ERROR, "服务器错误");
+            return new Result<>(false, StatusCode.ERROR, "呀! 服务器开小差了~");
         }
         return new Result<>(false, StatusCode.ERROR, "删除失败");
     }
@@ -269,7 +269,7 @@ public class BiddingUserService {
 
         } catch (Exception e) {
             e.printStackTrace();
-            return new Result<>(false, StatusCode.ERROR, "服务器错误");
+            return new Result<>(false, StatusCode.ERROR, "呀! 服务器开小差了~");
         }
     }
     public Result login(Map map) {
@@ -309,7 +309,7 @@ public class BiddingUserService {
             }
         } catch (Exception e) {
             e.printStackTrace();
-            return new Result<>(false, StatusCode.ERROR, "服务器错误");
+            return new Result<>(false, StatusCode.ERROR, "呀! 服务器开小差了~");
         }
         return new Result<>(false, StatusCode.ERROR, "登录失败，请联系管理员");
     }
