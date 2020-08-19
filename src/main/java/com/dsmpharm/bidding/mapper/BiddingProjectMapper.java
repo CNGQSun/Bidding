@@ -88,6 +88,13 @@ public interface BiddingProjectMapper extends Mapper<BiddingProject> {
      */
     Map selectOfficialNotice(@Param("projectId")String projectId);
 
+    /**
+     * 项目总结
+     * @param projectId
+     * @return
+     */
+    Map selectProjectSummary(@Param("projectId")String projectId);
+
     BiddingProjectBulid selectGoStatus1(@Param("projectId") String projectId);
     BiddingProjectBulid selectGoStatus2(@Param("projectId")String projectId);
     BiddingProjectBulid selectGoStatus3(@Param("projectId")String projectId);
@@ -95,4 +102,6 @@ public interface BiddingProjectMapper extends Mapper<BiddingProject> {
     BiddingProjectBulid selectGoStatus5(@Param("projectId")String projectId);
     BiddingProjectBulid selectGoStatus6(@Param("projectId")String projectId);
     BiddingProjectBulid selectGoStatus7(@Param("projectId")String projectId);
+
+
 }

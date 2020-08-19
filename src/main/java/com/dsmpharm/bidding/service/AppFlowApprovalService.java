@@ -199,11 +199,13 @@ public class AppFlowApprovalService {
 				appFlowApply1.setStatus("1");
 				//更新审批表
 				appFlowApplyMapper.updateByPrimaryKeySelective(appFlowApply1);
+				Integer newNow=0;
 				if (biddingProject.getProjectPhaseNow().equals("1")){
 					BiddingProjectBulid biddingProjectBulid = biddingProjectBulidMapper.selectByPrimaryKey(biddingProject.getProjectBulidId());
 					if (biddingProjectBulid==null){
 						return new Result<>(false, StatusCode.ERROR, "没有找到该阶段记录");
 					}
+					newNow = (Integer.valueOf(biddingProject.getProjectPhaseNow()))+1;
 					biddingProjectBulid.setGoStatus("4");
 					biddingProjectBulidMapper.updateByPrimaryKeySelective(biddingProjectBulid);
 				}else if (biddingProject.getProjectPhaseNow().equals("2")){
@@ -211,6 +213,10 @@ public class AppFlowApprovalService {
 					if (biddingDocInterpretation==null){
 						return new Result<>(false, StatusCode.ERROR, "没有找到该阶段记录");
 					}
+					if (biddingProject.getIsSkip().equals("0")){
+						newNow= (Integer.valueOf(biddingProject.getProjectPhaseNow()))+2;
+					}
+					newNow = (Integer.valueOf(biddingProject.getProjectPhaseNow()))+1;
 					biddingDocInterpretation.setGoStatus("4");
 					biddingDocInterpretationMapper.updateByPrimaryKeySelective(biddingDocInterpretation);
 				}else if (biddingProject.getProjectPhaseNow().equals("3")){
@@ -218,6 +224,7 @@ public class AppFlowApprovalService {
 					if (biddingProductCollection==null){
 						return new Result<>(false, StatusCode.ERROR, "没有找到该阶段记录");
 					}
+					newNow = (Integer.valueOf(biddingProject.getProjectPhaseNow()))+1;
 					biddingProductCollection.setGoStatus("4");
 					biddingProductCollectionMapper.updateByPrimaryKeySelective(biddingProductCollection);
 				}else if (biddingProject.getProjectPhaseNow().equals("4")){
@@ -225,6 +232,7 @@ public class AppFlowApprovalService {
 					if (biddingStrategyAnalysis==null){
 						return new Result<>(false, StatusCode.ERROR, "没有找到该阶段记录");
 					}
+					newNow = (Integer.valueOf(biddingProject.getProjectPhaseNow()))+1;
 					biddingStrategyAnalysis.setGoStatus("4");
 					biddingStrategyAnalysisMapper.updateByPrimaryKeySelective(biddingStrategyAnalysis);
 				}else if (biddingProject.getProjectPhaseNow().equals("5")){
@@ -232,6 +240,7 @@ public class AppFlowApprovalService {
 					if (biddingInfoFilling==null){
 						return new Result<>(false, StatusCode.ERROR, "没有找到该阶段记录");
 					}
+					newNow = (Integer.valueOf(biddingProject.getProjectPhaseNow()))+1;
 					biddingInfoFilling.setGoStatus("4");
 					biddingInfoFillingMapper.updateByPrimaryKeySelective(biddingInfoFilling);
 				}else if (biddingProject.getProjectPhaseNow().equals("6")){
@@ -239,6 +248,7 @@ public class AppFlowApprovalService {
 					if (biddingOfficialNotice==null){
 						return new Result<>(false, StatusCode.ERROR, "没有找到该阶段记录");
 					}
+					newNow = (Integer.valueOf(biddingProject.getProjectPhaseNow()))+1;
 					biddingOfficialNotice.setGoStatus("4");
 					biddingOfficialNoticeMapper.updateByPrimaryKeySelective(biddingOfficialNotice);
 				}else if (biddingProject.getProjectPhaseNow().equals("7")){
@@ -246,10 +256,10 @@ public class AppFlowApprovalService {
 					if (biddingProjectSummary==null){
 						return new Result<>(false, StatusCode.ERROR, "没有找到该阶段记录");
 					}
+					newNow = (Integer.valueOf(biddingProject.getProjectPhaseNow()))+1;
 					biddingProjectSummary.setGoStatus("4");
 					biddingProjectSummaryMapper.updateByPrimaryKeySelective(biddingProjectSummary);
 				}
-				Integer newNow = (Integer.valueOf(biddingProject.getProjectPhaseNow()))+1;
 				biddingProject.setProjectPhaseNow(newNow+"");
 				biddingProjectMapper.updateByPrimaryKeySelective(biddingProject);
 				return new Result<>(true, StatusCode.OK, "审批成功");

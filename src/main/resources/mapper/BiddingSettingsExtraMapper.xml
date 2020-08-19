@@ -4,4 +4,8 @@
 <mapper namespace="com.dsmpharm.bidding.mapper.BiddingSettingsExtraMapper">
 
 
+    <update id="updateByPhaseId">
+        update bidding_settings_extra set delflag='1'
+        where project_phase_id=#{id}
+    </update>
 </mapper>

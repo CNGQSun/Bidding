@@ -8,4 +8,5 @@ import tk.mybatis.mapper.common.Mapper;
  * Created by Grant on 2020/08/08
  */
 public interface BiddingSettingsExtraMapper extends Mapper<BiddingSettingsExtra> {
+    int updateByPhaseId(String id);
 }

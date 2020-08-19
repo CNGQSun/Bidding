@@ -77,7 +77,7 @@
         FROM bidding_project bp
         LEFT JOIN bidding_settings_extra bse on bse.project_id=bp.id
         LEFT JOIN bidding_file_addcontent bfa on bfa.id=bse.id
-        where bp.id=#{projectId} and bse.project_phase_id=#{projectBulidId}
+        where bp.id=#{projectId} and bse.project_phase_id=#{projectBulidId} and bse.delflag='0'
     </select>
     <!--    查询阶段2详情-->
     <select id="selectInterpretation" resultType="java.util.Map">
@@ -127,6 +127,16 @@
   LEFT JOIN bidding_official_notice bon on bon.id=bp.official_notice_id
   where bp.id=#{projectId}
     </select>
+
+    <select id="selectProjectSummary" resultType="java.util.Map">
+    SELECT DISTINCT bp.id projectId,bp.type_id typeId,bp.project_phase_now phaseNow ,
+    bp.suggestion projectSuggestion ,bp.status projectStatus,
+    bp.project_summary_id projectSummaryId,
+    bon.*
+    FROM bidding_project bp
+    LEFT JOIN bidding_project_summary bon on bon.id=bp.project_summary_id
+    where bp.id=#{projectId}
+    </select>
     <select id="selectGoStatus1" resultType="com.dsmpharm.bidding.pojo.BiddingProjectBulid">
         select bpu.*
         from bidding_project bp
@@ -169,5 +179,6 @@ where bp.id=#{projectId}
         left JOIN bidding_project_summary bpu on bpu.id=bp.project_summary_id
 where bp.id=#{projectId}
     </select>
+
 
 </mapper>

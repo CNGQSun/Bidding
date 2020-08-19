@@ -43,6 +43,8 @@ public class BiddingProject implements Serializable {
 
     private String delflag;
 
+	private String isSkip;
+
 	public String getUserId() {
 		return userId;
 	}
@@ -139,5 +141,12 @@ public class BiddingProject implements Serializable {
 	}
     public void setDelflag(String delflag) {
 		this.delflag = delflag;
+	}
+
+	public String getIsSkip() {
+		return isSkip;
+	}
+	public void setIsSkip(String isSkip) {
+		this.isSkip = isSkip;
 	}
 }

@@ -5,6 +5,7 @@ import org.apache.ibatis.annotations.Param;
 import tk.mybatis.mapper.common.Mapper;
 
 import java.util.List;
+import java.util.Map;
 
 /** 
  * <br/>
@@ -19,4 +20,6 @@ public interface BiddingContentBakMapper extends Mapper<BiddingContentBak> {
 
 
     List<BiddingContentBak> selectByPhaseId(@Param("projectPhaseId") String projectPhaseId, @Param("versionNum") String versionNum);
+
+    List<Map> selectByUpdate(@Param("projectPhaseId") String projectPhaseId, @Param("versionNum") String versionNum);
 }
