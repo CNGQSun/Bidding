@@ -249,6 +249,9 @@ public class AppFlowApprovalService {
 					biddingProjectSummary.setGoStatus("4");
 					biddingProjectSummaryMapper.updateByPrimaryKeySelective(biddingProjectSummary);
 				}
+				Integer newNow = (Integer.valueOf(biddingProject.getProjectPhaseNow()))+1;
+				biddingProject.setProjectPhaseNow(newNow+"");
+				biddingProjectMapper.updateByPrimaryKeySelective(biddingProject);
 				return new Result<>(true, StatusCode.OK, "审批成功");
 			}
 			//如果查的到记录，说明还有审批流程没有走完

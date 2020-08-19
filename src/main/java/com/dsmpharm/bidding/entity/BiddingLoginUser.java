@@ -39,6 +39,8 @@ public class BiddingLoginUser implements Serializable {
 
     private String token;
 
+    private String isEmpty;
+
 
 	public String getId() {
 		return id;
@@ -120,5 +122,13 @@ public class BiddingLoginUser implements Serializable {
 
 	public void setRoleName(String roleName) {
 		this.roleName = roleName;
+	}
+
+	public String getIsEmpty() {
+		return isEmpty;
+	}
+
+	public void setIsEmpty(String isEmpty) {
+		this.isEmpty = isEmpty;
 	}
 }

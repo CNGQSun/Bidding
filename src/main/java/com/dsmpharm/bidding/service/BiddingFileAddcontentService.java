@@ -37,8 +37,13 @@ public class BiddingFileAddcontentService {
 	private String uploadFilesAdd;//上传文件保存的本地目录，使用@Value获取全局配置文件中配置的属性值
 
 
+	/**
+	 * 项目编辑中接收新增的内容设置的文件类型
+	 * @param files
+	 * @return
+	 */
 	public Result insert(List<MultipartFile> files){
-		if (files==null&&files.size()>0){
+		if (files!=null&&files.size()>0){
 			//判断文件夹是否存在，不存在则新建
 			String docPath1 = uploadFilesAdd;
 			File docPath = new File(docPath1);
@@ -60,7 +65,7 @@ public class BiddingFileAddcontentService {
 				biddingFileAddcontent.setFilePath(filePath.getPath());
 				BiddingFileAddcontent biddingFileAddcontent1 = null;
 				try {
-					biddingFileAddcontentMapper.insert(biddingFileAddcontent);
+					biddingFileAddcontentMapper.insertAddcontent(filePath.getPath());
 					biddingFileAddcontent1 = biddingFileAddcontentMapper.selectOne(biddingFileAddcontent);
 				} catch (Exception e) {
 					e.printStackTrace();

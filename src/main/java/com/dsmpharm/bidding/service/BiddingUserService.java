@@ -2,16 +2,14 @@ package com.dsmpharm.bidding.service;
 
 import com.dsmpharm.bidding.entity.BiddingLoginUser;
 import com.dsmpharm.bidding.mapper.BiddingRoleMapper;
+import com.dsmpharm.bidding.mapper.BiddingUserFrameworkMapper;
 import com.dsmpharm.bidding.mapper.BiddingUserMapper;
 import com.dsmpharm.bidding.mapper.BiddingUserRoleMapper;
 import com.dsmpharm.bidding.pojo.BiddingRole;
 import com.dsmpharm.bidding.pojo.BiddingUser;
+import com.dsmpharm.bidding.pojo.BiddingUserFramework;
 import com.dsmpharm.bidding.pojo.BiddingUserRole;
-import com.dsmpharm.bidding.utils.IdWorker;
-import com.dsmpharm.bidding.utils.JwtUtil;
-import com.dsmpharm.bidding.utils.PageResult;
-import com.dsmpharm.bidding.utils.Result;
-import com.dsmpharm.bidding.utils.StatusCode;
+import com.dsmpharm.bidding.utils.*;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.apache.ibatis.session.RowBounds;
@@ -37,6 +35,11 @@ public class BiddingUserService {
 
     @Resource
     private BiddingUserRoleMapper biddingUserRoleMapper;
+
+    @Resource
+    private BiddingUserFrameworkMapper biddingUserFrameworkMapper;
+
+
 
     @Resource
     private IdWorker idWorker;
@@ -272,6 +275,12 @@ public class BiddingUserService {
             return new Result<>(false, StatusCode.ERROR, "呀! 服务器开小差了~");
         }
     }
+
+    /**
+     * 用户登录
+     * @param map
+     * @return
+     */
     public Result login(Map map) {
         try {
             String userId = map.get("userId").toString();
@@ -302,6 +311,29 @@ public class BiddingUserService {
                 biddingLoginUser.setStatus(biddingUser.getStatus());
                 biddingLoginUser.setRoleId(biddingUserRole.getRoleId());
                 biddingLoginUser.setRoleName(biddingRole.getName());
+
+
+                if (biddingUserRole.getRoleId().equals("1")){
+                    List<BiddingUserFramework>  biddingUserFrameworks=biddingUserFrameworkMapper.selectByGraParent(userId);
+                    if (biddingUserFrameworks!=null&&biddingUserFrameworks.size()>0){
+                        //大区经理不空岗，不可以创建项目
+                        biddingLoginUser.setIsEmpty("1");
+                    }else {
+                        //大区经理空岗 可以创建项目
+                        biddingLoginUser.setIsEmpty("0");
+                    }
+                }
+
+                if (biddingUserRole.getRoleId().equals("2")){
+                    List<BiddingUserFramework>  biddingUserFrameworks=biddingUserFrameworkMapper.selectByParent(userId);
+                    if (biddingUserFrameworks!=null&&biddingUserFrameworks.size()>0){
+                        //商务经理不空岗，不可以创建项目
+                        biddingLoginUser.setIsEmpty("1");
+                    }else {
+                        //商务经理空岗 可以创建项目
+                        biddingLoginUser.setIsEmpty("0");
+                    }
+                }
                 // 登陆成功，返回令牌给用户
                 String token = jwtUtil.createJWT(biddingUser.getId(),biddingUser.getPhoneNumber());
                 biddingLoginUser.setToken(token);

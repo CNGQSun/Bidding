@@ -32,4 +32,13 @@
         left join bidding_user bu3 on bu3.id=buf.user_id
         where buf.delflag='0' and bu1.delflag='0' and bu2.delflag='0' and bu3.delflag='0' and buf.id=#{id}
     </select>
+
+<!--    查看大区经理是否空岗-->
+    <select id="selectByGraParent" resultType="com.dsmpharm.bidding.pojo.BiddingUserFramework">
+        select * from bidding_user_framework where (parent_id IS not NULL OR parent_id !='') and gra_parent_id=#{graParentId} and delflag='0'
+    </select>
+<!--    查看商务经理是否空岗-->
+    <select id="selectByParent" resultType="com.dsmpharm.bidding.pojo.BiddingUserFramework">
+                select * from bidding_user_framework where (user_id is not null OR user_id !='') and parent_id=#{parentId} and delflag='0'
+    </select>
 </mapper>

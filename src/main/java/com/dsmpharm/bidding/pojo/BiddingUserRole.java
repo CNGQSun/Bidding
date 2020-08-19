@@ -23,6 +23,7 @@ public class BiddingUserRole implements Serializable {
 
     private String delflag;
 
+
     public String getId() {
 		return id;
 	}

@@ -103,6 +103,7 @@ public class BiddingProjectController {
      */
     @ApiOperation(value = "提交立项内容")
     @ApiImplicitParams({
+            @ApiImplicitParam(name = "isSubmit", value = "提交或保存，0为提交，1为保存", required = true, paramType = "query", dataType = "String"),
             @ApiImplicitParam(name = "addContent", value = "单独的内容设置，格式{{name,contentTypeId,isNull,value},{}}", required = true, paramType = "query", dataType = "body"),
             @ApiImplicitParam(name = "projectPhaseId", value = "阶段ID，七个阶段对应七个ID：1,2,3,4,5,6,7", required = true, paramType = "query", dataType = "String"),
             @ApiImplicitParam(name = "docPublicTime", value = "文件发布时间", required = true, paramType = "query", dataType = "String"),
@@ -124,7 +125,8 @@ public class BiddingProjectController {
     })
 
     @PostMapping("/build")
-    public Result insert(HttpServletRequest request, @RequestParam Map map, @RequestParam(value = "addContent") List<String> addContent) {
+    public Result insert(HttpServletRequest request, @RequestParam Map map, @RequestParam(value = "addContent") List<List<String>> addContent) {
+
         MultipartHttpServletRequest params = ((MultipartHttpServletRequest) request);
         Map<String, MultipartFile> fileMap = params.getFileMap();
         String authorization = request.getHeader("Authorization");
@@ -142,6 +144,7 @@ public class BiddingProjectController {
      */
     @ApiOperation(value = "提交文件解读内容")
     @ApiImplicitParams({
+            @ApiImplicitParam(name = "isSubmit", value = "提交或保存，0为提交，1为保存", required = true, paramType = "query", dataType = "String"),
             @ApiImplicitParam(name = "addContent", value = "单独的内容设置，格式{{name,contentTypeId,isNull,value},{}}", required = true, paramType = "query", dataType = "body"),
             @ApiImplicitParam(name = "projectPhaseId", value = "阶段ID，七个阶段对应七个ID：1,2,3,4,5,6,7", required = true, paramType = "query", dataType = "String"),
             @ApiImplicitParam(name = "Authorization", value = "请求头中存储token", required = true, paramType = "query", dataType = "String"),
@@ -153,7 +156,7 @@ public class BiddingProjectController {
             @ApiImplicitParam(name = "timeRangeEnd", value = "执行时间范围终止", required = true, paramType = "query", dataType = "String"),
             @ApiImplicitParam(name = "commonName", value = "通用名", required = true, paramType = "query", dataType = "String"),
             @ApiImplicitParam(name = "standards", value = "规格", required = true, paramType = "query", dataType = "String"),
-            @ApiImplicitParam(name = "qualityLevel", value = "质量层次", required = true, paramType = "query", dataType = "String"),
+            //@ApiImplicitParam(name = "qualityLevel", value = "质量层次", required = true, paramType = "query", dataType = "String"),
             @ApiImplicitParam(name = "priceLimit", value = "限价制定", required = true, paramType = "query", dataType = "String"),
             @ApiImplicitParam(name = "priceLimitReference", value = "限价的参考值", required = true, paramType = "query", dataType = "String"),
             @ApiImplicitParam(name = "priceLimitExplain", value = "限价的说明", required = true, paramType = "query", dataType = "String"),
@@ -165,7 +168,7 @@ public class BiddingProjectController {
             @ApiImplicitParam(name = "suggestion", value = "意见填写", required = true, paramType = "query", dataType = "String"),
     })
     @PostMapping("/docInter")
-    public Result insertDocInter(HttpServletRequest request, @RequestParam Map map, @RequestParam(value = "addContent") List<String> addContent) {
+    public Result insertDocInter(HttpServletRequest request, @RequestParam Map map, @RequestParam(value = "addContent") List<List<String>> addContent) {
         MultipartHttpServletRequest params = ((MultipartHttpServletRequest) request);
         Map<String, MultipartFile> fileMap = params.getFileMap();
         String authorization = request.getHeader("Authorization");
@@ -183,6 +186,7 @@ public class BiddingProjectController {
      */
     @ApiOperation(value = "提交竞品收集内容")
     @ApiImplicitParams({
+            @ApiImplicitParam(name = "isSubmit", value = "提交或保存，0为提交，1为保存", required = true, paramType = "query", dataType = "String"),
             @ApiImplicitParam(name = "addContent", value = "单独的内容设置，格式{{name,contentTypeId,isNull,value},{}}", required = true, paramType = "query", dataType = "body"),
             @ApiImplicitParam(name = "projectPhaseId", value = "阶段ID，七个阶段对应七个ID：1,2,3,4,5,6,7", required = true, paramType = "query", dataType = "String"),
             @ApiImplicitParam(name = "Authorization", value = "请求头中存储token", required = true, paramType = "query", dataType = "String"),
@@ -191,7 +195,7 @@ public class BiddingProjectController {
             @ApiImplicitParam(name = "suggestion", value = "意见填写", required = true, paramType = "query", dataType = "String"),
     })
     @PostMapping("/proCollection")
-    public Result insertProCollection(HttpServletRequest request, @RequestParam Map map, @RequestParam(value = "addContent") List<String> addContent) {
+    public Result insertProCollection(HttpServletRequest request, @RequestParam Map map, @RequestParam(value = "addContent") List<List<String>> addContent) {
         MultipartHttpServletRequest params = ((MultipartHttpServletRequest) request);
         List<MultipartFile> fileText = params.getFiles("fileText");
         String authorization = request.getHeader("Authorization");
@@ -209,6 +213,7 @@ public class BiddingProjectController {
      */
     @ApiOperation(value = "提交策略分析内容")
     @ApiImplicitParams({
+            @ApiImplicitParam(name = "isSubmit", value = "提交或保存，0为提交，1为保存", required = true, paramType = "query", dataType = "String"),
             @ApiImplicitParam(name = "addContent", value = "单独的内容设置，格式{{name,contentTypeId,isNull,value},{}}", required = true, paramType = "query", dataType = "body"),
             @ApiImplicitParam(name = "projectPhaseId", value = "阶段ID，七个阶段对应七个ID：1,2,3,4,5,6,7", required = true, paramType = "query", dataType = "String"),
             @ApiImplicitParam(name = "Authorization", value = "请求头中存储token", required = true, paramType = "query", dataType = "String"),
@@ -227,7 +232,7 @@ public class BiddingProjectController {
             @ApiImplicitParam(name = "suggestion", value = "意见填写", required = true, paramType = "query", dataType = "String"),
     })
     @PostMapping("/strategyAnalysis")
-    public Result insertStrategyAnalysis(HttpServletRequest request, @RequestParam Map map, @RequestParam(value = "addContent") List<String> addContent) {
+    public Result insertStrategyAnalysis(HttpServletRequest request, @RequestParam Map map, @RequestParam(value = "addContent") List<List<String>> addContent) {
         MultipartHttpServletRequest params = ((MultipartHttpServletRequest) request);
         Map<String, MultipartFile> fileMap = params.getFileMap();
         String authorization = request.getHeader("Authorization");
@@ -245,6 +250,7 @@ public class BiddingProjectController {
      */
     @ApiOperation(value = "提交信息填报内容")
     @ApiImplicitParams({
+            @ApiImplicitParam(name = "isSubmit", value = "提交或保存，0为提交，1为保存", required = true, paramType = "query", dataType = "String"),
             @ApiImplicitParam(name = "addContent", value = "单独的内容设置，格式{{name,contentTypeId,isNull,value},{}}", required = true, paramType = "query", dataType = "body"),
             @ApiImplicitParam(name = "projectPhaseId", value = "阶段ID，七个阶段对应七个ID：1,2,3,4,5,6,7", required = true, paramType = "query", dataType = "String"),
             @ApiImplicitParam(name = "Authorization", value = "请求头中存储token", required = true, paramType = "query", dataType = "String"),
@@ -262,7 +268,7 @@ public class BiddingProjectController {
             @ApiImplicitParam(name = "suggestion", value = "意见填写", required = true, paramType = "query", dataType = "String"),
     })
     @PostMapping("/infoFilling")
-    public Result insertInfoFilling(HttpServletRequest request, @RequestParam Map map, @RequestParam(value = "addContent") List<String> addContent) {
+    public Result insertInfoFilling(HttpServletRequest request, @RequestParam Map map, @RequestParam(value = "addContent") List<List<String>> addContent) {
         MultipartHttpServletRequest params = ((MultipartHttpServletRequest) request);
         Map<String, MultipartFile> fileMap = params.getFileMap();
         String authorization = request.getHeader("Authorization");
@@ -280,6 +286,7 @@ public class BiddingProjectController {
      */
     @ApiOperation(value = "提交官方公告内容")
     @ApiImplicitParams({
+            @ApiImplicitParam(name = "isSubmit", value = "提交或保存，0为提交，1为保存", required = true, paramType = "query", dataType = "String"),
             @ApiImplicitParam(name = "addContent", value = "单独的内容设置，格式{{name,contentTypeId,isNull,value},{}}", required = true, paramType = "query", dataType = "body"),
             @ApiImplicitParam(name = "projectPhaseId", value = "阶段ID，七个阶段对应七个ID：1,2,3,4,5,6,7", required = true, paramType = "query", dataType = "String"),
             @ApiImplicitParam(name = "Authorization", value = "请求头中存储token", required = true, paramType = "query", dataType = "String"),
@@ -289,7 +296,7 @@ public class BiddingProjectController {
             @ApiImplicitParam(name = "suggestion", value = "意见填写", required = true, paramType = "query", dataType = "String"),
     })
     @PostMapping("/officialNotice")
-    public Result insertofficialNotice(HttpServletRequest request, @RequestParam Map map, @RequestParam(value = "addContent") List<String> addContent) {
+    public Result insertofficialNotice(HttpServletRequest request, @RequestParam Map map, @RequestParam(value = "addContent") List<List<String>> addContent) {
         MultipartHttpServletRequest params = ((MultipartHttpServletRequest) request);
         Map<String, MultipartFile> fileMap = params.getFileMap();
         String authorization = request.getHeader("Authorization");
@@ -298,7 +305,60 @@ public class BiddingProjectController {
         return result;
     }
 
-
+    /**
+     * 项目总结
+     * @param request
+     * @param map
+     * @param addContent
+     * @return
+     */
+    @ApiOperation(value = "提交项目总结内容")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "isSubmit", value = "提交或保存，0为提交，1为保存", required = true, paramType = "query", dataType = "String"),
+            @ApiImplicitParam(name = "addContent", value = "单独的内容设置，格式{{name,contentTypeId,isNull,value},{}}", required = true, paramType = "query", dataType = "body"),
+            @ApiImplicitParam(name = "projectPhaseId", value = "阶段ID，七个阶段对应七个ID：1,2,3,4,5,6,7", required = true, paramType = "query", dataType = "String"),
+            @ApiImplicitParam(name = "Authorization", value = "请求头中存储token", required = true, paramType = "query", dataType = "String"),
+            @ApiImplicitParam(name = "projectId", value = "项目ID", required = true, paramType = "query", dataType = "String"),
+            @ApiImplicitParam(name = "status", value = "参与竞标产品状态 成功为0，失败为1", required = true, paramType = "query", dataType = "String"),
+            @ApiImplicitParam(name = "productId", value = "产品ID，多个用,隔开", required = true, paramType = "query", dataType = "String"),
+            @ApiImplicitParam(name = "lastRoundDecline", value = "较上一轮降幅", required = true, paramType = "query", dataType = "String"),
+            @ApiImplicitParam(name = "competitiveProduc", value = "竞品情况", required = true, paramType = "query", dataType = "String"),
+            @ApiImplicitParam(name = "failureReasons", value = "失败原因", required = true, paramType = "query", dataType = "String"),
+            @ApiImplicitParam(name = "nextStep", value = "下一步工作", required = true, paramType = "query", dataType = "String"),
+            @ApiImplicitParam(name = "estimatedTime", value = "预估下一轮启动时间", required = true, paramType = "query", dataType = "String"),
+            @ApiImplicitParam(name = "startTime", value = "启动时间", required = true, paramType = "query", dataType = "String"),
+            @ApiImplicitParam(name = "isClinical", value = "临床 是0 否1", required = true, paramType = "query", dataType = "String"),
+            @ApiImplicitParam(name = "isRecord", value = "备案 是0 否1", required = true, paramType = "query", dataType = "String"),
+            @ApiImplicitParam(name = "suggestion", value = "意见填写", required = true, paramType = "query", dataType = "String"),
+    })
+    @PostMapping("/projectSummary")
+    public Result insertProjectSummary(HttpServletRequest request, @RequestParam Map map, @RequestParam(value = "addContent") List<List<String>> addContent) {
+        MultipartHttpServletRequest params = ((MultipartHttpServletRequest) request);
+        Map<String, MultipartFile> fileMap = params.getFileMap();
+        String authorization = request.getHeader("Authorization");
+        String userId = jwtUtil.parseJWT(authorization).getId();
+        Result result = biddingProjectService.insertProjectSummary(map, userId, fileMap, addContent);
+        return result;
+    }
+    /**
+     * 查看详情
+     * @param request
+     * @param map
+     * @return
+     */
+    @ApiOperation(value = "点击可查看具体阶段详情")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "projectPhaseId", value = "阶段ID，七个阶段对应七个ID：1,2,3,4,5,6,7", required = true, paramType = "query", dataType = "String"),
+            @ApiImplicitParam(name = "Authorization", value = "请求头中存储token", required = true, paramType = "query", dataType = "String"),
+            @ApiImplicitParam(name = "projectId", value = "项目ID", required = true, paramType = "query", dataType = "String"),
+    })
+    @GetMapping("/info")
+    public Result selectInfo(HttpServletRequest request,@RequestParam Map map) {
+        String authorization = request.getHeader("Authorization");
+        String userId = jwtUtil.parseJWT(authorization).getId();
+        Result result = biddingProjectService.selectInfo(map, userId);
+        return result;
+    }
 
 
 

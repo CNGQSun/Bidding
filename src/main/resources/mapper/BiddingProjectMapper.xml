@@ -4,7 +4,8 @@
 <mapper namespace="com.dsmpharm.bidding.mapper.BiddingProjectMapper">
     <!--    查询所有登录用户创建的项目-->
     <select id="selectByNoDel" resultType="java.util.Map">
-        select DISTINCT bp.*,bpb.name projectName,bpph.name phaseName,bpt.name typeName from bidding_project bp
+        select DISTINCT bp.*,bpb.name projectName,bpph.name phaseName,bpt.name typeName
+        from bidding_project bp
         LEFT JOIN bidding_project_bulid bpb on bpb.id=bp.project_bulid_id
         LEFT JOIN bidding_doc_interpretation bdi on bdi.id=bp.doc_interpretation_id
         LEFT JOIN bidding_product_collection bpc on bpc.id=bp.product_collection_id
@@ -22,10 +23,12 @@
         <if test="name !=null and name !='' ">
             and bpb.name like concat('%',#{name},'%')
         </if>
+        ORDER BY bp.id DESC
     </select>
-<!--    查询所有登录用户待办的项目-->
+    <!--    查询所有登录用户待办的项目-->
     <select id="selectDealByNoDel" resultType="java.util.Map">
-        select DISTINCT bp.*,bpb.name projectName,bpph.name phaseName,bpt.name typeName,afap.approve_result approveResult,afa.id applyId,afap.id approveId
+        select DISTINCT bp.*,bpb.name projectName,bpph.name phaseName,bpt.name typeName,afap.approve_result
+        approveResult,afa.id applyId,afap.id approveId
         from app_flow_approval afap
         LEFT JOIN app_flow_apply afa on afap.apply_id=afa.id
         left join bidding_project bp on bp.id=afa.project_id
@@ -46,5 +49,125 @@
         <if test="name !=null and name !='' ">
             and bpb.name like concat('%',#{name},'%')
         </if>
+        ORDER BY bp.id DESC
     </select>
+
+    <!--    查询阶段1详情-->
+    <select id="selectBuild" resultType="java.util.Map">
+     SELECT DISTINCT bp.id projectId,bp.type_id typeId,bp.project_bulid_id bulidId ,bp.project_phase_now phaseNow ,
+     bp.suggestion projectSuggestion ,bp.status projectStatus,bpb.doc_public_time docPublicTime,
+     bpb.name projectName,bpb.[source] source,bpb.province_id provinceId,bpb.city_id cityId,bpb.product_id productId,
+     bpb.file_formal fileFormal,bpb.file_ask fileAsk,bpb.doc_inter_time docInterTime,bpb.submit_time submitTime,
+     bpb.public_time publicTime, bpb.appeal_time appealTime,bpb.notice_time noticeTime, bpb.suggestion buildSuggestion,
+     bpb.go_status goStatus
+     FROM bidding_project bp
+     LEFT JOIN bidding_project_bulid bpb on bpb.id=bp.project_bulid_id
+     where bp.id=#{projectId}
+    </select>
+    <select id="selectSetting" resultType="java.util.Map">
+        SELECT DISTINCT bcb.id contentId,bcb.name contentName,bcb.en_name contentParam,
+        bcb.is_null isNull,bcb.content_type_id contentTypeId,bpd.value contentValue
+        FROM bidding_project bp
+        LEFT JOIN bidding_project_data bpd on bpd.project_id=bp.id
+        LEFT JOIN bidding_content_bak bcb on bcb.id=bpd.content_settings_id
+        where bp.id=#{projectId} AND bcb.project_phase_id=#{projectPhaseId}
+    </select>
+    <select id="selectAddContent" resultType="java.util.Map">
+        SELECT DISTINCT bse.id contentExtraId ,bse.name contentExtraName,bse.content_type_id typeId,bse.is_null isNull,bse.value contentExtraValue
+        FROM bidding_project bp
+        LEFT JOIN bidding_settings_extra bse on bse.project_id=bp.id
+        LEFT JOIN bidding_file_addcontent bfa on bfa.id=bse.id
+        where bp.id=#{projectId} and bse.project_phase_id=#{projectBulidId}
+    </select>
+    <!--    查询阶段2详情-->
+    <select id="selectInterpretation" resultType="java.util.Map">
+        SELECT DISTINCT bp.id projectId,bp.type_id typeId,bp.project_phase_now phaseNow ,
+        bp.suggestion projectSuggestion ,bp.status projectStatus,
+        bdi.id docInterpretationId,bdi.[type],bdi.[range],bdi.no_reason noReason,bdi.time_range_start,
+        bdi.time_range_end,bdi.common_name,bdi.standards,bdi.quality_level,bdi.price_limit,bdi.price_limit_reference,
+        bdi.price_limit_explain,bdi.file_buy_rules,bdi.file_quoted_price,bdi.industry_influence,bdi.self_influence,
+        bdi.soliciting_opinions,bdi.file_soliciting_opinions,bdi.suggestion,bdi.go_status
+        FROM bidding_project bp
+        LEFT JOIN bidding_doc_interpretation bdi on bdi.id=bp.doc_interpretation_id
+        where bp.id=#{projectId}
+    </select>
+    <select id="selectProCollection" resultType="java.util.Map">
+    SELECT DISTINCT bp.id projectId,bp.type_id typeId,bp.project_phase_now phaseNow ,
+    bp.suggestion projectSuggestion ,bp.status projectStatus,
+    bp.product_collection_id productCollectionId,
+    bpc.*
+    FROM bidding_project bp
+    LEFT JOIN bidding_product_collection bpc on bpc.id=bp.product_collection_id
+    where bp.id=#{projectId}
+    </select>
+    <select id="selectStrategyAnalysis" resultType="java.util.Map">
+        SELECT DISTINCT bp.id projectId,bp.type_id typeId,bp.project_phase_now phaseNow ,
+        bp.suggestion projectSuggestion ,bp.status projectStatus,
+        bp.strategy_analysis_id strategyAnalysisId,
+        bsa.*
+        FROM bidding_project bp
+        LEFT JOIN bidding_strategy_analysis bsa on bsa.id=bp.strategy_analysis_id
+        where bp.id=#{projectId}
+    </select>
+    <select id="selectInfoFilling" resultType="java.util.Map">
+          SELECT DISTINCT bp.id projectId,bp.type_id typeId,bp.project_phase_now phaseNow ,
+  bp.suggestion projectSuggestion ,bp.status projectStatus,
+  bp.info_filling_id infoFillingId,
+  bif.*
+  FROM bidding_project bp
+  LEFT JOIN bidding_info_filling bif on bif.id=bp.info_filling_id
+  where bp.id=#{projectId}
+    </select>
+    <select id="selectOfficialNotice" resultType="java.util.Map">
+          SELECT DISTINCT bp.id projectId,bp.type_id typeId,bp.project_phase_now phaseNow ,
+  bp.suggestion projectSuggestion ,bp.status projectStatus,
+  bp.official_notice_id officialNoticeId,
+  bon.*
+  FROM bidding_project bp
+  LEFT JOIN bidding_official_notice bon on bon.id=bp.official_notice_id
+  where bp.id=#{projectId}
+    </select>
+    <select id="selectGoStatus1" resultType="com.dsmpharm.bidding.pojo.BiddingProjectBulid">
+        select bpu.*
+        from bidding_project bp
+        left JOIN bidding_project_bulid bpu on bpu.id=bp.project_bulid_id
+        where bp.id=#{projectId}
+    </select>
+    <select id="selectGoStatus2" resultType="com.dsmpharm.bidding.pojo.BiddingProjectBulid">
+        select bpu.*
+        from bidding_project bp
+        left JOIN bidding_doc_interpretation bpu on bpu.id=bp.doc_interpretation_id
+        where bp.id=#{projectId}
+    </select>
+    <select id="selectGoStatus3" resultType="com.dsmpharm.bidding.pojo.BiddingProjectBulid">
+            select bpu.*
+        from bidding_project bp
+        left JOIN bidding_product_collection bpu on bpu.id=bp.product_collection_id
+where bp.id=#{projectId}
+    </select>
+    <select id="selectGoStatus4" resultType="com.dsmpharm.bidding.pojo.BiddingProjectBulid">
+            select bpu.*
+        from bidding_project bp
+        left JOIN bidding_strategy_analysis bpu on bpu.id=bp.strategy_analysis_id
+where bp.id=#{projectId}
+    </select>
+    <select id="selectGoStatus5" resultType="com.dsmpharm.bidding.pojo.BiddingProjectBulid">
+            select bpu.*
+        from bidding_project bp
+        left JOIN bidding_info_filling bpu on bpu.id=bp.info_filling_id
+where bp.id=#{projectId}
+    </select>
+    <select id="selectGoStatus6" resultType="com.dsmpharm.bidding.pojo.BiddingProjectBulid">
+            select bpu.*
+        from bidding_project bp
+        left JOIN bidding_official_notice bpu on bpu.id=bp.official_notice_id
+where bp.id=#{projectId}
+    </select>
+    <select id="selectGoStatus7" resultType="com.dsmpharm.bidding.pojo.BiddingProjectBulid">
+            select bpu.*
+        from bidding_project bp
+        left JOIN bidding_project_summary bpu on bpu.id=bp.project_summary_id
+where bp.id=#{projectId}
+    </select>
+
 </mapper>

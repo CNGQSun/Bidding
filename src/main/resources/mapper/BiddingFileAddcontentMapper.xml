@@ -3,5 +3,8 @@
 
 <mapper namespace="com.dsmpharm.bidding.mapper.BiddingFileAddcontentMapper">
 
-
+<!--    项目编辑中接收新增的内容设置的文件类型-->
+    <insert id="insertAddcontent">
+        insert into bidding_file_addcontent (file_path) values (#{filePath})
+    </insert>
 </mapper>

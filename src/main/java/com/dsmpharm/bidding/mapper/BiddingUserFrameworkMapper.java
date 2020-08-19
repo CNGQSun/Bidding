@@ -19,4 +19,17 @@ public interface BiddingUserFrameworkMapper extends Mapper<BiddingUserFramework>
     List<Map> selectAllNoDel(@Param("userId") String userId, @Param("parentId") String parentId, @Param("graParentId") String graParentId);
 
     Map selectById(@Param("id") String id);
+
+    /**
+     * 查看大区经理是否空岗
+     * @param graParentId
+     * @return
+     */
+    List<BiddingUserFramework> selectByGraParent(@Param("graParentId") String graParentId);
+    /**
+     * 查看商务经理是否空岗
+     * @param parentId
+     * @return
+     */
+    List<BiddingUserFramework> selectByParent(@Param("parentId") String parentId);
 }
