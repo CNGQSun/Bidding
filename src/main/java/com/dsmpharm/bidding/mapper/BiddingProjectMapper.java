@@ -103,5 +103,10 @@ public interface BiddingProjectMapper extends Mapper<BiddingProject> {
     BiddingProjectBulid selectGoStatus6(@Param("projectId")String projectId);
     BiddingProjectBulid selectGoStatus7(@Param("projectId")String projectId);
 
-
+    /**
+     *
+     * @param userId
+     * @return
+     */
+    List<String> selectAllPro(@Param("userId") String userId);
 }

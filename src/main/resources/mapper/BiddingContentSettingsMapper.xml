@@ -4,7 +4,7 @@
 <mapper namespace="com.dsmpharm.bidding.mapper.BiddingContentSettingsMapper">
 <!--    设置所有内容设置版本号-->
     <update id="updateAllNum">
-        update bidding_content_settings set version_num=#{versionNum} where delflag='0' and project_phase_id=#{projectPhaseId}
+        update bidding_content_settings set version_num=#{versionNum} where delflag='0'
     </update>
     <update id="updateAllNumNull">
         update bidding_content_settings set version_num=null

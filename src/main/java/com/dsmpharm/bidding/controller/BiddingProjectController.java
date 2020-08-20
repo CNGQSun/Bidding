@@ -13,6 +13,8 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.*;
 import java.util.List;
 import java.util.Map;
 
@@ -46,6 +48,22 @@ public class BiddingProjectController {
     @GetMapping(value = "/content")
     public Result findById(@RequestParam String projectPhaseId) {
         Result result = biddingProjectService.findContent(projectPhaseId);
+        return result;
+    }
+    /**
+     * 点击新增 加载其他阶段内容设置
+     *
+     * @param projectPhaseId
+     * @return
+     */
+    @ApiOperation(value = "点击新增，调用此接口，加载***其他阶段***内容设置")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "projectPhaseId", value = "阶段ID，六个阶段对应六个ID：1,2,3,4,5,6,7", required = true, paramType = "query", dataType = "String"),
+            @ApiImplicitParam(name = "projectId", value = "项目ID", required = true, paramType = "query", dataType = "String"),
+    })
+    @GetMapping(value = "/content/bak")
+    public Result findByIdPro(@RequestParam String projectPhaseId,@RequestParam String projectId) {
+        Result result = biddingProjectService.findContentPro(projectPhaseId,projectId);
         return result;
     }
 
@@ -131,7 +149,7 @@ public class BiddingProjectController {
         Map<String, MultipartFile> fileMap = params.getFileMap();
         String authorization = request.getHeader("Authorization");
         String userId = jwtUtil.parseJWT(authorization).getId();
-        Result result = biddingProjectService.insert(map, userId, fileMap,addContent);
+        Result result = biddingProjectService.insert(map, userId, fileMap, addContent);
         return result;
     }
 
@@ -172,12 +190,13 @@ public class BiddingProjectController {
         Map<String, MultipartFile> fileMap = params.getFileMap();
         String authorization = request.getHeader("Authorization");
         String userId = jwtUtil.parseJWT(authorization).getId();
-        Result result = biddingProjectService.updateBuild(map, userId, fileMap,addContent);
+        Result result = biddingProjectService.updateBuild(map, userId, fileMap, addContent);
         return result;
     }
 
     /**
      * 文件解读
+     *
      * @param request
      * @param map
      * @param addContent
@@ -221,6 +240,7 @@ public class BiddingProjectController {
 
     /**
      * 修改文件解读
+     *
      * @param request
      * @param map
      * @param addContent
@@ -264,6 +284,7 @@ public class BiddingProjectController {
 
     /**
      * 竞品收集
+     *
      * @param request
      * @param map
      * @param addContent
@@ -286,12 +307,13 @@ public class BiddingProjectController {
         Map<String, MultipartFile> fileMap = params.getFileMap();
         String authorization = request.getHeader("Authorization");
         String userId = jwtUtil.parseJWT(authorization).getId();
-        Result result = biddingProjectService.insertProCollection(map, userId, fileText,addContent,fileMap);
+        Result result = biddingProjectService.insertProCollection(map, userId, fileText, addContent, fileMap);
         return result;
     }
 
     /**
      * 修改竞品收集
+     *
      * @param request
      * @param map
      * @param addContent
@@ -314,12 +336,13 @@ public class BiddingProjectController {
         Map<String, MultipartFile> fileMap = params.getFileMap();
         String authorization = request.getHeader("Authorization");
         String userId = jwtUtil.parseJWT(authorization).getId();
-        Result result = biddingProjectService.updateProCollection(map, userId, fileText,addContent,fileMap);
+        Result result = biddingProjectService.updateProCollection(map, userId, fileText, addContent, fileMap);
         return result;
     }
 
     /**
      * 策略分析
+     *
      * @param request
      * @param map
      * @param addContent
@@ -357,12 +380,13 @@ public class BiddingProjectController {
 
     /**
      * 修改策略分析
+     *
      * @param request
      * @param map
      * @param addContent
      * @return
      */
-    @ApiOperation(value = "提交策略分析内容")
+    @ApiOperation(value = "修改策略分析内容")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "isSubmit", value = "提交或保存，0为提交，1为保存", required = true, paramType = "query", dataType = "String"),
             @ApiImplicitParam(name = "addContent", value = "单独的内容设置，格式{{name,contentTypeId,isNull,value},{}}", required = true, paramType = "query", dataType = "body"),
@@ -394,6 +418,7 @@ public class BiddingProjectController {
 
     /**
      * 信息填报
+     *
      * @param request
      * @param map
      * @param addContent
@@ -430,12 +455,13 @@ public class BiddingProjectController {
 
     /**
      * 修改信息填报
+     *
      * @param request
      * @param map
      * @param addContent
      * @return
      */
-    @ApiOperation(value = "提交信息填报内容")
+    @ApiOperation(value = "修改信息填报内容")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "isSubmit", value = "提交或保存，0为提交，1为保存", required = true, paramType = "query", dataType = "String"),
             @ApiImplicitParam(name = "addContent", value = "单独的内容设置，格式{{name,contentTypeId,isNull,value},{}}", required = true, paramType = "query", dataType = "body"),
@@ -466,6 +492,7 @@ public class BiddingProjectController {
 
     /**
      * 官方公告
+     *
      * @param request
      * @param map
      * @param addContent
@@ -494,12 +521,13 @@ public class BiddingProjectController {
 
     /**
      * 修改官方公告
+     *
      * @param request
      * @param map
      * @param addContent
      * @return
      */
-    @ApiOperation(value = "提交官方公告内容")
+    @ApiOperation(value = "修改官方公告内容")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "isSubmit", value = "提交或保存，0为提交，1为保存", required = true, paramType = "query", dataType = "String"),
             @ApiImplicitParam(name = "addContent", value = "单独的内容设置，格式{{name,contentTypeId,isNull,value},{}}", required = true, paramType = "query", dataType = "body"),
@@ -522,6 +550,7 @@ public class BiddingProjectController {
 
     /**
      * 项目总结
+     *
      * @param request
      * @param map
      * @param addContent
@@ -558,12 +587,13 @@ public class BiddingProjectController {
 
     /**
      * 修改项目总结
+     *
      * @param request
      * @param map
      * @param addContent
      * @return
      */
-    @ApiOperation(value = "提交项目总结内容")
+    @ApiOperation(value = "修改项目总结内容")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "isSubmit", value = "提交或保存，0为提交，1为保存", required = true, paramType = "query", dataType = "String"),
             @ApiImplicitParam(name = "addContent", value = "单独的内容设置，格式{{name,contentTypeId,isNull,value},{}}", required = true, paramType = "query", dataType = "body"),
@@ -595,6 +625,7 @@ public class BiddingProjectController {
 
     /**
      * 查看详情
+     *
      * @param request
      * @param map
      * @return
@@ -606,14 +637,59 @@ public class BiddingProjectController {
             @ApiImplicitParam(name = "projectId", value = "项目ID", required = true, paramType = "query", dataType = "String"),
     })
     @GetMapping("/info")
-    public Result selectInfo(HttpServletRequest request,@RequestParam Map map) {
+    public Result selectInfo(HttpServletRequest request, @RequestParam Map map) {
         String authorization = request.getHeader("Authorization");
         String userId = jwtUtil.parseJWT(authorization).getId();
         Result result = biddingProjectService.selectInfo(map, userId);
         return result;
     }
 
+    @ApiOperation(value = "下载文件")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "filePath", value = "文件全路径", required = true, paramType = "query", dataType = "String"),
+    })
+    @PostMapping("/downloadFile")
+    private String downloadFile(HttpServletResponse response, @RequestParam String filePath) {
 
+        File file = new File(filePath);
+        String fileName = file.getName();
+        if (file.exists()) {
+            response.setContentType("application/force-download");// 设置强制下载不打开
+            response.addHeader("Content-Disposition", "attachment;fileName=" + fileName);
+            byte[] buffer = new byte[1024];
+            FileInputStream fis = null;
+            BufferedInputStream bis = null;
+            try {
+                fis = new FileInputStream(file);
+                bis = new BufferedInputStream(fis);
+                OutputStream outputStream = response.getOutputStream();
+                int i = bis.read(buffer);
+                while (i != -1) {
+                    outputStream.write(buffer, 0, i);
+                    i = bis.read(buffer);
+                }
+                return "下载成功";
+            } catch (Exception e) {
+                e.printStackTrace();
+            } finally {
+                if (bis != null) {
+                    try {
+                        bis.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+                if (fis != null) {
+                    try {
+                        fis.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }
+        return "下载失败";
+    }
 
 
 }

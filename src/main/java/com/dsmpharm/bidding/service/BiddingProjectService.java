@@ -114,7 +114,7 @@ public class BiddingProjectService {
             String versionNum = idWorker.nextId() + "";
             biddingProject.setVersionNum(versionNum);
             //设置所有内容设置版本号
-            int i = biddingContentSettingsMapper.updateAllNum(versionNum, projectPhaseId);
+            biddingContentSettingsMapper.updateAllNum(versionNum);
             //将内容设置数据备份到内容设置备份表
             biddingContentBakMapper.copySetting(projectPhaseId, versionNum);
             //判断文件夹是否存在，不存在则新建
@@ -943,10 +943,10 @@ public class BiddingProjectService {
             if (biddingProject1 == null) {
                 return new Result<>(false, StatusCode.ERROR, "该条记录不存在");
             }
-            //修改对应阶段的内容设置的版本号
-            biddingContentSettingsMapper.updateAllNum(biddingProject1.getVersionNum(), projectPhaseId);
-            //将内容设置数据备份到内容设置备份表
-            biddingContentBakMapper.copySetting(projectPhaseId, biddingProject1.getVersionNum());
+            ////修改对应阶段的内容设置的版本号
+            //biddingContentSettingsMapper.updateAllNum(biddingProject1.getVersionNum(), projectPhaseId);
+            ////将内容设置数据备份到内容设置备份表
+            //biddingContentBakMapper.copySetting(projectPhaseId, biddingProject1.getVersionNum());
             //判断文件夹是否存在，不存在则新建
             String docPath1 = uploadDocTerpretation + "/" + biddingProject1.getId();
             File docPath = new File(docPath1);
@@ -1661,7 +1661,7 @@ public class BiddingProjectService {
      * @param addContent
      * @return
      */
-    public Result insertProCollection(Map<String, String> map, String userId, List<MultipartFile> fileText, List<List<String>> addContent,Map<String, MultipartFile> fileMap) {
+    public Result insertProCollection(Map<String, String> map, String userId, List<MultipartFile> fileText, List<List<String>> addContent, Map<String, MultipartFile> fileMap) {
         try {
             //第一块，直接引用开始
             String isSubmit = map.get("isSubmit").toString();
@@ -1677,11 +1677,11 @@ public class BiddingProjectService {
                 return new Result<>(false, StatusCode.ERROR, "该条记录不存在");
             }
             //修改对应阶段的内容设置的版本号
-            biddingContentSettingsMapper.updateAllNum(biddingProject1.getVersionNum(), projectPhaseId);
-            //将内容设置数据备份到内容设置备份表
-            biddingContentBakMapper.copySetting(projectPhaseId, biddingProject1.getVersionNum());
+            //biddingContentSettingsMapper.updateAllNum(biddingProject1.getVersionNum(), projectPhaseId);
+            ////将内容设置数据备份到内容设置备份表
+            //biddingContentBakMapper.copySetting(projectPhaseId, biddingProject1.getVersionNum());
             //判断文件夹是否存在，不存在则新建
-            String docPath1 = uploadDocTerpretation + "/" + biddingProject1.getId();
+            String docPath1 = uploadProCollection + "/" + biddingProject1.getId();
             File docPath = new File(docPath1);
             if (!docPath.exists() && !docPath.isDirectory()) {
                 docPath.mkdirs();
@@ -1724,7 +1724,12 @@ public class BiddingProjectService {
             //第一块，直接引用结束
 
             biddingProject1.setProductCollectionId(idWorker.nextId() + "");
-            biddingProject1.setProjectPhaseNow("3");
+            if (isSubmit.equals("0")) {
+                biddingProject1.setProjectPhaseNow("4");
+            } else if (isSubmit.equals("1")) {
+                biddingProject1.setProjectPhaseNow("3");
+            }
+
             //更新project表
             biddingProjectMapper.updateByPrimaryKeySelective(biddingProject1);
             BiddingProductCollection biddingProductCollection = new BiddingProductCollection();
@@ -1799,7 +1804,7 @@ public class BiddingProjectService {
             }
             if (isSubmit.equals("0")) {
                 //0 进行中 1 未进行 2 草稿 3 待审核 4 审核通过 5 审核驳回 6跳过此阶段
-                biddingProductCollection.setGoStatus("3");
+                biddingProductCollection.setGoStatus("4");
             } else if (isSubmit.equals("1")) {
                 //0 进行中 1 未进行 2 草稿 3 待审核 4 审核通过 5 审核驳回 6跳过此阶段
                 biddingProductCollection.setGoStatus("2");
@@ -1814,6 +1819,7 @@ public class BiddingProjectService {
             return new Result<>(true, StatusCode.ERROR, "呀! 服务器开小差了~");
         }
     }
+
     /**
      * 修改竞品收集
      *
@@ -1823,7 +1829,7 @@ public class BiddingProjectService {
      * @param addContent
      * @return
      */
-    public Result updateProCollection(Map<String, String> map, String userId, List<MultipartFile> fileText, List<List<String>> addContent,Map<String, MultipartFile> fileMap) {
+    public Result updateProCollection(Map<String, String> map, String userId, List<MultipartFile> fileText, List<List<String>> addContent, Map<String, MultipartFile> fileMap) {
         try {
             //第一块，直接引用开始
             String isSubmit = map.get("isSubmit").toString();
@@ -1850,7 +1856,7 @@ public class BiddingProjectService {
             ////将内容设置数据备份到内容设置备份表
             //biddingContentBakMapper.copySetting(projectPhaseId, biddingProject1.getVersionNum());
             //判断文件夹是否存在，不存在则新建
-            String docPath1 = uploadDocTerpretation + "/" + biddingProject1.getId();
+            String docPath1 = uploadProCollection + "/" + biddingProject1.getId();
             File docPath = new File(docPath1);
             if (!docPath.exists() && !docPath.isDirectory()) {
                 docPath.mkdirs();
@@ -2042,12 +2048,12 @@ public class BiddingProjectService {
             if (biddingProject1 == null) {
                 return new Result<>(false, StatusCode.ERROR, "该条记录不存在");
             }
-            //修改对应阶段的内容设置的版本号
-            biddingContentSettingsMapper.updateAllNum(biddingProject1.getVersionNum(), projectPhaseId);
-            //将内容设置数据备份到内容设置备份表
-            biddingContentBakMapper.copySetting(projectPhaseId, biddingProject1.getVersionNum());
+            ////修改对应阶段的内容设置的版本号
+            //biddingContentSettingsMapper.updateAllNum(biddingProject1.getVersionNum(), projectPhaseId);
+            ////将内容设置数据备份到内容设置备份表
+            //biddingContentBakMapper.copySetting(projectPhaseId, biddingProject1.getVersionNum());
             //判断文件夹是否存在，不存在则新建
-            String docPath1 = uploadDocTerpretation + "/" + biddingProject1.getId();
+            String docPath1 = uploadStrategyAnalysis + "/" + biddingProject1.getId();
             File docPath = new File(docPath1);
             if (!docPath.exists() && !docPath.isDirectory()) {
                 docPath.mkdirs();
@@ -2450,6 +2456,7 @@ public class BiddingProjectService {
             return new Result<>(true, StatusCode.ERROR, "呀! 服务器开小差了~");
         }
     }
+
     /**
      * 修改策略分析
      *
@@ -2487,7 +2494,7 @@ public class BiddingProjectService {
             ////将内容设置数据备份到内容设置备份表
             //biddingContentBakMapper.copySetting(projectPhaseId, biddingProject1.getVersionNum());
             ////判断文件夹是否存在，不存在则新建
-            String docPath1 = uploadDocTerpretation + "/" + biddingProject1.getId();
+            String docPath1 = uploadStrategyAnalysis + "/" + biddingProject1.getId();
             File docPath = new File(docPath1);
             if (!docPath.exists() && !docPath.isDirectory()) {
                 docPath.mkdirs();
@@ -2947,12 +2954,12 @@ public class BiddingProjectService {
             if (biddingProject1 == null) {
                 return new Result<>(false, StatusCode.ERROR, "该条记录不存在");
             }
-            //修改对应阶段的内容设置的版本号
-            biddingContentSettingsMapper.updateAllNum(biddingProject1.getVersionNum(), projectPhaseId);
-            //将内容设置数据备份到内容设置备份表
-            biddingContentBakMapper.copySetting(projectPhaseId, biddingProject1.getVersionNum());
+            ////修改对应阶段的内容设置的版本号
+            //biddingContentSettingsMapper.updateAllNum(biddingProject1.getVersionNum(), projectPhaseId);
+            ////将内容设置数据备份到内容设置备份表
+            //biddingContentBakMapper.copySetting(projectPhaseId, biddingProject1.getVersionNum());
             //判断文件夹是否存在，不存在则新建
-            String docPath1 = uploadDocTerpretation + "/" + biddingProject1.getId();
+            String docPath1 = uploadInfoFilling + "/" + biddingProject1.getId();
             File docPath = new File(docPath1);
             if (!docPath.exists() && !docPath.isDirectory()) {
                 docPath.mkdirs();
@@ -3362,7 +3369,7 @@ public class BiddingProjectService {
             ////将内容设置数据备份到内容设置备份表
             //biddingContentBakMapper.copySetting(projectPhaseId, biddingProject1.getVersionNum());
             //判断文件夹是否存在，不存在则新建
-            String docPath1 = uploadDocTerpretation + "/" + biddingProject1.getId();
+            String docPath1 = uploadInfoFilling + "/" + biddingProject1.getId();
             File docPath = new File(docPath1);
             if (!docPath.exists() && !docPath.isDirectory()) {
                 docPath.mkdirs();
@@ -3790,12 +3797,12 @@ public class BiddingProjectService {
             if (biddingProject1 == null) {
                 return new Result<>(false, StatusCode.ERROR, "该条记录不存在");
             }
-            //修改对应阶段的内容设置的版本号
-            biddingContentSettingsMapper.updateAllNum(biddingProject1.getVersionNum(), projectPhaseId);
-            //将内容设置数据备份到内容设置备份表
-            biddingContentBakMapper.copySetting(projectPhaseId, biddingProject1.getVersionNum());
+            ////修改对应阶段的内容设置的版本号
+            //biddingContentSettingsMapper.updateAllNum(biddingProject1.getVersionNum(), projectPhaseId);
+            ////将内容设置数据备份到内容设置备份表
+            //biddingContentBakMapper.copySetting(projectPhaseId, biddingProject1.getVersionNum());
             //判断文件夹是否存在，不存在则新建
-            String docPath1 = uploadDocTerpretation + "/" + biddingProject1.getId();
+            String docPath1 = uploadOfficialNotice + "/" + biddingProject1.getId();
             File docPath = new File(docPath1);
             if (!docPath.exists() && !docPath.isDirectory()) {
                 docPath.mkdirs();
@@ -4013,6 +4020,7 @@ public class BiddingProjectService {
             return new Result<>(false, StatusCode.ERROR, "呀! 服务器开小差了~");
         }
     }
+
     /**
      * 修改官方公告
      *
@@ -4051,7 +4059,7 @@ public class BiddingProjectService {
             ////将内容设置数据备份到内容设置备份表
             //biddingContentBakMapper.copySetting(projectPhaseId, biddingProject1.getVersionNum());
             //判断文件夹是否存在，不存在则新建
-            String docPath1 = uploadDocTerpretation + "/" + biddingProject1.getId();
+            String docPath1 = uploadOfficialNotice + "/" + biddingProject1.getId();
             File docPath = new File(docPath1);
             if (!docPath.exists() && !docPath.isDirectory()) {
                 docPath.mkdirs();
@@ -4298,6 +4306,7 @@ public class BiddingProjectService {
             return new Result<>(false, StatusCode.ERROR, "呀! 服务器开小差了~");
         }
     }
+
     /**
      * 项目总结
      *
@@ -4323,12 +4332,12 @@ public class BiddingProjectService {
             if (biddingProject1 == null) {
                 return new Result<>(false, StatusCode.ERROR, "该条记录不存在");
             }
-            //修改对应阶段的内容设置的版本号
-            biddingContentSettingsMapper.updateAllNum(biddingProject1.getVersionNum(), projectPhaseId);
-            //将内容设置数据备份到内容设置备份表
-            biddingContentBakMapper.copySetting(projectPhaseId, biddingProject1.getVersionNum());
+            ////修改对应阶段的内容设置的版本号
+            //biddingContentSettingsMapper.updateAllNum(biddingProject1.getVersionNum(), projectPhaseId);
+            ////将内容设置数据备份到内容设置备份表
+            //biddingContentBakMapper.copySetting(projectPhaseId, biddingProject1.getVersionNum());
             //判断文件夹是否存在，不存在则新建
-            String docPath1 = uploadDocTerpretation + "/" + biddingProject1.getId();
+            String docPath1 = uploadProjectSummary + "/" + biddingProject1.getId();
             File docPath = new File(docPath1);
             if (!docPath.exists() && !docPath.isDirectory()) {
                 docPath.mkdirs();
@@ -4533,6 +4542,7 @@ public class BiddingProjectService {
             return new Result<>(false, StatusCode.ERROR, "呀! 服务器开小差了~");
         }
     }
+
     /**
      * 修改项目总结
      *
@@ -4570,7 +4580,7 @@ public class BiddingProjectService {
             ////将内容设置数据备份到内容设置备份表
             //biddingContentBakMapper.copySetting(projectPhaseId, biddingProject1.getVersionNum());
             //判断文件夹是否存在，不存在则新建
-            String docPath1 = uploadDocTerpretation + "/" + biddingProject1.getId();
+            String docPath1 = uploadProjectSummary + "/" + biddingProject1.getId();
             File docPath = new File(docPath1);
             if (!docPath.exists() && !docPath.isDirectory()) {
                 docPath.mkdirs();
@@ -4935,7 +4945,7 @@ public class BiddingProjectService {
                     }
                 }
                 maps.put("addContent", addContent);
-            }else if (projectPhaseId.equals("7")) {
+            } else if (projectPhaseId.equals("7")) {
                 //*****1，此处需要更改开始*****
                 Map ProjectSummary = biddingProjectMapper.selectProjectSummary(projectId);
                 maps.put("ProjectSummary", ProjectSummary);
@@ -4965,4 +4975,22 @@ public class BiddingProjectService {
     }
 
 
+    /**
+     * 点击新增 加载其他阶段内容设置
+     *
+     * @param projectPhaseId
+     * @param projectId
+     * @return
+     */
+    public Result findContentPro(String projectPhaseId, String projectId) {
+
+        try {
+            BiddingProject biddingProject = biddingProjectMapper.selectByPrimaryKey(projectId);
+            List<BiddingContentBak> settingsList = biddingContentBakMapper.selectByPhaseId(projectPhaseId,biddingProject.getVersionNum());
+            return new Result<>(true, StatusCode.OK, "查询成功", settingsList);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new Result<>(false, StatusCode.ERROR, "呀! 服务器开小差了~");
+        }
+    }
 }

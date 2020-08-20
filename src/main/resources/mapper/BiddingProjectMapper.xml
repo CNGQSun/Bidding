@@ -42,7 +42,8 @@
         LEFT JOIN bidding_project_product bpp on bpp.project_id=bp.id
         LEFT JOIN bidding_project_phase bpph on bpph.id=bp.project_phase_now
         LEFT JOIN bidding_project_type bpt on bpt.id =bp.type_id
-        WHERE afap.user_id=#{userId}
+        WHERE afap.user_id=#{userId} and afap.approve_result='0'
+--         AND afap.approve_result='0'
         <if test="status !=null and  status!='' ">
             and bp.status= #{status}
         </if>
@@ -179,6 +180,7 @@ where bp.id=#{projectId}
         left JOIN bidding_project_summary bpu on bpu.id=bp.project_summary_id
 where bp.id=#{projectId}
     </select>
+    <select id="selectAllPro" resultType="java.lang.String"></select>
 
 
 </mapper>
