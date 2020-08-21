@@ -86,6 +86,15 @@ public class BiddingProjectService {
 
     @Resource
     private BiddingFileAddcontentMapper biddingFileAddcontentMapper;
+
+    @Resource
+    private BiddingPriceInfoMapper biddingPriceInfoMapper;
+
+    @Resource
+    private BiddingProductMapper biddingProductMapper;
+
+    @Resource
+    private BiddingUserProvinceMapper biddingUserProvinceMapper;
     @Resource
     private IdWorker idWorker;
 
@@ -3945,7 +3954,7 @@ public class BiddingProjectService {
                     //往申请表里插数据
                     appFlowApplyMapper.insert(appFlowApply);
                     //查找下一个审批用户
-                    BiddingUser biddingUser = appFlowNodeMapper.selectAppUserSw(appFlowApply.getFlowId(), appFlowApply.getCurrentNode(), userId);
+                    BiddingUser biddingUser = appFlowNodeMapper.selectAppUser(appFlowApply.getFlowId(), appFlowApply.getCurrentNode());
                     appFlowApproval = new AppFlowApproval();
                     appFlowApproval.setId(idWorker.nextId() + "");
 
@@ -4228,7 +4237,7 @@ public class BiddingProjectService {
                     //往申请表里插数据
                     appFlowApplyMapper.insert(appFlowApply);
                     //查找下一个审批用户
-                    BiddingUser biddingUser = appFlowNodeMapper.selectAppUserSw(appFlowApply.getFlowId(), appFlowApply.getCurrentNode(), userId);
+                    BiddingUser biddingUser = appFlowNodeMapper.selectAppUser(appFlowApply.getFlowId(), appFlowApply.getCurrentNode());
                     appFlowApproval = new AppFlowApproval();
                     appFlowApproval.setId(idWorker.nextId() + "");
 
@@ -4378,15 +4387,21 @@ public class BiddingProjectService {
                 }
             }
             //第一块，直接引用结束
-
+            String status = map.get("status").toString();
             biddingProject1.setProjectSummaryId(idWorker.nextId() + "");
             biddingProject1.setProjectPhaseNow("7");
+            if(isSubmit.equals("0")){
+                if (status.equals("0")){
+                    biddingProject1.setIsBid("0");
+                }else {
+                    biddingProject1.setIsBid("1");
+                }
+            }
             //更新project表
             biddingProjectMapper.updateByPrimaryKeySelective(biddingProject1);
             BiddingProjectSummary biddingProjectSummary = new BiddingProjectSummary();
             biddingProjectSummary.setId(biddingProject1.getProjectSummaryId());
             //开始拿参数
-            String status = map.get("status").toString();
             biddingProjectSummary.setStatus(status);
             if (status.equals("0")) {
                 String productId = map.get("productId").toString();
@@ -4617,7 +4632,14 @@ public class BiddingProjectService {
                 }
             }
             //第一块，直接引用结束
-
+            String status = map.get("status").toString();
+            if(isSubmit.equals("0")){
+                if (status.equals("0")){
+                    biddingProject1.setIsBid("0");
+                }else {
+                    biddingProject1.setIsBid("1");
+                }
+            }
             //biddingProject1.setProjectSummaryId(idWorker.nextId() + "");
             //biddingProject1.setProjectPhaseNow("7");
             //更新project表
@@ -4625,7 +4647,7 @@ public class BiddingProjectService {
             //BiddingProjectSummary biddingProjectSummary = new BiddingProjectSummary();
             //biddingProjectSummary.setId(biddingProject1.getProjectSummaryId());
             //开始拿参数
-            String status = map.get("status").toString();
+
             biddingProjectSummary.setStatus(status);
             if (status.equals("0")) {
                 String productId = map.get("productId").toString();
@@ -4993,4 +5015,44 @@ public class BiddingProjectService {
             return new Result<>(false, StatusCode.ERROR, "呀! 服务器开小差了~");
         }
     }
+
+    /**
+     * 价格信息展示
+     * @param projectId
+     * @return
+     */
+    public Result selectPriceInfo(String projectId) {
+        try {
+        BiddingProject biddingProject = biddingProjectMapper.selectByPrimaryKey(projectId);
+            //根据userId查询用户角色
+            BiddingUserRole biddingUserRole = biddingUserRoleMapper.selectByUserId(biddingProject.getUserId());
+
+            BiddingProjectBulid biddingProjectBulid = biddingProjectBulidMapper.selectByPrimaryKey(biddingProject.getProjectBulidId());
+            String[] productIds = biddingProjectBulid.getProductId().split(",");
+            List<BiddingUserProvince> biddingUserProvinces=biddingUserProvinceMapper.selectByUserId(biddingProject.getUserId());
+            List<List<BiddingPriceInfo>> lists=new ArrayList<>();
+            if (biddingProjectBulid.getProvinceId().equals("")||biddingProjectBulid.getProvinceId()==null){
+                for (int i = 0; i < productIds.length; i++) {
+                    BiddingProduct biddingProduct = biddingProductMapper.selectByPrimaryKey(productIds[i]);
+                    List<BiddingPriceInfo> biddingPriceInfos= biddingPriceInfoMapper.selectByProduct(biddingProduct.getEnName());
+                    lists.add(biddingPriceInfos);
+                }
+            }else {
+                for (int i = 0; i < productIds.length; i++) {
+                    BiddingProduct biddingProduct = biddingProductMapper.selectByPrimaryKey(productIds[i]);
+                    for (BiddingUserProvince biddingUserProvince : biddingUserProvinces) {
+                        List<BiddingPriceInfo> biddingPriceInfos=biddingPriceInfoMapper.selectByProductPro(biddingProduct.getEnName(),biddingUserProvince.getProId());
+                        lists.add(biddingPriceInfos);
+                    }
+                }
+            }
+            return new Result<>(true, StatusCode.OK, "查询成功", lists);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new Result<>(false, StatusCode.ERROR, "呀! 服务器开小差了~");
+        }
+
+    }
+
+
 }

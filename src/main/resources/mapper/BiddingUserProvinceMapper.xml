@@ -8,7 +8,7 @@
         from bidding_user_province bup
         left join bidding_user bu on bup.user_id = bu.id
         left join bidding_province bp on bup.pro_id = bp.id
-        where bup.id=#{id}
+        where bup.id=#{id} and bup.delflag='0' and bu.delflag='0'order by bp.pro_name
     </select>
 <!--    分页、条件查询所有用户省份信息-->
     <select id="selectList" resultType="java.util.Map">
@@ -23,5 +23,10 @@
         <if test="name !=null and name !='' ">
             and bu.name like concat('%',#{name},'%')
         </if>
+        order by bp.pro_name
+    </select>
+    <select id="selectByUserId" resultType="com.dsmpharm.bidding.pojo.BiddingUserProvince">
+        select * from  bidding_user_province
+        where user_id=#{userId} and delflag='0'
     </select>
 </mapper>

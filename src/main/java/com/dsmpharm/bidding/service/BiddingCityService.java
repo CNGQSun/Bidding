@@ -68,9 +68,9 @@ public class BiddingCityService {
 
 	public Result findByProId(String proId) {
 		try {
-			BiddingCity biddingCity=new BiddingCity();
-			biddingCity.setProId(Integer.valueOf(proId));
-			List<BiddingCity> cityList = biddingCityMapper.select(biddingCity);
+			//BiddingCity biddingCity=new BiddingCity();
+			//biddingCity.setProId(Integer.valueOf(proId));
+			List<BiddingCity> cityList = biddingCityMapper.selectAllByName(proId);
 			if (cityList!=null){
 				return new Result<>(true, StatusCode.OK, "查询成功", cityList);
 			}

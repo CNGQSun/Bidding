@@ -4,4 +4,7 @@
 <mapper namespace="com.dsmpharm.bidding.mapper.BiddingProvinceMapper">
 
 
+    <select id="selectAllNoDel" resultType="com.dsmpharm.bidding.pojo.BiddingProvince">
+          select * from bidding_province  order by pro_name
+    </select>
 </mapper>

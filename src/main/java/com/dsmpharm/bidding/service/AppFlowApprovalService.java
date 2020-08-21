@@ -215,8 +215,9 @@ public class AppFlowApprovalService {
 					}
 					if (biddingProject.getIsSkip().equals("0")){
 						newNow= (Integer.valueOf(biddingProject.getProjectPhaseNow()))+2;
+					}else {
+						newNow = (Integer.valueOf(biddingProject.getProjectPhaseNow()))+1;
 					}
-					newNow = (Integer.valueOf(biddingProject.getProjectPhaseNow()))+1;
 					biddingDocInterpretation.setGoStatus("4");
 					biddingDocInterpretationMapper.updateByPrimaryKeySelective(biddingDocInterpretation);
 				}else if (biddingProject.getProjectPhaseNow().equals("3")){

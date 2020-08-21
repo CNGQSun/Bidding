@@ -45,6 +45,8 @@ public class BiddingProject implements Serializable {
 
 	private String isSkip;
 
+	private String isBid;
+
 	public String getUserId() {
 		return userId;
 	}
@@ -148,5 +150,13 @@ public class BiddingProject implements Serializable {
 	}
 	public void setIsSkip(String isSkip) {
 		this.isSkip = isSkip;
+	}
+
+	public String getIsBid() {
+		return isBid;
+	}
+
+	public void setIsBid(String isBid) {
+		this.isBid = isBid;
 	}
 }

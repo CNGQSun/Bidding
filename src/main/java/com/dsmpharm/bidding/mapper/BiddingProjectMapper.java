@@ -109,4 +109,6 @@ public interface BiddingProjectMapper extends Mapper<BiddingProject> {
      * @return
      */
     List<String> selectAllPro(@Param("userId") String userId);
+
+    List<Map> selectByDatebase(@Param("proId") String proId, @Param("cityId")String cityId,@Param("cityId")String name,@Param("proLabel")String proLabel,@Param("typeId")String typeId,@Param("startTime")Integer startTime,@Param("endTime")Integer endTime);
 }

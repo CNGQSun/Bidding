@@ -72,7 +72,7 @@ public class BiddingProvinceService {
 	 */
 	public Result selectAllPro() {
 		try {
-			List<BiddingProvince> biddingProvinces = biddingProvinceMapper.selectAll();
+			List<BiddingProvince> biddingProvinces = biddingProvinceMapper.selectAllNoDel();
 			return 	new Result<>(true, StatusCode.OK, "查询成功", biddingProvinces);
 		} catch (Exception e) {
 			e.printStackTrace();

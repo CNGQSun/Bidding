@@ -41,4 +41,9 @@
     <select id="selectByParent" resultType="com.dsmpharm.bidding.pojo.BiddingUserFramework">
                 select * from bidding_user_framework where (user_id is not null OR user_id !='') and parent_id=#{parentId} and delflag='0'
     </select>
+    <select id="selectByUserId" resultType="com.dsmpharm.bidding.pojo.BiddingUserFramework">
+        select *
+        from bidding_user_framework
+        where user_id=#{userId} and delflag='0'
+    </select>
 </mapper>

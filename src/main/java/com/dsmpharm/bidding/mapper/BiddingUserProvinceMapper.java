@@ -26,4 +26,11 @@ public interface BiddingUserProvinceMapper extends Mapper<BiddingUserProvince> {
      * @return
      */
     List<Map> selectList(@Param("name") String name, @Param("proId") String proId);
+
+    /**
+     * 根据userId查询用户所有省份
+     * @param userId
+     * @return
+     */
+    List<BiddingUserProvince> selectByUserId(@Param("userId") String userId);
 }

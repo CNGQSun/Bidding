@@ -32,4 +32,11 @@ public interface BiddingUserFrameworkMapper extends Mapper<BiddingUserFramework>
      * @return
      */
     List<BiddingUserFramework> selectByParent(@Param("parentId") String parentId);
+
+    /**
+     * 根据userId查询用户所在省份
+     * @param userId
+     * @return
+     */
+    List<BiddingUserFramework> selectByUserId(@Param("userId") String userId);
 }

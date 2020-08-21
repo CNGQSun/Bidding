@@ -24,7 +24,6 @@ import java.util.Map;
  */
 @CrossOrigin
 @RestController
-//@Controller
 @RequestMapping("/biddingProject")
 @Api(tags = "项目管理相关接口")
 public class BiddingProjectController {
@@ -50,6 +49,7 @@ public class BiddingProjectController {
         Result result = biddingProjectService.findContent(projectPhaseId);
         return result;
     }
+
     /**
      * 点击新增 加载其他阶段内容设置
      *
@@ -62,8 +62,8 @@ public class BiddingProjectController {
             @ApiImplicitParam(name = "projectId", value = "项目ID", required = true, paramType = "query", dataType = "String"),
     })
     @GetMapping(value = "/content/bak")
-    public Result findByIdPro(@RequestParam String projectPhaseId,@RequestParam String projectId) {
-        Result result = biddingProjectService.findContentPro(projectPhaseId,projectId);
+    public Result findByIdPro(@RequestParam String projectPhaseId, @RequestParam String projectId) {
+        Result result = biddingProjectService.findContentPro(projectPhaseId, projectId);
         return result;
     }
 
@@ -691,5 +691,21 @@ public class BiddingProjectController {
         return "下载失败";
     }
 
+    /**
+     * 价格信息展示
+     *
+     * @param request
+     * @param projectId
+     * @return
+     */
+    @ApiOperation(value = "价格信息展示")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "projectId", value = "项目ID", required = true, paramType = "query", dataType = "String"),
+    })
+    @GetMapping("/priceInfo")
+    private Result priceInfo(HttpServletRequest request, @RequestParam String projectId) {
+        Result result = biddingProjectService.selectPriceInfo(projectId);
+        return result;
+    }
 
 }

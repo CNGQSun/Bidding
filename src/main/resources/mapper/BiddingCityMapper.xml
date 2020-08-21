@@ -4,4 +4,9 @@
 <mapper namespace="com.dsmpharm.bidding.mapper.BiddingCityMapper">
 
 
+    <select id="selectAllByName" resultType="com.dsmpharm.bidding.pojo.BiddingCity">
+        select * from bidding_city
+        where pro_id=#{proId}
+        order by city_name
+    </select>
 </mapper>

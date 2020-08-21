@@ -23,6 +23,8 @@ public class BiddingProduct implements Serializable {
 
     private String commonName;
 
+    private String enName;
+
     private String standards;
 
     private String status;
@@ -53,7 +55,13 @@ public class BiddingProduct implements Serializable {
     public void setCommonName(String commonName) {
 		this.commonName = commonName;
 	}
-    public String getStandards() {
+	public String getEnName() {
+		return enName;
+	}
+	public void setEnName(String enName) {
+		this.enName = enName;
+	}
+	public String getStandards() {
 		return standards;
 	}
     public void setStandards(String standards) {

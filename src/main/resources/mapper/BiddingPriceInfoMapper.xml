@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.dsmpharm.bidding.mapper.BiddingPriceInfoMapper">
+
+
+    <select id="selectByProduct" resultType="com.dsmpharm.bidding.pojo.BiddingPriceInfo">
+        select * from bidding_price_info where delflag='0' and product_en=#{enName} and is_bid='0'
+    </select>
+    <select id="selectByProductPro" resultType="com.dsmpharm.bidding.pojo.BiddingPriceInfo">
+        select * from bidding_price_info
+        where pro_id=#{proId} and product_en=#{enName} and delflag='0' and is_bid='0'
+    </select>
+</mapper>
