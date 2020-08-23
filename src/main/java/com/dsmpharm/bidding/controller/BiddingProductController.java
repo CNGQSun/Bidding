@@ -44,6 +44,8 @@ public class BiddingProductController {
 			@ApiImplicitParam(name = "code", value = "产品code", required = true, paramType = "query", dataType = "String"),
 			@ApiImplicitParam(name = "commonName", value = "通用名", required = true, paramType = "query", dataType = "String"),
 			@ApiImplicitParam(name = "standards", value = "规格", required = true, paramType = "query", dataType = "String"),
+			@ApiImplicitParam(name = "enName", value = "英文名", required = true, paramType = "query", dataType = "String"),
+			@ApiImplicitParam(name = "dosageForm", value = "剂型", required = true, paramType = "query", dataType = "String"),
 	})
 	@PostMapping("/sub")
 	public Result insertSub(@RequestParam Map map){
@@ -62,6 +64,8 @@ public class BiddingProductController {
 			@ApiImplicitParam(name = "code", value = "产品code", required = true, paramType = "query", dataType = "String"),
 			@ApiImplicitParam(name = "commonName", value = "通用名", required = true, paramType = "query", dataType = "String"),
 			@ApiImplicitParam(name = "standards", value = "规格", required = true, paramType = "query", dataType = "String"),
+			@ApiImplicitParam(name = "enName", value = "英文名", required = true, paramType = "query", dataType = "String"),
+			@ApiImplicitParam(name = "dosageForm", value = "剂型", required = true, paramType = "query", dataType = "String"),
 	})
 	@PostMapping("/pre")
 	public Result insertPro(@RequestParam Map map){
@@ -122,6 +126,8 @@ public class BiddingProductController {
 			@ApiImplicitParam(name = "code", value = "产品code", required = true, paramType = "query", dataType = "String"),
 			@ApiImplicitParam(name = "commonName", value = "通用名", required = true, paramType = "query", dataType = "String"),
 			@ApiImplicitParam(name = "standards", value = "规格", required = true, paramType = "query", dataType = "String"),
+			@ApiImplicitParam(name = "enName", value = "英文名", required = true, paramType = "query", dataType = "String"),
+			@ApiImplicitParam(name = "dosageForm", value = "剂型", required = true, paramType = "query", dataType = "String"),
 	})
 	@PostMapping("/update")
 	public Result update(@RequestParam Map map) {

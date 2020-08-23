@@ -37,11 +37,15 @@ public class BiddingProductService {
         String code =map.get("code").toString();
         String commonName =map.get("commonName").toString();
         String standards =map.get("standards").toString();
+        String enName =map.get("enName").toString();
+        String dosageForm =map.get("dosageForm").toString();
         BiddingProduct biddingProduct=new BiddingProduct();
         biddingProduct.setCode(code);
         biddingProduct.setName(name);
         biddingProduct.setCommonName(commonName);
         biddingProduct.setStandards(standards);
+        biddingProduct.setEnName(enName);
+        biddingProduct.setDosageForm(dosageForm);
         try {
             biddingProduct.setDelflag("0");
             int i = biddingProductMapper.selectCount(biddingProduct);
@@ -92,12 +96,16 @@ public class BiddingProductService {
         String code =map.get("code").toString();
         String commonName =map.get("commonName").toString();
         String standards =map.get("standards").toString();
+        String enName =map.get("enName").toString();
+        String dosageForm =map.get("dosageForm").toString();
         BiddingProduct biddingProduct=new BiddingProduct();
         biddingProduct.setId(id);
         biddingProduct.setCode(code);
         biddingProduct.setName(name);
         biddingProduct.setCommonName(commonName);
         biddingProduct.setStandards(standards);
+        biddingProduct.setEnName(enName);
+        biddingProduct.setDosageForm(dosageForm);
         try {
             BiddingProduct biddingProduct1 = biddingProductMapper.selectByPrimaryKey(biddingProduct.getId());
             if (biddingProduct1 == null || (biddingProduct1.getDelflag().equals("1"))) {
@@ -186,11 +194,15 @@ public class BiddingProductService {
         String code =map.get("code").toString();
         String commonName =map.get("commonName").toString();
         String standards =map.get("standards").toString();
+        String enName =map.get("enName").toString();
+        String dosageForm =map.get("dosageForm").toString();
         BiddingProduct biddingProduct=new BiddingProduct();
         biddingProduct.setCode(code);
         biddingProduct.setName(name);
         biddingProduct.setCommonName(commonName);
         biddingProduct.setStandards(standards);
+        biddingProduct.setEnName(enName);
+        biddingProduct.setDosageForm(dosageForm);
         try {
             biddingProduct.setDelflag("0");
             int i = biddingProductMapper.selectCount(biddingProduct);

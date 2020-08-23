@@ -1020,8 +1020,10 @@ public class BiddingProjectService {
             biddingDocInterpretation.setCommonName(commonName);
             String standards = map.get("standards").toString();
             biddingDocInterpretation.setStandards(standards);
-            //String qualityLevel = map.get("qualityLevel").toString();
-            //biddingDocInterpretation.setQualityLevel(qualityLevel);
+            String qualityLevel = map.get("qualityLevel").toString();
+            biddingDocInterpretation.setQualityLevel(qualityLevel);
+            String selfInfluence = map.get("selfInfluence").toString();
+            biddingDocInterpretation.setSelfInfluence(selfInfluence);
             String priceLimit = map.get("priceLimit").toString();
             biddingDocInterpretation.setPriceLimit(priceLimit);
             String priceLimitReference = map.get("priceLimitReference").toString();
@@ -1393,8 +1395,10 @@ public class BiddingProjectService {
             biddingDocInterpretation.setCommonName(commonName);
             String standards = map.get("standards").toString();
             biddingDocInterpretation.setStandards(standards);
-            //String qualityLevel = map.get("qualityLevel").toString();
-            //biddingDocInterpretation.setQualityLevel(qualityLevel);
+            String qualityLevel = map.get("qualityLevel").toString();
+            biddingDocInterpretation.setQualityLevel(qualityLevel);
+            String selfInfluence = map.get("selfInfluence").toString();
+            biddingDocInterpretation.setSelfInfluence(selfInfluence);
             String priceLimit = map.get("priceLimit").toString();
             biddingDocInterpretation.setPriceLimit(priceLimit);
             String priceLimitReference = map.get("priceLimitReference").toString();
@@ -2298,6 +2302,23 @@ public class BiddingProjectService {
                 biddingStrategyAnalysis.setFileNationalPrice(filePath.getPath());
             }
 
+            if (map.get("fileCompetitiveLimit") != null) {
+                String fileCompetitiveLimit = map.get("fileCompetitiveLimit").toString();
+                biddingStrategyAnalysis.setFileCompetitiveLimit(fileCompetitiveLimit);
+            } else {
+                MultipartFile fileCompetitiveLimit = fileMap.get("fileCompetitiveLimit");
+                String fileName1 = fileCompetitiveLimit.getOriginalFilename();
+                String fileName = DateUtils.format(new Date(), "yyyy-MM-dd-HH-mm-ss") + fileName1;
+                File filePath = new File(docPath, fileName);
+                try {
+                    fileCompetitiveLimit.transferTo(filePath);
+                } catch (IOException e) {
+                    log.error(e.toString(), e);
+                    return new Result<>(false, StatusCode.ERROR, "呀! 服务器开小差了~");
+                }
+                biddingStrategyAnalysis.setFileCompetitiveLimit(filePath.getPath());
+            }
+
             String suggestion = map.get("suggestion").toString();
             biddingStrategyAnalysis.setSuggestion(suggestion);
 
@@ -2734,6 +2755,23 @@ public class BiddingProjectService {
                     return new Result<>(false, StatusCode.ERROR, "呀! 服务器开小差了~");
                 }
                 biddingStrategyAnalysis.setFileNationalPrice(filePath.getPath());
+            }
+
+            if (map.get("fileCompetitiveLimit") != null) {
+                String fileCompetitiveLimit = map.get("fileCompetitiveLimit").toString();
+                biddingStrategyAnalysis.setFileCompetitiveLimit(fileCompetitiveLimit);
+            } else {
+                MultipartFile fileCompetitiveLimit = fileMap.get("fileCompetitiveLimit");
+                String fileName1 = fileCompetitiveLimit.getOriginalFilename();
+                String fileName = DateUtils.format(new Date(), "yyyy-MM-dd-HH-mm-ss") + fileName1;
+                File filePath = new File(docPath, fileName);
+                try {
+                    fileCompetitiveLimit.transferTo(filePath);
+                } catch (IOException e) {
+                    log.error(e.toString(), e);
+                    return new Result<>(false, StatusCode.ERROR, "呀! 服务器开小差了~");
+                }
+                biddingStrategyAnalysis.setFileCompetitiveLimit(filePath.getPath());
             }
 
             String suggestion = map.get("suggestion").toString();
@@ -4390,10 +4428,10 @@ public class BiddingProjectService {
             String status = map.get("status").toString();
             biddingProject1.setProjectSummaryId(idWorker.nextId() + "");
             biddingProject1.setProjectPhaseNow("7");
-            if(isSubmit.equals("0")){
-                if (status.equals("0")){
+            if (isSubmit.equals("0")) {
+                if (status.equals("0")) {
                     biddingProject1.setIsBid("0");
-                }else {
+                } else {
                     biddingProject1.setIsBid("1");
                 }
             }
@@ -4403,19 +4441,16 @@ public class BiddingProjectService {
             biddingProjectSummary.setId(biddingProject1.getProjectSummaryId());
             //开始拿参数
             biddingProjectSummary.setStatus(status);
-            if (status.equals("0")) {
-                String productId = map.get("productId").toString();
-                biddingProjectSummary.setProductId(productId);
-                String lastRoundDecline = map.get("lastRoundDecline").toString();
-                biddingProjectSummary.setLastRoundDecline(lastRoundDecline);
-            } else if (status.equals("1")) {
-                String failureReasons = map.get("failureReasons").toString();
-                biddingProjectSummary.setFailureReasons(failureReasons);
-                String nextStep = map.get("nextStep").toString();
-                biddingProjectSummary.setNextStep(nextStep);
-                String estimatedTime = map.get("estimatedTime").toString();
-                biddingProjectSummary.setEstimatedTime(estimatedTime);
-            }
+            String productId = map.get("productId").toString();
+            biddingProjectSummary.setProductId(productId);
+            String lastRoundDecline = map.get("lastRoundDecline").toString();
+            biddingProjectSummary.setLastRoundDecline(lastRoundDecline);
+            String failureReasons = map.get("failureReasons").toString();
+            biddingProjectSummary.setFailureReasons(failureReasons);
+            String nextStep = map.get("nextStep").toString();
+            biddingProjectSummary.setNextStep(nextStep);
+            String estimatedTime = map.get("estimatedTime").toString();
+            biddingProjectSummary.setEstimatedTime(estimatedTime);
             String competitiveProduc = map.get("competitiveProduc").toString();
             biddingProjectSummary.setCompetitiveProduc(competitiveProduc);
             String startTime = map.get("startTime").toString();
@@ -4633,10 +4668,10 @@ public class BiddingProjectService {
             }
             //第一块，直接引用结束
             String status = map.get("status").toString();
-            if(isSubmit.equals("0")){
-                if (status.equals("0")){
+            if (isSubmit.equals("0")) {
+                if (status.equals("0")) {
                     biddingProject1.setIsBid("0");
-                }else {
+                } else {
                     biddingProject1.setIsBid("1");
                 }
             }
@@ -4649,19 +4684,16 @@ public class BiddingProjectService {
             //开始拿参数
 
             biddingProjectSummary.setStatus(status);
-            if (status.equals("0")) {
-                String productId = map.get("productId").toString();
-                biddingProjectSummary.setProductId(productId);
-                String lastRoundDecline = map.get("lastRoundDecline").toString();
-                biddingProjectSummary.setLastRoundDecline(lastRoundDecline);
-            } else if (status.equals("1")) {
-                String failureReasons = map.get("failureReasons").toString();
-                biddingProjectSummary.setFailureReasons(failureReasons);
-                String nextStep = map.get("nextStep").toString();
-                biddingProjectSummary.setNextStep(nextStep);
-                String estimatedTime = map.get("estimatedTime").toString();
-                biddingProjectSummary.setEstimatedTime(estimatedTime);
-            }
+            String productId = map.get("productId").toString();
+            biddingProjectSummary.setProductId(productId);
+            String lastRoundDecline = map.get("lastRoundDecline").toString();
+            biddingProjectSummary.setLastRoundDecline(lastRoundDecline);
+            String failureReasons = map.get("failureReasons").toString();
+            biddingProjectSummary.setFailureReasons(failureReasons);
+            String nextStep = map.get("nextStep").toString();
+            biddingProjectSummary.setNextStep(nextStep);
+            String estimatedTime = map.get("estimatedTime").toString();
+            biddingProjectSummary.setEstimatedTime(estimatedTime);
             String competitiveProduc = map.get("competitiveProduc").toString();
             biddingProjectSummary.setCompetitiveProduc(competitiveProduc);
             String startTime = map.get("startTime").toString();
@@ -5008,7 +5040,7 @@ public class BiddingProjectService {
 
         try {
             BiddingProject biddingProject = biddingProjectMapper.selectByPrimaryKey(projectId);
-            List<BiddingContentBak> settingsList = biddingContentBakMapper.selectByPhaseId(projectPhaseId,biddingProject.getVersionNum());
+            List<BiddingContentBak> settingsList = biddingContentBakMapper.selectByPhaseId(projectPhaseId, biddingProject.getVersionNum());
             return new Result<>(true, StatusCode.OK, "查询成功", settingsList);
         } catch (Exception e) {
             e.printStackTrace();
@@ -5018,30 +5050,31 @@ public class BiddingProjectService {
 
     /**
      * 价格信息展示
+     *
      * @param projectId
      * @return
      */
     public Result selectPriceInfo(String projectId) {
         try {
-        BiddingProject biddingProject = biddingProjectMapper.selectByPrimaryKey(projectId);
+            BiddingProject biddingProject = biddingProjectMapper.selectByPrimaryKey(projectId);
             //根据userId查询用户角色
             BiddingUserRole biddingUserRole = biddingUserRoleMapper.selectByUserId(biddingProject.getUserId());
 
             BiddingProjectBulid biddingProjectBulid = biddingProjectBulidMapper.selectByPrimaryKey(biddingProject.getProjectBulidId());
             String[] productIds = biddingProjectBulid.getProductId().split(",");
-            List<BiddingUserProvince> biddingUserProvinces=biddingUserProvinceMapper.selectByUserId(biddingProject.getUserId());
-            List<List<BiddingPriceInfo>> lists=new ArrayList<>();
-            if (biddingProjectBulid.getProvinceId().equals("")||biddingProjectBulid.getProvinceId()==null){
+            List<BiddingUserProvince> biddingUserProvinces = biddingUserProvinceMapper.selectByUserId(biddingProject.getUserId());
+            List<List<BiddingPriceInfo>> lists = new ArrayList<>();
+            if (biddingProjectBulid.getProvinceId().equals("") || biddingProjectBulid.getProvinceId() == null) {
                 for (int i = 0; i < productIds.length; i++) {
                     BiddingProduct biddingProduct = biddingProductMapper.selectByPrimaryKey(productIds[i]);
-                    List<BiddingPriceInfo> biddingPriceInfos= biddingPriceInfoMapper.selectByProduct(biddingProduct.getEnName());
+                    List<BiddingPriceInfo> biddingPriceInfos = biddingPriceInfoMapper.selectByProduct(biddingProduct.getEnName());
                     lists.add(biddingPriceInfos);
                 }
-            }else {
+            } else {
                 for (int i = 0; i < productIds.length; i++) {
                     BiddingProduct biddingProduct = biddingProductMapper.selectByPrimaryKey(productIds[i]);
                     for (BiddingUserProvince biddingUserProvince : biddingUserProvinces) {
-                        List<BiddingPriceInfo> biddingPriceInfos=biddingPriceInfoMapper.selectByProductPro(biddingProduct.getEnName(),biddingUserProvince.getProId());
+                        List<BiddingPriceInfo> biddingPriceInfos = biddingPriceInfoMapper.selectByProductPro(biddingProduct.getEnName(), biddingUserProvince.getProId());
                         lists.add(biddingPriceInfos);
                     }
                 }

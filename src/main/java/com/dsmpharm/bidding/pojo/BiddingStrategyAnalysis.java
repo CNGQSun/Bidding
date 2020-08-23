@@ -39,6 +39,8 @@ public class BiddingStrategyAnalysis implements Serializable {
 
     private String fileNationalPrice;
 
+    private String fileCompetitiveLimit;
+
     private String suggestion;
 
     private String goStatus;
@@ -115,7 +117,16 @@ public class BiddingStrategyAnalysis implements Serializable {
     public void setFileNationalPrice(String fileNationalPrice) {
 		this.fileNationalPrice = fileNationalPrice;
 	}
-    public String getSuggestion() {
+
+	public String getFileCompetitiveLimit() {
+		return fileCompetitiveLimit;
+	}
+
+	public void setFileCompetitiveLimit(String fileCompetitiveLimit) {
+		this.fileCompetitiveLimit = fileCompetitiveLimit;
+	}
+
+	public String getSuggestion() {
 		return suggestion;
 	}
     public void setSuggestion(String suggestion) {

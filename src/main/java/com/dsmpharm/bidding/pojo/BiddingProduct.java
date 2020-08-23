@@ -27,6 +27,8 @@ public class BiddingProduct implements Serializable {
 
     private String standards;
 
+	private String dosageForm;
+
     private String status;
 
     private String delflag;
@@ -73,7 +75,14 @@ public class BiddingProduct implements Serializable {
     public void setStatus(String status) {
 		this.status = status;
 	}
-    public String getDelflag() {
+	public String getDosageForm() {
+		return dosageForm;
+	}
+	public void setDosageForm(String dosageForm) {
+		this.dosageForm = dosageForm;
+	}
+
+	public String getDelflag() {
 		return delflag;
 	}
     public void setDelflag(String delflag) {
