@@ -340,6 +340,8 @@ public class BiddingProjectService {
                     //往审批表里插数据，为了后续查看是否有待审批的记录
                     appFlowApprovalMapper.insert(appFlowApproval);
                 }
+                //如果是0说明要提交审批，因此需要将该项目之前的审批数据‘删除’
+                    appFlowApprovalMapper.updateApp(appFlowApproval.getUserId(),biddingProject.getId());
                 //如果是保存
             } else if (isSubmt.equals("1")) {
                 biddingProjectBulid.setGoStatus("2");//0 进行中 1 未进行 2 草稿 3 待审核 4 审核通过 5 审核驳回 6跳过此阶段
@@ -452,7 +454,7 @@ public class BiddingProjectService {
             }
             //获取内容设置表中的字段信息
             //List<BiddingContentBak> settingsList = biddingContentBakMapper.selectByPhaseId(projectPhaseId, versionNum);
-            List<Map> settingsList = biddingContentBakMapper.selectByUpdate(projectPhaseId, versionNum);
+            List<Map> settingsList = biddingContentBakMapper.selectByUpdate1(projectPhaseId, versionNum,biddingProject.getId());
             for (Map map1 : settingsList) {
                 if ((map.get(map1.get("enName"))) != null) {
                     String value = map.get(map1.get("enName").toString());
@@ -1008,6 +1010,8 @@ public class BiddingProjectService {
             //开始拿参数
             String type = map.get("type").toString();
             biddingDocInterpretation.setType(type);
+            String dosageForm = map.get("dosageForm").toString();
+            biddingDocInterpretation.setDosageForm(dosageForm);
             String range = map.get("range").toString();
             biddingDocInterpretation.setRange(range);
             String noReason = map.get("noReason").toString();
@@ -1338,7 +1342,7 @@ public class BiddingProjectService {
             //}
             //*******修改3结束（注释）*******
             //*******修改4开始（新增）*******
-            List<Map> settingsList = biddingContentBakMapper.selectByUpdate(projectPhaseId, versionNum);
+            List<Map> settingsList = biddingContentBakMapper.selectByUpdate1(projectPhaseId, versionNum,biddingProject1.getId());
             for (Map map1 : settingsList) {
                 if ((map.get(map1.get("enName"))) != null) {
                     String value = map.get(map1.get("enName").toString());
@@ -1383,6 +1387,8 @@ public class BiddingProjectService {
             //开始拿参数
             String type = map.get("type").toString();
             biddingDocInterpretation.setType(type);
+            String dosageForm = map.get("dosageForm").toString();
+            biddingDocInterpretation.setDosageForm(dosageForm);
             String range = map.get("range").toString();
             biddingDocInterpretation.setRange(range);
             String noReason = map.get("noReason").toString();
@@ -1910,7 +1916,7 @@ public class BiddingProjectService {
             //    }
             //}
             //*******修改4开始（新增）*******
-            List<Map> settingsList = biddingContentBakMapper.selectByUpdate(projectPhaseId, versionNum);
+            List<Map> settingsList = biddingContentBakMapper.selectByUpdate1(projectPhaseId, versionNum,biddingProject1.getId());
             for (Map map1 : settingsList) {
                 if ((map.get(map1.get("enName"))) != null) {
                     String value = map.get(map1.get("enName").toString());
@@ -1945,6 +1951,11 @@ public class BiddingProjectService {
             //biddingProject1.setProductCollectionId(idWorker.nextId() + "");
             //biddingProject1.setProjectPhaseNow("3");
             //更新project表
+            if (isSubmit.equals("0")) {
+                biddingProject1.setProjectPhaseNow("4");
+            } else if (isSubmit.equals("1")) {
+                biddingProject1.setProjectPhaseNow("3");
+            }
             biddingProjectMapper.updateByPrimaryKeySelective(biddingProject1);
             //BiddingProductCollection biddingProductCollection = new BiddingProductCollection();
             //biddingProductCollection.setId(biddingProject1.getProductCollectionId());
@@ -2021,7 +2032,7 @@ public class BiddingProjectService {
             }
             if (isSubmit.equals("0")) {
                 //0 进行中 1 未进行 2 草稿 3 待审核 4 审核通过 5 审核驳回 6跳过此阶段
-                biddingProductCollection.setGoStatus("3");
+                biddingProductCollection.setGoStatus("4");
             } else if (isSubmit.equals("1")) {
                 //0 进行中 1 未进行 2 草稿 3 待审核 4 审核通过 5 审核驳回 6跳过此阶段
                 biddingProductCollection.setGoStatus("2");
@@ -2531,7 +2542,7 @@ public class BiddingProjectService {
             }
             //获取内容设置表中的字段信息
             //*******修改4开始（新增）*******
-            List<Map> settingsList = biddingContentBakMapper.selectByUpdate(projectPhaseId, versionNum);
+            List<Map> settingsList = biddingContentBakMapper.selectByUpdate1(projectPhaseId, versionNum,biddingProject1.getId());
             for (Map map1 : settingsList) {
                 if ((map.get(map1.get("enName"))) != null) {
                     String value = map.get(map1.get("enName").toString());
@@ -3423,7 +3434,7 @@ public class BiddingProjectService {
             }
             //获取内容设置表中的字段信息
             //*******修改4开始（新增）*******
-            List<Map> settingsList = biddingContentBakMapper.selectByUpdate(projectPhaseId, versionNum);
+            List<Map> settingsList = biddingContentBakMapper.selectByUpdate1(projectPhaseId, versionNum,biddingProject1.getId());
             for (Map map1 : settingsList) {
                 if ((map.get(map1.get("enName"))) != null) {
                     String value = map.get(map1.get("enName").toString());
@@ -4112,7 +4123,7 @@ public class BiddingProjectService {
                 docPath.mkdirs();
             }
             //获取内容设置表中的字段信息
-            List<Map> settingsList = biddingContentBakMapper.selectByUpdate(projectPhaseId, versionNum);
+            List<Map> settingsList = biddingContentBakMapper.selectByUpdate1(projectPhaseId, versionNum,biddingProject1.getId());
             for (Map map1 : settingsList) {
                 if ((map.get(map1.get("enName"))) != null) {
                     String value = map.get(map1.get("enName").toString());
@@ -4637,7 +4648,7 @@ public class BiddingProjectService {
             }
             //获取内容设置表中的字段信息
             //*******修改4开始（新增）*******
-            List<Map> settingsList = biddingContentBakMapper.selectByUpdate(projectPhaseId, versionNum);
+            List<Map> settingsList = biddingContentBakMapper.selectByUpdate1(projectPhaseId, versionNum,biddingProject1.getId());
             for (Map map1 : settingsList) {
                 if ((map.get(map1.get("enName"))) != null) {
                     String value = map.get(map1.get("enName").toString());

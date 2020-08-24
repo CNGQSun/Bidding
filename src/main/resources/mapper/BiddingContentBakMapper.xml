@@ -11,8 +11,15 @@
                 select distinct * from bidding_content_bak where project_phase_id=#{projectPhaseId} and version_num=#{versionNum}
     </select>
     <select id="selectByUpdate" resultType="java.util.Map">
+          select distinct bcb.en_name enName,bpd.value value,bpd.id dataId from bidding_content_bak bcb
+        LEFT JOIN bidding_project_data bpd on bcb.id=bpd.content_settings_id
+        LEFT JOIN bidding_project bp on bp.version_num=bcb.version_num
+     where project_phase_id=#{projectPhaseId} and version_num=#{versionNum} and         where bcb.project_phase_id='7' and bp.version_num='747418059723116545' AND bpd.project_id=#{projectId}
+    </select>
+    <select id="selectByUpdate1" resultType="java.util.Map">
         select distinct bcb.en_name enName,bpd.value value,bpd.id dataId from bidding_content_bak bcb
         LEFT JOIN bidding_project_data bpd on bcb.id=bpd.content_settings_id
-        where project_phase_id=#{projectPhaseId} and version_num=#{versionNum}
+        LEFT JOIN bidding_project bp on bp.version_num=bcb.version_num
+        where bcb.project_phase_id=#{projectPhaseId} and bp.version_num=#{versionNum} and bpd.project_id=#{projectId}
     </select>
 </mapper>

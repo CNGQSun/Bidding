@@ -228,6 +228,7 @@ public class BiddingProjectController {
             @ApiImplicitParam(name = "solicitingOpinions", value = "征求稿意见", required = true, paramType = "query", dataType = "String"),
             @ApiImplicitParam(name = "fileSolicitingOpinions", value = "征求稿意见文件（文件或输入）", required = true, paramType = "query", dataType = "String"),
             @ApiImplicitParam(name = "suggestion", value = "意见填写", required = true, paramType = "query", dataType = "String"),
+            @ApiImplicitParam(name = "dosageForm", value = "剂型", required = true, paramType = "query", dataType = "String"),
     })
     @PostMapping("/docInter")
     public Result insertDocInter(HttpServletRequest request, @RequestParam Map map, @RequestParam(value = "addContent") List<List<String>> addContent) {
@@ -273,6 +274,7 @@ public class BiddingProjectController {
             @ApiImplicitParam(name = "solicitingOpinions", value = "征求稿意见", required = true, paramType = "query", dataType = "String"),
             @ApiImplicitParam(name = "fileSolicitingOpinions", value = "征求稿意见文件（文件或输入）", required = true, paramType = "query", dataType = "String"),
             @ApiImplicitParam(name = "suggestion", value = "意见填写", required = true, paramType = "query", dataType = "String"),
+            @ApiImplicitParam(name = "dosageForm", value = "剂型", required = true, paramType = "query", dataType = "String"),
     })
     @PostMapping("/docInter/update")
     public Result updateDocInter(HttpServletRequest request, @RequestParam Map map, @RequestParam(value = "addContent") List<List<String>> addContent) {

@@ -22,4 +22,5 @@ public interface BiddingContentBakMapper extends Mapper<BiddingContentBak> {
     List<BiddingContentBak> selectByPhaseId(@Param("projectPhaseId") String projectPhaseId, @Param("versionNum") String versionNum);
 
     List<Map> selectByUpdate(@Param("projectPhaseId") String projectPhaseId, @Param("versionNum") String versionNum);
+    List<Map> selectByUpdate1(@Param("projectPhaseId") String projectPhaseId, @Param("versionNum") String versionNum,@Param("projectId") String projectId);
 }

@@ -117,8 +117,14 @@ public class BiddingPriceInfoService {
             String proTypeId = map.get("typeId").toString();
             String startTime = map.get("startTime").toString();
             String endTime = map.get("endTime").toString();
-            Integer start = Integer.valueOf(startTime.replace("/", ""));
-            Integer end = Integer.valueOf(endTime.replace("/", ""));
+            Integer end=null;
+            Integer start=null;
+            if (startTime!=null && !startTime.equals("")){
+                start = Integer.valueOf(startTime.replace("/", ""));
+            }
+            if (endTime!=null && !endTime.equals("")){
+                end= Integer.valueOf(endTime.replace("/", ""));
+            }
             List<Map> mapList = biddingProjectMapper.selectByDatebase(proId, cityId, name, proLabel, proTypeId, start, end);
             PageHelper.startPage(currentPage, pageSize);
             List<Map> maps = biddingProjectMapper.selectByDatebase(proId, cityId, name, proLabel, proTypeId, start, end);

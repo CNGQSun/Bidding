@@ -43,7 +43,7 @@
         LEFT JOIN bidding_project_phase bpph on bpph.id=bp.project_phase_now
         LEFT JOIN bidding_project_type bpt on bpt.id =bp.type_id
         WHERE afap.user_id=#{userId} and afap.approve_result='0'
---         AND afap.approve_result='0'
+        -- AND afap.approve_result='0'
         <if test="status !=null and  status!='' ">
             and bp.status= #{status}
         </if>
@@ -87,7 +87,7 @@
         bdi.id docInterpretationId,bdi.[type],bdi.[range],bdi.no_reason noReason,bdi.time_range_start,
         bdi.time_range_end,bdi.common_name,bdi.standards,bdi.quality_level,bdi.price_limit,bdi.price_limit_reference,
         bdi.price_limit_explain,bdi.file_buy_rules,bdi.file_quoted_price,bdi.industry_influence,bdi.self_influence,
-        bdi.soliciting_opinions,bdi.file_soliciting_opinions,bdi.suggestion,bdi.go_status
+        bdi.soliciting_opinions,bdi.file_soliciting_opinions,bdi.suggestion,bdi.go_status,bdi.dosage_form 
         FROM bidding_project bp
         LEFT JOIN bidding_doc_interpretation bdi on bdi.id=bp.doc_interpretation_id
         where bp.id=#{projectId}

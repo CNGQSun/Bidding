@@ -55,6 +55,8 @@ public class BiddingDocInterpretation implements Serializable {
 
     private String goStatus;
 
+    private String dosageForm;
+
     public String getId() {
 		return id;
 	}
@@ -174,5 +176,13 @@ public class BiddingDocInterpretation implements Serializable {
 	}
     public void setGoStatus(String goStatus) {
 		this.goStatus = goStatus;
+	}
+
+	public String getDosageForm() {
+		return dosageForm;
+	}
+
+	public void setDosageForm(String dosageForm) {
+		this.dosageForm = dosageForm;
 	}
 }

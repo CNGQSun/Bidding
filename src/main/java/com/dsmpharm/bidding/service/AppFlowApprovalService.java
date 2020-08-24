@@ -183,6 +183,7 @@ public class AppFlowApprovalService {
 					biddingProjectSummary.setGoStatus("5");
 					biddingProjectSummaryMapper.updateByPrimaryKeySelective(biddingProjectSummary);
 				}
+
 				return new Result<>(true, StatusCode.OK, "审批成功");
 			}
 			//申请通过，则需要看看是否还有其他节点，有其他节点则继续走，没有其他节点则
