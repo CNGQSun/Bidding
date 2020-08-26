@@ -7,6 +7,8 @@ import com.dsmpharm.bidding.utils.IdWorker;
 import com.dsmpharm.bidding.utils.Result;
 import com.dsmpharm.bidding.utils.StatusCode;
 import org.apache.ibatis.session.RowBounds;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -20,6 +22,7 @@ import java.util.Map;
  */
 @Service
 public class AppFlowApprovalService {
+	private static Logger log = LoggerFactory.getLogger(AppFlowApprovalService.class);
 
 	@Resource
 	private AppFlowApprovalMapper appFlowApprovalMapper;
@@ -102,6 +105,7 @@ public class AppFlowApprovalService {
 		try {
 			String approveId = map.get("approveId").toString();
 			String approveResult = map.get("approveResult").toString();
+			String approveInfo = map.get("approveInfo").toString();
 			AppFlowApproval appFlowApproval=new AppFlowApproval();
 			appFlowApproval.setId(approveId);
 			AppFlowApproval appFlowApproval1 = appFlowApprovalMapper.selectOne(appFlowApproval);
@@ -110,6 +114,7 @@ public class AppFlowApprovalService {
 			}
 			//设置审核结果
 			appFlowApproval1.setApproveResult(approveResult);
+			appFlowApproval1.setApproveInfo(approveInfo);
 			//设置审批时间
 			appFlowApproval1.setApproveDate(DateUtils.format(new Date(), "yyyy-MM-dd HH:mm:ss"));
 			//更新审批记录
@@ -258,8 +263,9 @@ public class AppFlowApprovalService {
 					if (biddingProjectSummary==null){
 						return new Result<>(false, StatusCode.ERROR, "没有找到该阶段记录");
 					}
-					newNow = (Integer.valueOf(biddingProject.getProjectPhaseNow()))+1;
+					newNow = (Integer.valueOf(biddingProject.getProjectPhaseNow()));
 					biddingProjectSummary.setGoStatus("4");
+					biddingProject.setStatus("1");
 					biddingProjectSummaryMapper.updateByPrimaryKeySelective(biddingProjectSummary);
 				}
 				biddingProject.setProjectPhaseNow(newNow+"");
@@ -286,9 +292,11 @@ public class AppFlowApprovalService {
 			appFlowApproval2.setUserId(biddingUser.getId());
 			//往审批表里插数据，为了后续查看是否有待审批的记录
 			appFlowApprovalMapper.insert(appFlowApproval2);
+			//如果是0说明要提交审批，因此需要将该项目之前的审批数据‘删除’
+			appFlowApprovalMapper.updateApp(appFlowApproval2.getUserId(),biddingProject.getId());
 			return new Result<>(true, StatusCode.OK, "审批成功");
 		} catch (NumberFormatException e) {
-			e.printStackTrace();
+			log.error(e.toString(),e);
 			return new Result<>(false, StatusCode.ERROR, "呀! 服务器开小差了~");
 		}
 	}

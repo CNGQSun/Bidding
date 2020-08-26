@@ -7,6 +7,8 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -22,6 +24,8 @@ import java.util.Map;
 @RequestMapping("/appFlowApproval")
 @Api(tags = "项目审批相关接口")
 public class AppFlowApprovalController {
+
+    private static Logger log = LoggerFactory.getLogger(AppFlowApprovalController.class);
 
     @Resource
     private AppFlowApprovalService appFlowApprovalService;
@@ -39,6 +43,7 @@ public class AppFlowApprovalController {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "approveId", value = "审批ID，list返回数据中已经提供", required = true, paramType = "query", dataType = "String"),
             @ApiImplicitParam(name = "approveResult", value = "审批结果，通过为1，驳回为2", required = true, paramType = "query", dataType = "String"),
+            @ApiImplicitParam(name = "approveInfo", value = "驳回原因", required = true, paramType = "query", dataType = "String"),
     })
     @PostMapping("/app")
     public Result update(HttpServletRequest request, @RequestParam Map map) {

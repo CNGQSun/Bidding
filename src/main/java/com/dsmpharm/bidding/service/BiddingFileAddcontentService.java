@@ -68,7 +68,7 @@ public class BiddingFileAddcontentService {
 					biddingFileAddcontentMapper.insertAddcontent(filePath.getPath());
 					biddingFileAddcontent1 = biddingFileAddcontentMapper.selectOne(biddingFileAddcontent);
 				} catch (Exception e) {
-					e.printStackTrace();
+					log.error(e.toString(),e);
 					return new Result(false, StatusCode.ERROR,"呀! 服务器开小差了~");
 				}
 				arrayList.add(biddingFileAddcontent1);

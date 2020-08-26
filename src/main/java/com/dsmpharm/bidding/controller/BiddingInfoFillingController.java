@@ -5,6 +5,8 @@ import com.dsmpharm.bidding.service.BiddingInfoFillingService;
 import com.dsmpharm.bidding.utils.PageResult;
 import com.dsmpharm.bidding.utils.Result;
 import com.dsmpharm.bidding.utils.StatusCode;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -18,6 +20,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/biddingInfoFilling")
 public class BiddingInfoFillingController {
+	private static Logger log = LoggerFactory.getLogger(BiddingInfoFillingController.class);
 
 	@Resource
 	private BiddingInfoFillingService biddingInfoFillingService;

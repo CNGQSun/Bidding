@@ -22,6 +22,13 @@ public class BiddingProductCollection implements Serializable {
     private String suggestion;
 
     private String goStatus;
+    private String price;
+    private String historicalsSales;
+    private String marketShare;
+    private String qualityLevel;
+    private String winningBid;
+
+
 
     public String getId() {
 		return id;
@@ -46,5 +53,45 @@ public class BiddingProductCollection implements Serializable {
 	}
     public void setGoStatus(String goStatus) {
 		this.goStatus = goStatus;
+	}
+
+	public String getPrice() {
+		return price;
+	}
+
+	public void setPrice(String price) {
+		this.price = price;
+	}
+
+	public String getHistoricalsSales() {
+		return historicalsSales;
+	}
+
+	public void setHistoricalsSales(String historicalsSales) {
+		this.historicalsSales = historicalsSales;
+	}
+
+	public String getMarketShare() {
+		return marketShare;
+	}
+
+	public void setMarketShare(String marketShare) {
+		this.marketShare = marketShare;
+	}
+
+	public String getQualityLevel() {
+		return qualityLevel;
+	}
+
+	public void setQualityLevel(String qualityLevel) {
+		this.qualityLevel = qualityLevel;
+	}
+
+	public String getWinningBid() {
+		return winningBid;
+	}
+
+	public void setWinningBid(String winningBid) {
+		this.winningBid = winningBid;
 	}
 }

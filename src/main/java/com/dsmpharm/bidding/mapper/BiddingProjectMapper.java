@@ -1,7 +1,6 @@
 package com.dsmpharm.bidding.mapper;
 
-import com.dsmpharm.bidding.pojo.BiddingProject;
-import com.dsmpharm.bidding.pojo.BiddingProjectBulid;
+import com.dsmpharm.bidding.pojo.*;
 import org.apache.ibatis.annotations.Param;
 import tk.mybatis.mapper.common.Mapper;
 
@@ -96,12 +95,12 @@ public interface BiddingProjectMapper extends Mapper<BiddingProject> {
     Map selectProjectSummary(@Param("projectId")String projectId);
 
     BiddingProjectBulid selectGoStatus1(@Param("projectId") String projectId);
-    BiddingProjectBulid selectGoStatus2(@Param("projectId")String projectId);
-    BiddingProjectBulid selectGoStatus3(@Param("projectId")String projectId);
-    BiddingProjectBulid selectGoStatus4(@Param("projectId")String projectId);
-    BiddingProjectBulid selectGoStatus5(@Param("projectId")String projectId);
-    BiddingProjectBulid selectGoStatus6(@Param("projectId")String projectId);
-    BiddingProjectBulid selectGoStatus7(@Param("projectId")String projectId);
+    BiddingDocInterpretation selectGoStatus2(@Param("projectId")String projectId);
+    BiddingProductCollection selectGoStatus3(@Param("projectId")String projectId);
+    BiddingStrategyAnalysis selectGoStatus4(@Param("projectId")String projectId);
+    BiddingInfoFilling selectGoStatus5(@Param("projectId")String projectId);
+    BiddingOfficialNotice selectGoStatus6(@Param("projectId")String projectId);
+    BiddingProjectSummary selectGoStatus7(@Param("projectId")String projectId);
 
     /**
      *

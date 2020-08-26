@@ -9,6 +9,8 @@ import com.dsmpharm.bidding.utils.StatusCode;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.apache.ibatis.session.RowBounds;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -21,6 +23,7 @@ import java.util.Map;
  */
 @Service
 public class BiddingContentSettingsService {
+    private static Logger log = LoggerFactory.getLogger(BiddingContentSettingsService.class);
 
     @Resource
     private BiddingContentSettingsMapper biddingContentSettingsMapper;
@@ -50,7 +53,7 @@ public class BiddingContentSettingsService {
                 return new Result<>(true, StatusCode.OK, "查询成功", map);
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.toString(),e);
             return new Result<>(false, StatusCode.ERROR, "呀! 服务器开小差了~");
         }
         return new Result<>(false, StatusCode.ERROR, "查询失败");
@@ -88,7 +91,7 @@ public class BiddingContentSettingsService {
                 return new Result<>(true, StatusCode.OK, "修改成功");
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.toString(),e);
             return new Result<>(false, StatusCode.ERROR, "呀! 服务器开小差了~");
         }
         return new Result<>(false, StatusCode.ERROR, "修改失败");
@@ -117,7 +120,7 @@ public class BiddingContentSettingsService {
             PageResult pageResult = new PageResult(pageInfo.getTotal(), maps);
             return new Result(true, StatusCode.OK, "查询成功", pageResult);
         } catch (NumberFormatException e) {
-            e.printStackTrace();
+            log.error(e.toString(),e);
             return new Result<>(false, StatusCode.ERROR, "呀! 服务器开小差了~");
         }
     }
@@ -168,7 +171,7 @@ public class BiddingContentSettingsService {
                 return new Result<>(true, StatusCode.OK, "添加成功");
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.toString(),e);
             return new Result<>(false, StatusCode.ERROR, "呀! 服务器开小差了~");
         }
         return new Result<>(false, StatusCode.ERROR, "添加失败");
@@ -192,7 +195,7 @@ public class BiddingContentSettingsService {
                 return new Result<>(true, StatusCode.OK, "删除成功");
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.toString(),e);
             return new Result<>(false, StatusCode.ERROR, "呀! 服务器开小差了~");
         }
         return new Result<>(false, StatusCode.ERROR, "删除失败");
@@ -214,7 +217,7 @@ public class BiddingContentSettingsService {
             }
             return new Result<>(true, StatusCode.OK, "删除成功");
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.toString(),e);
             return new Result<>(false, StatusCode.ERROR, "呀! 服务器开小差了~");
         }
     }

@@ -2,8 +2,7 @@ package com.dsmpharm.bidding.service;
 
 import com.dsmpharm.bidding.controller.BiddingProductController;
 import com.dsmpharm.bidding.mapper.*;
-import com.dsmpharm.bidding.pojo.BiddingProjectBulid;
-import com.dsmpharm.bidding.pojo.BiddingProjectType;
+import com.dsmpharm.bidding.pojo.*;
 import com.dsmpharm.bidding.utils.IdWorker;
 import com.dsmpharm.bidding.utils.PageResult;
 import com.dsmpharm.bidding.utils.Result;
@@ -117,13 +116,13 @@ public class BiddingPriceInfoService {
             String proTypeId = map.get("typeId").toString();
             String startTime = map.get("startTime").toString();
             String endTime = map.get("endTime").toString();
-            Integer end=null;
-            Integer start=null;
-            if (startTime!=null && !startTime.equals("")){
+            Integer end = null;
+            Integer start = null;
+            if (startTime != null && !startTime.equals("")) {
                 start = Integer.valueOf(startTime.replace("/", ""));
             }
-            if (endTime!=null && !endTime.equals("")){
-                end= Integer.valueOf(endTime.replace("/", ""));
+            if (endTime != null && !endTime.equals("")) {
+                end = Integer.valueOf(endTime.replace("/", ""));
             }
             List<Map> mapList = biddingProjectMapper.selectByDatebase(proId, cityId, name, proLabel, proTypeId, start, end);
             PageHelper.startPage(currentPage, pageSize);
@@ -150,25 +149,43 @@ public class BiddingPriceInfoService {
                     map1.put("projectPhaseId", projectPhaseId);
                 }
                 BiddingProjectBulid biddingProjectBulid = null;
+                BiddingDocInterpretation biddingDocInterpretation = null;
+                BiddingProductCollection biddingProductCollection = null;
+                BiddingStrategyAnalysis biddingStrategyAnalysis = null;
+                BiddingInfoFilling biddingInfoFilling = null;
+                BiddingOfficialNotice biddingOfficialNotice = null;
+                BiddingProjectSummary biddingProjectSummary = null;
                 if (map1.get("project_phase_now") != null) {
                     if ((map1.get("project_phase_now").toString()).equals("1")) {
                         biddingProjectBulid = biddingProjectMapper.selectGoStatus1(projectId);
                     } else if ((map1.get("project_phase_now").toString()).equals("2")) {
-                        biddingProjectBulid = biddingProjectMapper.selectGoStatus2(projectId);
+                        biddingDocInterpretation = biddingProjectMapper.selectGoStatus2(projectId);
                     } else if ((map1.get("project_phase_now").toString()).equals("3")) {
-                        biddingProjectBulid = biddingProjectMapper.selectGoStatus3(projectId);
+                        biddingProductCollection = biddingProjectMapper.selectGoStatus3(projectId);
                     } else if ((map1.get("project_phase_now").toString()).equals("4")) {
-                        biddingProjectBulid = biddingProjectMapper.selectGoStatus4(projectId);
+                        biddingStrategyAnalysis = biddingProjectMapper.selectGoStatus4(projectId);
                     } else if ((map1.get("project_phase_now").toString()).equals("5")) {
-                        biddingProjectBulid = biddingProjectMapper.selectGoStatus5(projectId);
+                        biddingInfoFilling = biddingProjectMapper.selectGoStatus5(projectId);
                     } else if ((map1.get("project_phase_now").toString()).equals("6")) {
-                        biddingProjectBulid = biddingProjectMapper.selectGoStatus6(projectId);
+                        biddingOfficialNotice = biddingProjectMapper.selectGoStatus6(projectId);
                     } else if ((map1.get("project_phase_now").toString()).equals("7")) {
-                        biddingProjectBulid = biddingProjectMapper.selectGoStatus7(projectId);
+                        biddingProjectSummary = biddingProjectMapper.selectGoStatus7(projectId);
                     }
                 }
                 if (biddingProjectBulid != null) {
                     map1.put("goStatus", biddingProjectBulid.getGoStatus());
+                } else if (biddingDocInterpretation != null) {
+                    map1.put("goStatus", biddingDocInterpretation.getGoStatus());
+                } else if (biddingProductCollection != null) {
+                    map1.put("goStatus", biddingProductCollection.getGoStatus());
+                } else if (biddingStrategyAnalysis != null) {
+                    map1.put("goStatus", biddingStrategyAnalysis.getGoStatus());
+                } else if (biddingInfoFilling != null) {
+                    map1.put("goStatus", biddingInfoFilling.getGoStatus());
+                } else if (biddingOfficialNotice != null) {
+                    map1.put("goStatus", biddingOfficialNotice.getGoStatus());
+                } else if (biddingProjectSummary != null) {
+                    map1.put("goStatus", biddingProjectSummary.getGoStatus());
                 }
             }
             PageInfo pageInfo = new PageInfo<>(maps);
@@ -176,7 +193,7 @@ public class BiddingPriceInfoService {
             PageResult pageResult = new PageResult(pageInfo.getTotal(), maps);
             return new Result<>(true, StatusCode.OK, "查询成功", pageResult);
         } catch (NumberFormatException e) {
-            e.printStackTrace();
+            log.error(e.toString(),e);
             return new Result<>(false, StatusCode.ERROR, "呀! 服务器开小差了~");
         }
     }
@@ -188,9 +205,9 @@ public class BiddingPriceInfoService {
             String qualityLevel = map.get("qualityLevel").toString();
             String proId = map.get("proId").toString();
             String productId = map.get("productId").toString();
-            List<Map> mapList = biddingProjectMapper.selectByAppeal(qualityLevel,proId,productId);
+            List<Map> mapList = biddingProjectMapper.selectByAppeal(qualityLevel, proId, productId);
             PageHelper.startPage(currentPage, pageSize);
-            List<Map> maps = biddingProjectMapper.selectByAppeal(qualityLevel,proId,productId);
+            List<Map> maps = biddingProjectMapper.selectByAppeal(qualityLevel, proId, productId);
             for (Map map1 : maps) {
                 String typeId = null;
                 String projectId = null;
@@ -213,25 +230,43 @@ public class BiddingPriceInfoService {
                     map1.put("projectPhaseId", projectPhaseId);
                 }
                 BiddingProjectBulid biddingProjectBulid = null;
+                BiddingDocInterpretation biddingDocInterpretation = null;
+                BiddingProductCollection biddingProductCollection = null;
+                BiddingStrategyAnalysis biddingStrategyAnalysis = null;
+                BiddingInfoFilling biddingInfoFilling = null;
+                BiddingOfficialNotice biddingOfficialNotice = null;
+                BiddingProjectSummary biddingProjectSummary = null;
                 if (map1.get("project_phase_now") != null) {
                     if ((map1.get("project_phase_now").toString()).equals("1")) {
                         biddingProjectBulid = biddingProjectMapper.selectGoStatus1(projectId);
                     } else if ((map1.get("project_phase_now").toString()).equals("2")) {
-                        biddingProjectBulid = biddingProjectMapper.selectGoStatus2(projectId);
+                        biddingDocInterpretation = biddingProjectMapper.selectGoStatus2(projectId);
                     } else if ((map1.get("project_phase_now").toString()).equals("3")) {
-                        biddingProjectBulid = biddingProjectMapper.selectGoStatus3(projectId);
+                        biddingProductCollection = biddingProjectMapper.selectGoStatus3(projectId);
                     } else if ((map1.get("project_phase_now").toString()).equals("4")) {
-                        biddingProjectBulid = biddingProjectMapper.selectGoStatus4(projectId);
+                        biddingStrategyAnalysis = biddingProjectMapper.selectGoStatus4(projectId);
                     } else if ((map1.get("project_phase_now").toString()).equals("5")) {
-                        biddingProjectBulid = biddingProjectMapper.selectGoStatus5(projectId);
+                        biddingInfoFilling = biddingProjectMapper.selectGoStatus5(projectId);
                     } else if ((map1.get("project_phase_now").toString()).equals("6")) {
-                        biddingProjectBulid = biddingProjectMapper.selectGoStatus6(projectId);
+                        biddingOfficialNotice = biddingProjectMapper.selectGoStatus6(projectId);
                     } else if ((map1.get("project_phase_now").toString()).equals("7")) {
-                        biddingProjectBulid = biddingProjectMapper.selectGoStatus7(projectId);
+                        biddingProjectSummary = biddingProjectMapper.selectGoStatus7(projectId);
                     }
                 }
                 if (biddingProjectBulid != null) {
                     map1.put("goStatus", biddingProjectBulid.getGoStatus());
+                } else if (biddingDocInterpretation != null) {
+                    map1.put("goStatus", biddingDocInterpretation.getGoStatus());
+                } else if (biddingProductCollection != null) {
+                    map1.put("goStatus", biddingProductCollection.getGoStatus());
+                } else if (biddingStrategyAnalysis != null) {
+                    map1.put("goStatus", biddingStrategyAnalysis.getGoStatus());
+                } else if (biddingInfoFilling != null) {
+                    map1.put("goStatus", biddingInfoFilling.getGoStatus());
+                } else if (biddingOfficialNotice != null) {
+                    map1.put("goStatus", biddingOfficialNotice.getGoStatus());
+                } else if (biddingProjectSummary != null) {
+                    map1.put("goStatus", biddingProjectSummary.getGoStatus());
                 }
             }
             PageInfo pageInfo = new PageInfo<>(maps);
@@ -239,7 +274,24 @@ public class BiddingPriceInfoService {
             PageResult pageResult = new PageResult(pageInfo.getTotal(), maps);
             return new Result<>(true, StatusCode.OK, "查询成功", pageResult);
         } catch (NumberFormatException e) {
-            e.printStackTrace();
+            log.error(e.toString(),e);
+            return new Result<>(false, StatusCode.ERROR, "呀! 服务器开小差了~");
+        }
+    }
+
+    /**
+     * 首页地图展示
+     *
+     * @param map
+     * @return
+     */
+    public Result findIndexInfo(Map map) {
+        try {
+            String productEnName = map.get("productEnName").toString();
+            List<BiddingPriceInfo> priceInfos = biddingPriceInfoMapper.selectByproductEn(productEnName);
+            return new Result<>(true, StatusCode.OK, "查询成功",priceInfos);
+        } catch (Exception e) {
+            log.error(e.toString(),e);
             return new Result<>(false, StatusCode.ERROR, "呀! 服务器开小差了~");
         }
     }

@@ -8,6 +8,8 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -23,6 +25,7 @@ import java.util.Map;
 @RequestMapping("/biddingPriceInfo")
 @Api(tags = "资料库相关接口")
 public class BiddingPriceInfoController {
+	private static Logger log = LoggerFactory.getLogger(BiddingPriceInfoController.class);
 
 	@Resource
 	private BiddingPriceInfoService biddingPriceInfoService;
@@ -82,4 +85,19 @@ public class BiddingPriceInfoController {
 		return result;
 	}
 
+	/**
+	 *
+	 *首页地图展示
+	 * @param map
+	 * @return
+	 */
+	@ApiOperation(value = "首页地图展示")
+	@ApiImplicitParams({
+			@ApiImplicitParam(name = "productEnName", value = "产品英文名（不能为空，需要默认值）", required = true, paramType = "query", dataType = "String"),
+	})
+	@PostMapping(value = "/index")
+	public Result findIndexInfo(@RequestParam Map map) {
+		Result result = biddingPriceInfoService.findIndexInfo(map);
+		return result;
+	}
 }

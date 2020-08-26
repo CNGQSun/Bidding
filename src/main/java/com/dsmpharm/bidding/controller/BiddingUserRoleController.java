@@ -5,6 +5,8 @@ import com.dsmpharm.bidding.utils.Result;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -18,6 +20,7 @@ import javax.annotation.Resource;
 @RequestMapping("/biddingUserRole")
 @Api(tags = "用户角色相关接口")
 public class BiddingUserRoleController {
+	private static Logger log = LoggerFactory.getLogger(BiddingUserRoleController.class);
 
 	@Resource
 	private BiddingUserRoleService biddingUserRoleService;

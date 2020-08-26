@@ -25,4 +25,11 @@ public interface BiddingPriceInfoMapper extends Mapper<BiddingPriceInfo> {
      * @return
      */
     List<BiddingPriceInfo> selectByProductPro(@Param("enName") String enName, @Param("proId")Integer proId);
+
+    /**
+     * 根据enName、proId查询省份信息
+     * @param productEnName
+     * @return
+     */
+    List<BiddingPriceInfo> selectByproductEn(@Param("productEnName") String productEnName);
 }

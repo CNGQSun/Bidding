@@ -62,7 +62,7 @@ public class BiddingUserFrameworkService {
             log.info("用户架构列表获取成功！");
             return new Result(true, StatusCode.OK, "查询成功", pageResult);
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.toString(),e);
             return new Result<>(false, StatusCode.ERROR, "呀! 服务器开小差了~");
         }
     }
@@ -79,7 +79,7 @@ public class BiddingUserFrameworkService {
                 return new Result<>(true, StatusCode.OK, "查询成功", map);
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.toString(),e);
             return new Result<>(false, StatusCode.ERROR, "呀! 服务器开小差了~");
         }
         return new Result<>(false, StatusCode.ERROR, "查询失败");
@@ -119,7 +119,7 @@ public class BiddingUserFrameworkService {
                 return new Result<>(true, StatusCode.OK, "修改成功");
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.toString(),e);
             return new Result<>(false, StatusCode.ERROR, "服务器异常");
         }
         return new Result<>(false, StatusCode.ERROR, "修改失败");
@@ -141,7 +141,7 @@ public class BiddingUserFrameworkService {
                 return new Result<>(true, StatusCode.OK, "删除成功");
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.toString(),e);
             return new Result<>(false, StatusCode.ERROR, "呀! 服务器开小差了~");
         }
         return new Result<>(false, StatusCode.ERROR, "删除失败");
@@ -196,7 +196,7 @@ public class BiddingUserFrameworkService {
                 return new Result<>(true, StatusCode.OK, "提交成功");
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.toString(),e);
             return new Result<>(false, StatusCode.ERROR, "服务器异常");
         }
         return new Result<>(false, StatusCode.ERROR, "提交失败");
@@ -229,7 +229,7 @@ public class BiddingUserFrameworkService {
                 return new Result<>(true, StatusCode.OK, "保存成功");
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.toString(),e);
             return new Result<>(false, StatusCode.ERROR, "服务器异常");
         }
         return new Result<>(false, StatusCode.ERROR, "保存失败");
@@ -257,7 +257,7 @@ public class BiddingUserFrameworkService {
             }
             return new Result<>(true, StatusCode.OK, "删除成功");
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.toString(),e);
             return new Result<>(false, StatusCode.ERROR, "呀! 服务器开小差了~");
         }
     }

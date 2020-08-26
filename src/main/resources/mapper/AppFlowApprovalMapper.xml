@@ -9,6 +9,9 @@
         SELECT afap.id FROM app_flow_approval afap
         left join app_flow_apply afa on afap.apply_id=afa.id
         left join bidding_project bp on bp.id=afa.project_id
-        WHERE bp.id=#{projectId} AND afap.user_id=#{userId} AND afap.approve_result !='0' AND afap.delflag ='0')
+        WHERE bp.id=#{projectId} AND afap.user_id=#{userId} AND afap.approve_result!='0' AND afap.delflag ='0')
     </update>
+    <select id="selectByPhaseId" resultType="com.dsmpharm.bidding.pojo.AppFlowApproval">
+        select * from app_flow_approval where project_phase_id=#{projectPhaseId} and delflag='0' and approve_result='2'
+    </select>
 </mapper>

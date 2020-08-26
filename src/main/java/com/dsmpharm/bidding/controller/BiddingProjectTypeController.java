@@ -4,6 +4,8 @@ import com.dsmpharm.bidding.service.BiddingProjectTypeService;
 import com.dsmpharm.bidding.utils.Result;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,6 +22,7 @@ import javax.annotation.Resource;
 @RequestMapping("/biddingProjectType")
 @Api(tags = "项目类型相关接口")
 public class BiddingProjectTypeController {
+	private static Logger log = LoggerFactory.getLogger(BiddingProjectTypeController.class);
 
 	@Resource
 	private BiddingProjectTypeService biddingProjectTypeService;

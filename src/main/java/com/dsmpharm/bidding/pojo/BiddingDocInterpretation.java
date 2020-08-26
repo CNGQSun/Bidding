@@ -41,6 +41,8 @@ public class BiddingDocInterpretation implements Serializable {
 
     private String fileBuyRules;
 
+    private String fileBuyRulestag;
+
     private String fileQuotedPrice;
 
     private String industryInfluence;
@@ -57,7 +59,15 @@ public class BiddingDocInterpretation implements Serializable {
 
     private String dosageForm;
 
-    public String getId() {
+	public String getFileBuyRulestag() {
+		return fileBuyRulestag;
+	}
+
+	public void setFileBuyRulestag(String fileBuyRulestag) {
+		this.fileBuyRulestag = fileBuyRulestag;
+	}
+
+	public String getId() {
 		return id;
 	}
     public void setId(String id) {

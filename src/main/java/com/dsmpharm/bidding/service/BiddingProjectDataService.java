@@ -4,6 +4,8 @@ import com.dsmpharm.bidding.mapper.BiddingProjectDataMapper;
 import com.dsmpharm.bidding.pojo.BiddingProjectData;
 import com.dsmpharm.bidding.utils.IdWorker;
 import org.apache.ibatis.session.RowBounds;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -15,6 +17,7 @@ import java.util.List;
  */
 @Service
 public class BiddingProjectDataService {
+	private static Logger log = LoggerFactory.getLogger(BiddingProjectDataService.class);
 
 	@Resource
 	private BiddingProjectDataMapper biddingProjectDataMapper;

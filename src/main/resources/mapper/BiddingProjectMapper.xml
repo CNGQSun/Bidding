@@ -42,8 +42,7 @@
         LEFT JOIN bidding_project_product bpp on bpp.project_id=bp.id
         LEFT JOIN bidding_project_phase bpph on bpph.id=bp.project_phase_now
         LEFT JOIN bidding_project_type bpt on bpt.id =bp.type_id
-        WHERE afap.user_id=#{userId} and afap.approve_result='0'
-        -- AND afap.approve_result='0'
+        where afap.user_id=#{userId} and afap.approve_result='0'
         <if test="status !=null and  status!='' ">
             and bp.status= #{status}
         </if>
@@ -87,7 +86,7 @@
         bdi.id docInterpretationId,bdi.[type],bdi.[range],bdi.no_reason noReason,bdi.time_range_start,
         bdi.time_range_end,bdi.common_name,bdi.standards,bdi.quality_level,bdi.price_limit,bdi.price_limit_reference,
         bdi.price_limit_explain,bdi.file_buy_rules,bdi.file_quoted_price,bdi.industry_influence,bdi.self_influence,
-        bdi.soliciting_opinions,bdi.file_soliciting_opinions,bdi.suggestion,bdi.go_status,bdi.dosage_form 
+        bdi.soliciting_opinions,bdi.file_soliciting_opinions,bdi.suggestion,bdi.go_status,bdi.dosage_form,bdi.file_buy_rulestag
         FROM bidding_project bp
         LEFT JOIN bidding_doc_interpretation bdi on bdi.id=bp.doc_interpretation_id
         where bp.id=#{projectId}
@@ -144,37 +143,37 @@
         left JOIN bidding_project_bulid bpu on bpu.id=bp.project_bulid_id
         where bp.id=#{projectId}
     </select>
-    <select id="selectGoStatus2" resultType="com.dsmpharm.bidding.pojo.BiddingProjectBulid">
+    <select id="selectGoStatus2" resultType="com.dsmpharm.bidding.pojo.BiddingDocInterpretation">
         select bpu.*
         from bidding_project bp
         left JOIN bidding_doc_interpretation bpu on bpu.id=bp.doc_interpretation_id
         where bp.id=#{projectId}
     </select>
-    <select id="selectGoStatus3" resultType="com.dsmpharm.bidding.pojo.BiddingProjectBulid">
+    <select id="selectGoStatus3" resultType="com.dsmpharm.bidding.pojo.BiddingProductCollection">
             select bpu.*
         from bidding_project bp
         left JOIN bidding_product_collection bpu on bpu.id=bp.product_collection_id
 where bp.id=#{projectId}
     </select>
-    <select id="selectGoStatus4" resultType="com.dsmpharm.bidding.pojo.BiddingProjectBulid">
-            select bpu.*
+    <select id="selectGoStatus4" resultType="com.dsmpharm.bidding.pojo.BiddingStrategyAnalysis">
+        select bpu.*
         from bidding_project bp
         left JOIN bidding_strategy_analysis bpu on bpu.id=bp.strategy_analysis_id
-where bp.id=#{projectId}
+        where bp.id=#{projectId}
     </select>
-    <select id="selectGoStatus5" resultType="com.dsmpharm.bidding.pojo.BiddingProjectBulid">
+    <select id="selectGoStatus5" resultType="com.dsmpharm.bidding.pojo.BiddingInfoFilling">
             select bpu.*
         from bidding_project bp
         left JOIN bidding_info_filling bpu on bpu.id=bp.info_filling_id
 where bp.id=#{projectId}
     </select>
-    <select id="selectGoStatus6" resultType="com.dsmpharm.bidding.pojo.BiddingProjectBulid">
+    <select id="selectGoStatus6" resultType="com.dsmpharm.bidding.pojo.BiddingOfficialNotice">
             select bpu.*
         from bidding_project bp
         left JOIN bidding_official_notice bpu on bpu.id=bp.official_notice_id
 where bp.id=#{projectId}
     </select>
-    <select id="selectGoStatus7" resultType="com.dsmpharm.bidding.pojo.BiddingProjectBulid">
+    <select id="selectGoStatus7" resultType="com.dsmpharm.bidding.pojo.BiddingProjectSummary">
             select bpu.*
         from bidding_project bp
         left JOIN bidding_project_summary bpu on bpu.id=bp.project_summary_id
@@ -195,7 +194,7 @@ where bp.id=#{projectId}
         LEFT JOIN bidding_project_product bpp on bpp.project_id=bp.id
         LEFT JOIN bidding_project_phase bpph on bpph.id=bp.project_phase_now
         LEFT JOIN bidding_project_type bpt on bpt.id =bp.type_id
-        where bp.delflag='0'
+        where bp.delflag='0' and bp.status='1'
         <if test="proId !=null and  proId!='' ">
             and bpb.province_id= #{proId}
         </if>
@@ -230,7 +229,7 @@ where bp.id=#{projectId}
         LEFT JOIN bidding_project_product bpp on bpp.project_id=bp.id
         LEFT JOIN bidding_project_phase bpph on bpph.id=bp.project_phase_now
         LEFT JOIN bidding_project_type bpt on bpt.id =bp.type_id
-        where bp.delflag='0'
+        where bp.delflag='0' and  bp.status='1'
         <if test="qualityLevel !=null and  qualityLevel!='' ">
             and bdi.quality_level= #{qualityLevel}
         </if>

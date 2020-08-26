@@ -6,6 +6,8 @@ import com.dsmpharm.bidding.utils.IdWorker;
 import com.dsmpharm.bidding.utils.Result;
 import com.dsmpharm.bidding.utils.StatusCode;
 import org.apache.ibatis.session.RowBounds;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -17,6 +19,7 @@ import java.util.List;
  */
 @Service
 public class BiddingProvinceService {
+	private static Logger log = LoggerFactory.getLogger(BiddingProvinceService.class);
 
 	@Resource
 	private BiddingProvinceMapper biddingProvinceMapper;
@@ -75,7 +78,7 @@ public class BiddingProvinceService {
 			List<BiddingProvince> biddingProvinces = biddingProvinceMapper.selectAllNoDel();
 			return 	new Result<>(true, StatusCode.OK, "查询成功", biddingProvinces);
 		} catch (Exception e) {
-			e.printStackTrace();
+			log.error(e.toString(),e);
 			return 	new Result<>(false, StatusCode.ERROR, "服务器异常");
 		}
 	}

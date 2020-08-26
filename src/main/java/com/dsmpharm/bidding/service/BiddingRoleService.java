@@ -6,6 +6,8 @@ import com.dsmpharm.bidding.utils.IdWorker;
 import com.dsmpharm.bidding.utils.Result;
 import com.dsmpharm.bidding.utils.StatusCode;
 import org.apache.ibatis.session.RowBounds;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -17,6 +19,7 @@ import java.util.List;
  */
 @Service
 public class BiddingRoleService {
+	private static Logger log = LoggerFactory.getLogger(BiddingRoleService.class);
 
 	@Resource
 	private BiddingRoleMapper biddingRoleMapper;
@@ -37,7 +40,7 @@ public class BiddingRoleService {
 				return new Result<>(true, StatusCode.OK, "查询成功", biddingRoles);
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			log.error(e.toString(),e);
 			return new Result<>(true, StatusCode.ERROR, "呀! 服务器开小差了~");
 		}
 		return new Result<>(true, StatusCode.ERROR, "查询失败");

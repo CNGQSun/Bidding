@@ -4,6 +4,8 @@ import com.dsmpharm.bidding.service.BiddingProvinceService;
 import com.dsmpharm.bidding.utils.Result;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,6 +22,7 @@ import javax.annotation.Resource;
 @RequestMapping("/biddingProvince")
 @Api(tags = "省份相关接口")
 public class BiddingProvinceController {
+	private static Logger log = LoggerFactory.getLogger(BiddingProvinceController.class);
 
 	@Resource
 	private BiddingProvinceService biddingProvinceService;

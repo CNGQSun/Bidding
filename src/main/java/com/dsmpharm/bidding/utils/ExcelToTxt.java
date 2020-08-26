@@ -4,12 +4,15 @@ package com.dsmpharm.bidding.utils;
 import org.apache.poi.poifs.filesystem.FileMagic;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.util.*;
 import java.util.Map.Entry;
 
 public class ExcelToTxt {
+    private static Logger log = LoggerFactory.getLogger(ExcelToTxt.class);
 
     public static void main(String[] args) {
         // TODO Auto-generated method stub
@@ -90,7 +93,7 @@ public class ExcelToTxt {
         try {
             WriteToTxt(stringbuffer.toString(), excelPath.replace(".xlsx", ".txt"));
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error(e.toString(),e);
         }
         System.out.println("----------------Excel转成txt成功！");
     }
@@ -103,7 +106,7 @@ public class ExcelToTxt {
             bufferedwriter.write(string += "\r\n");
             bufferedwriter.flush();
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.toString(),e);
         } finally {
             bufferedwriter.close();
         }
@@ -131,7 +134,7 @@ public class ExcelToTxt {
                             cellValue = String.valueOf(cell.getNumericCellValue());
                         }
                     } catch (Exception e) {
-                        e.printStackTrace();
+                        log.error(e.toString(),e);
                     }
                 }
                 case Cell.CELL_TYPE_STRING: {
@@ -163,9 +166,9 @@ public class ExcelToTxt {
                 workbook = null;
             }
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
+            log.error(e.toString(),e);
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error(e.toString(),e);
         }
         return workbook;
     }
@@ -181,7 +184,7 @@ public class ExcelToTxt {
                 result = true;
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error(e.toString(),e);
         }
         return result;
     }

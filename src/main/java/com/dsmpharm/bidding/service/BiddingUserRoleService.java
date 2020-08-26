@@ -8,6 +8,8 @@ import com.dsmpharm.bidding.utils.IdWorker;
 import com.dsmpharm.bidding.utils.Result;
 import com.dsmpharm.bidding.utils.StatusCode;
 import org.apache.ibatis.session.RowBounds;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -20,6 +22,7 @@ import java.util.List;
  */
 @Service
 public class BiddingUserRoleService {
+    private static Logger log = LoggerFactory.getLogger(BiddingUserRoleService.class);
 
     @Resource
     private BiddingUserRoleMapper biddingUserRoleMapper;
@@ -98,7 +101,7 @@ public class BiddingUserRoleService {
             }
             return new Result<>(true, StatusCode.OK, "获取成功", userList);
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.toString(),e);
             return new Result<>(false, StatusCode.ERROR, "获取失败");
         }
     }

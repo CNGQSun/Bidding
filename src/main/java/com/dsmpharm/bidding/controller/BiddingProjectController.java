@@ -3,10 +3,13 @@ package com.dsmpharm.bidding.controller;
 import com.dsmpharm.bidding.service.BiddingProjectService;
 import com.dsmpharm.bidding.utils.JwtUtil;
 import com.dsmpharm.bidding.utils.Result;
+import com.dsmpharm.bidding.utils.StatusCode;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
@@ -30,6 +33,8 @@ public class BiddingProjectController {
 
     @Resource
     private BiddingProjectService biddingProjectService;
+
+    private static Logger log = LoggerFactory.getLogger(BiddingProjectController.class);
 
     @Resource
     private JwtUtil jwtUtil;
@@ -148,7 +153,13 @@ public class BiddingProjectController {
         MultipartHttpServletRequest params = ((MultipartHttpServletRequest) request);
         Map<String, MultipartFile> fileMap = params.getFileMap();
         String authorization = request.getHeader("Authorization");
-        String userId = jwtUtil.parseJWT(authorization).getId();
+        String userId = null;
+        try {
+            userId = jwtUtil.parseJWT(authorization).getId();
+        } catch (Exception e) {
+            log.error(e.toString(),e);
+            return new Result<>(false, StatusCode.ACCESS_ERROR, "token异常，请重新登录");
+        }
         Result result = biddingProjectService.insert(map, userId, fileMap, addContent);
         return result;
     }
@@ -222,6 +233,7 @@ public class BiddingProjectController {
             @ApiImplicitParam(name = "priceLimitReference", value = "限价的参考值", required = true, paramType = "query", dataType = "String"),
             @ApiImplicitParam(name = "priceLimitExplain", value = "限价的说明", required = true, paramType = "query", dataType = "String"),
             @ApiImplicitParam(name = "fileBuyRules", value = "采购规则（文件或输入）", required = true, paramType = "query", dataType = "String"),
+            @ApiImplicitParam(name = "fileBuyRulestag", value = "采购规则（0为带量采购 1为竞价 2为双信封）", required = true, paramType = "query", dataType = "String"),
             @ApiImplicitParam(name = "fileQuotedPrice", value = "报价（文件或输入）", required = true, paramType = "query", dataType = "String"),
             @ApiImplicitParam(name = "industryInfluence", value = "行业影响", required = true, paramType = "query", dataType = "String"),
             @ApiImplicitParam(name = "selfInfluence", value = "公司自身产品影响", required = true, paramType = "query", dataType = "String"),
@@ -268,6 +280,7 @@ public class BiddingProjectController {
             @ApiImplicitParam(name = "priceLimitReference", value = "限价的参考值", required = true, paramType = "query", dataType = "String"),
             @ApiImplicitParam(name = "priceLimitExplain", value = "限价的说明", required = true, paramType = "query", dataType = "String"),
             @ApiImplicitParam(name = "fileBuyRules", value = "采购规则（文件或输入）", required = true, paramType = "query", dataType = "String"),
+            @ApiImplicitParam(name = "fileBuyRulestag", value = "采购规则（0为带量采购 1为竞价 2为双信封）", required = true, paramType = "query", dataType = "String"),
             @ApiImplicitParam(name = "fileQuotedPrice", value = "报价（文件或输入）", required = true, paramType = "query", dataType = "String"),
             @ApiImplicitParam(name = "industryInfluence", value = "行业影响", required = true, paramType = "query", dataType = "String"),
             @ApiImplicitParam(name = "selfInfluence", value = "公司自身产品影响", required = true, paramType = "query", dataType = "String"),
@@ -303,6 +316,11 @@ public class BiddingProjectController {
             @ApiImplicitParam(name = "projectId", value = "项目ID", required = true, paramType = "query", dataType = "String"),
             @ApiImplicitParam(name = "fileText", value = "文件或内容（多个文件）", required = true, paramType = "query", dataType = "String"),
             @ApiImplicitParam(name = "suggestion", value = "意见填写", required = true, paramType = "query", dataType = "String"),
+            @ApiImplicitParam(name = "price", value = "价格", required = true, paramType = "query", dataType = "String"),
+            @ApiImplicitParam(name = "historicalsSales", value = "历史销量", required = true, paramType = "query", dataType = "String"),
+            @ApiImplicitParam(name = "marketShare", value = "市场占有率", required = true, paramType = "query", dataType = "String"),
+            @ApiImplicitParam(name = "qualityLevel", value = "质量层次", required = true, paramType = "query", dataType = "String"),
+            @ApiImplicitParam(name = "winningBid", value = "中标情况", required = true, paramType = "query", dataType = "String"),
     })
     @PostMapping("/proCollection")
     public Result insertProCollection(HttpServletRequest request, @RequestParam Map map, @RequestParam(value = "addContent") List<List<String>> addContent) {
@@ -332,6 +350,11 @@ public class BiddingProjectController {
             @ApiImplicitParam(name = "projectId", value = "项目ID", required = true, paramType = "query", dataType = "String"),
             @ApiImplicitParam(name = "fileText", value = "文件或内容（多个文件）", required = true, paramType = "query", dataType = "String"),
             @ApiImplicitParam(name = "suggestion", value = "意见填写", required = true, paramType = "query", dataType = "String"),
+            @ApiImplicitParam(name = "price", value = "价格", required = true, paramType = "query", dataType = "String"),
+            @ApiImplicitParam(name = "historicalsSales", value = "历史销量", required = true, paramType = "query", dataType = "String"),
+            @ApiImplicitParam(name = "marketShare", value = "市场占有率", required = true, paramType = "query", dataType = "String"),
+            @ApiImplicitParam(name = "qualityLevel", value = "质量层次", required = true, paramType = "query", dataType = "String"),
+            @ApiImplicitParam(name = "winningBid", value = "中标情况", required = true, paramType = "query", dataType = "String"),
     })
     @PostMapping("/proCollection/update")
     public Result updateProCollection(HttpServletRequest request, @RequestParam Map map, @RequestParam(value = "addContent") List<List<String>> addContent) {
@@ -676,20 +699,20 @@ public class BiddingProjectController {
                 }
                 return "下载成功";
             } catch (Exception e) {
-                e.printStackTrace();
+                log.error(e.toString(),e);
             } finally {
                 if (bis != null) {
                     try {
                         bis.close();
                     } catch (IOException e) {
-                        e.printStackTrace();
+                        log.error(e.toString(),e);
                     }
                 }
                 if (fis != null) {
                     try {
                         fis.close();
                     } catch (IOException e) {
-                        e.printStackTrace();
+                        log.error(e.toString(),e);
                     }
                 }
             }

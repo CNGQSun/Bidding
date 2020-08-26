@@ -2,6 +2,8 @@ package com.dsmpharm.bidding.utils;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.FastDateFormat;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -10,6 +12,8 @@ import java.util.Calendar;
 import java.util.Date;
 
 public class DateUtils {
+	private static Logger log = LoggerFactory.getLogger(DateUtils.class);
+
 	/**
 	 * Number of milliseconds in a standard second.
 	 */
@@ -288,7 +292,7 @@ public class DateUtils {
 			sCurTime = sdf.format(sNow.getTime());
 
 		} catch (Exception e) {
-			e.printStackTrace();
+			log.error(e.toString(),e);
 		}
 		return sCurTime;
 	}
@@ -396,7 +400,7 @@ public class DateUtils {
 			ndate1 = (Date) format.parseObject(date1);
 			ndate2 = (Date) format.parseObject(date2);
 		} catch (ParseException e) {
-			e.printStackTrace();
+			log.error(e.toString(),e);
 		}
 		if (ndate1.after(ndate2)) {
 			return true;
@@ -429,7 +433,7 @@ public class DateUtils {
 				beginCalendar.add(Calendar.DAY_OF_MONTH, 1);
 			}
 		} catch (ParseException e) {
-			e.printStackTrace();
+			log.error(e.toString(),e);
 		}
 		return new Long(days);
 	}

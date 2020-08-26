@@ -8,6 +8,8 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -22,6 +24,7 @@ import java.util.Map;
 @RequestMapping("/biddingUser")
 @Api(tags = "各部门人员主数据相关接口")
 public class BiddingUserController {
+	private static Logger log = LoggerFactory.getLogger(BiddingUserController.class);
 
 	@Resource
 	private BiddingUserService biddingUserService;
@@ -121,6 +124,7 @@ public class BiddingUserController {
 			@ApiImplicitParam(name = "email", value = "邮箱", required = true, paramType = "query", dataType = "String"),
 			@ApiImplicitParam(name = "phoneNumber", value = "手机号", required = true, paramType = "query", dataType = "String"),
 			@ApiImplicitParam(name = "role", value = "角色Id", required = true, paramType = "query", dataType = "String"),
+			//@ApiImplicitParam(name = "password", value = "用户密码", required = true, paramType = "query", dataType = "String"),
 	})
 	@PostMapping("/update")
 	public Result update(@RequestParam Map map) {
