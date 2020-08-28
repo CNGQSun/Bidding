@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.Map;
 
 /** 
@@ -100,4 +101,22 @@ public class BiddingPriceInfoController {
 		Result result = biddingPriceInfoService.findIndexInfo(map);
 		return result;
 	}
+
+	/**
+	 *
+	 *导出项目
+	 * @param map
+	 * @return
+	 */
+	@ApiOperation(value = "导出项目")
+	@ApiImplicitParams({
+			@ApiImplicitParam(name = "projectId", value = "项目ID", required = true, paramType = "query", dataType = "String"),
+	})
+	@PostMapping(value = "/export")
+	public Result exportProject(HttpServletRequest request, HttpServletResponse response,@RequestParam Map map) {
+		Result result = biddingPriceInfoService.exportProject(map);
+		return result;
+	}
+
+
 }

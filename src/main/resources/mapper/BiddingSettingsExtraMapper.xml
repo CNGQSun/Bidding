@@ -8,4 +8,7 @@
         update bidding_settings_extra set delflag='1'
         where project_phase_id=#{id}
     </update>
+    <select id="selectByProjectId" resultType="java.util.Map">
+        select id,name,value from  bidding_settings_extra where project_id=#{projectId}
+    </select>
 </mapper>

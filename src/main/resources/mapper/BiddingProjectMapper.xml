@@ -229,7 +229,7 @@ where bp.id=#{projectId}
         LEFT JOIN bidding_project_product bpp on bpp.project_id=bp.id
         LEFT JOIN bidding_project_phase bpph on bpph.id=bp.project_phase_now
         LEFT JOIN bidding_project_type bpt on bpt.id =bp.type_id
-        where bp.delflag='0' and  bp.status='1'
+        where bp.delflag='0' and bp.status='1'
         <if test="qualityLevel !=null and  qualityLevel!='' ">
             and bdi.quality_level= #{qualityLevel}
         </if>
@@ -241,6 +241,50 @@ where bp.id=#{projectId}
             and bpb.product_id like concat('%',#{productId},'%')
         </if>
         ORDER BY bp.id DESC
+    </select>
+    <select id="selectBuildList" resultType="java.util.LinkedHashMap">
+    SELECT DISTINCT bpb.doc_public_time,bp.type_id,bpb.name,bpb.source,bpb.province_id,bpb.city_id,bpb.product_id,bpb.file_formal,bpb.file_ask,bpb.doc_inter_time,bpb.submit_time,bpb.public_time,bpb.appeal_time,bpb.notice_time,bpb.pro_label,bpb.suggestion
+     FROM bidding_project bp
+     LEFT JOIN bidding_project_bulid bpb on bpb.id=bp.project_bulid_id
+     where bp.id=#{projectId}
+    </select>
+    <!--    查询阶段2详情-->
+    <select id="selectInterpretationList" resultType="java.util.Map">
+        SELECT DISTINCT bdi.*
+        FROM bidding_project bp
+        LEFT JOIN bidding_doc_interpretation bdi on bdi.id=bp.doc_interpretation_id
+        where bp.id=#{projectId}
+    </select>
+    <select id="selectProCollectionList" resultType="java.util.Map">
+    SELECT DISTINCT bpc.*
+    FROM bidding_project bp
+    LEFT JOIN bidding_product_collection bpc on bpc.id=bp.product_collection_id
+    where bp.id=#{projectId}
+    </select>
+    <select id="selectStrategyAnalysisList" resultType="java.util.Map">
+        SELECT DISTINCT bsa.*
+        FROM bidding_project bp
+        LEFT JOIN bidding_strategy_analysis bsa on bsa.id=bp.strategy_analysis_id
+        where bp.id=#{projectId}
+    </select>
+    <select id="selectInfoFillingList" resultType="java.util.Map">
+          SELECT DISTINCT bif.*
+  FROM bidding_project bp
+  LEFT JOIN bidding_info_filling bif on bif.id=bp.info_filling_id
+  where bp.id=#{projectId}
+    </select>
+    <select id="selectOfficialNoticeList" resultType="java.util.Map">
+          SELECT DISTINCT bon.*
+  FROM bidding_project bp
+  LEFT JOIN bidding_official_notice bon on bon.id=bp.official_notice_id
+  where bp.id=#{projectId}
+    </select>
+
+    <select id="selectProjectSummaryList" resultType="java.util.Map">
+    SELECT DISTINCT bon.*
+    FROM bidding_project bp
+    LEFT JOIN bidding_project_summary bon on bon.id=bp.project_summary_id
+    where bp.id=#{projectId}
     </select>
 
 

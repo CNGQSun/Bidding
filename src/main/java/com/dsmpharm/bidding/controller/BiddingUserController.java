@@ -2,6 +2,7 @@ package com.dsmpharm.bidding.controller;
 
 import com.dsmpharm.bidding.pojo.BiddingUser;
 import com.dsmpharm.bidding.service.BiddingUserService;
+import com.dsmpharm.bidding.utils.JwtUtil;
 import com.dsmpharm.bidding.utils.Result;
 import com.dsmpharm.bidding.utils.StatusCode;
 import io.swagger.annotations.Api;
@@ -13,6 +14,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
 
 /** 
@@ -28,6 +30,8 @@ public class BiddingUserController {
 
 	@Resource
 	private BiddingUserService biddingUserService;
+	@Resource
+	private JwtUtil jwtUtil;
 
 	/**
 	 * 添加用户，点击提交
@@ -185,6 +189,32 @@ public class BiddingUserController {
 	@PostMapping(value = "/login")
 	private Result login(@RequestParam Map map){
 		Result result=biddingUserService.login(map);
+		return result;
+	}
+
+	/**
+	 * 登录者修改自身密码
+	 * @param map
+	 * @return
+	 */
+	@ApiOperation(value="修改密码" )
+	@ApiImplicitParams({
+			@ApiImplicitParam(name = "oldPassword", value = "旧密码", required = true, paramType = "query", dataType = "String"),
+			@ApiImplicitParam(name = "newPassword", value = "新密码", required = true, paramType = "query", dataType = "String"),
+			@ApiImplicitParam(name = "conPassword", value = "确认密码", required = true, paramType = "query", dataType = "String"),
+			@ApiImplicitParam(name = "Authorization", value = "不是参数，登录成功之后，需在此请求头中存入token", required = true, paramType = "query", dataType = "String"),
+	})
+	@PostMapping(value = "/change")
+	private Result changePassword(HttpServletRequest request, @RequestParam Map map){
+		String authorization = request.getHeader("Authorization");
+		String userId = null;
+		try {
+			userId = jwtUtil.parseJWT(authorization).getId();
+		} catch (Exception e) {
+			log.error(e.toString(),e);
+			return new Result<>(false, StatusCode.ACCESS_ERROR, "token异常，请重新登录");
+		}
+		Result result=biddingUserService.changePassword(map,userId);
 		return result;
 	}
 }

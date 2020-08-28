@@ -675,7 +675,7 @@ public class BiddingProjectController {
 
     @ApiOperation(value = "下载文件")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "filePath", value = "文件全路径", required = true, paramType = "query", dataType = "String"),
+            @ApiImplicitParam(name = "filePath", value = "文件名", required = true, paramType = "query", dataType = "String"),
     })
     @PostMapping("/downloadFile")
     private String downloadFile(HttpServletResponse response, @RequestParam String filePath) {

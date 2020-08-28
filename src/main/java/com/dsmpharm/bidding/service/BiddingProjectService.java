@@ -24,20 +24,22 @@ import java.util.*;
 @Service
 public class BiddingProjectService {
 
-    @Value("${upload.build}")
-    private String uploadBuild;//上传文件保存的本地目录，使用@Value获取全局配置文件中配置的属性值
-    @Value("${upload.doc_terpretation}")
-    private String uploadDocTerpretation;//上传文件保存的本地目录，使用@Value获取全局配置文件中配置的属性值
-    @Value("${upload.product_collection}")
-    private String uploadProCollection;//上传文件保存的本地目录，使用@Value获取全局配置文件中配置的属性值
-    @Value("${upload.strategy_analysis}")
-    private String uploadStrategyAnalysis;//上传文件保存的本地目录，使用@Value获取全局配置文件中配置的属性值
-    @Value("${upload.info_filling}")
-    private String uploadInfoFilling;//上传文件保存的本地目录，使用@Value获取全局配置文件中配置的属性值
-    @Value("${upload.official_notice}")
-    private String uploadOfficialNotice;//上传文件保存的本地目录，使用@Value获取全局配置文件中配置的属性值
-    @Value("${upload.project_summary}")
-    private String uploadProjectSummary;//上传文件保存的本地目录，使用@Value获取全局配置文件中配置的属性值
+    @Value("${upload.base}")
+    private String uploadBase;//上传文件保存的本地目录，使用@Value获取全局配置文件中配置的属性值
+    //@Value("${upload.build}")
+    //private String uploadBuild;//上传文件保存的本地目录，使用@Value获取全局配置文件中配置的属性值
+    //@Value("${upload.doc_terpretation}")
+    //private String uploadDocTerpretation;//上传文件保存的本地目录，使用@Value获取全局配置文件中配置的属性值
+    //@Value("${upload.product_collection}")
+    //private String uploadProCollection;//上传文件保存的本地目录，使用@Value获取全局配置文件中配置的属性值
+    //@Value("${upload.strategy_analysis}")
+    //private String uploadStrategyAnalysis;//上传文件保存的本地目录，使用@Value获取全局配置文件中配置的属性值
+    //@Value("${upload.info_filling}")
+    //private String uploadInfoFilling;//上传文件保存的本地目录，使用@Value获取全局配置文件中配置的属性值
+    //@Value("${upload.official_notice}")
+    //private String uploadOfficialNotice;//上传文件保存的本地目录，使用@Value获取全局配置文件中配置的属性值
+    //@Value("${upload.project_summary}")
+    //private String uploadProjectSummary;//上传文件保存的本地目录，使用@Value获取全局配置文件中配置的属性值
 
 
     private static Logger log = LoggerFactory.getLogger(BiddingProductController.class);
@@ -116,6 +118,7 @@ public class BiddingProjectService {
             BiddingProjectBulid biddingProjectBulid = new BiddingProjectBulid();
             biddingProject.setId(idWorker.nextId() + "");
             biddingProject.setStatus("0");
+            biddingProject.setBasePath(uploadBase);
             biddingProject.setUserId(userId);
             biddingProject.setIsSkip("1");
             biddingProject.setDelflag("0");
@@ -127,7 +130,7 @@ public class BiddingProjectService {
             //将内容设置数据备份到内容设置备份表
             biddingContentBakMapper.copySetting(projectPhaseId, versionNum);
             //判断文件夹是否存在，不存在则新建
-            String docPath1 = uploadBuild + "/" + biddingProject.getId();
+            String docPath1 = uploadBase+biddingProject.getId()+"/立项/" ;
             File docPath = new File(docPath1);
             if (!docPath.exists() && !docPath.isDirectory()) {
                 docPath.mkdirs();
@@ -149,7 +152,7 @@ public class BiddingProjectService {
                         System.out.println(fileMap.get(biddingContentBak.getEnName()));
                         MultipartFile fileFormal = fileMap.get(biddingContentBak.getEnName());
                         String fileName1 = fileFormal.getOriginalFilename();
-                        String fileName = DateUtils.format(new Date(), "yyyy-MM-dd-HH-mm-ss") + fileName1;
+                        String fileName = fileName1;
                         File filePath = new File(docPath, fileName);
                         try {
                             fileFormal.transferTo(filePath);
@@ -162,7 +165,7 @@ public class BiddingProjectService {
                         biddingProjectData.setId(idWorker.nextId() + "");
                         biddingProjectData.setContentSettingsId(biddingContentBak.getId());
                         biddingProjectData.setProjectId(biddingProject.getId());
-                        biddingProjectData.setValue(filePath.getPath());
+                        biddingProjectData.setValue(filePath.getName());
                         biddingProjectDataMapper.insert(biddingProjectData);
                     }
                 }
@@ -202,7 +205,7 @@ public class BiddingProjectService {
             } else {
                 MultipartFile fileFormal = fileMap.get("fileFormal");
                 String fileName1 = fileFormal.getOriginalFilename();
-                String fileName = DateUtils.format(new Date(), "yyyy-MM-dd-HH-mm-ss") + fileName1;
+                String fileName = fileName1;
                 File filePath = new File(docPath, fileName);
                 try {
                     fileFormal.transferTo(filePath);
@@ -210,7 +213,7 @@ public class BiddingProjectService {
                     log.error(e.toString(), e);
                     return new Result<>(false, StatusCode.ERROR, "呀! 服务器开小差了~");
                 }
-                biddingProjectBulid.setFileFormal(filePath.getPath());
+                biddingProjectBulid.setFileFormal(filePath.getName());
             }
             if (map.get("fileAsk") != null) {
                 String fileAsk = map.get("fileAsk").toString();
@@ -218,7 +221,7 @@ public class BiddingProjectService {
             } else {
                 MultipartFile fileAsk = fileMap.get("fileAsk");
                 String fileName1 = fileAsk.getOriginalFilename();
-                String fileName = DateUtils.format(new Date(), "yyyy-MM-dd-HH-mm-ss") + fileName1;
+                String fileName = fileName1;
                 File filePath = new File(docPath, fileName);
                 try {
                     fileAsk.transferTo(filePath);
@@ -226,7 +229,7 @@ public class BiddingProjectService {
                     log.error(e.toString(), e);
                     return new Result<>(false, StatusCode.ERROR, "呀! 服务器开小差了~");
                 }
-                biddingProjectBulid.setFileAsk(filePath.getPath());
+                biddingProjectBulid.setFileAsk(filePath.getName());
             }
             String docInterTime = map.get("docInterTime").toString();
             biddingProjectBulid.setDocInterTime(docInterTime);
@@ -447,7 +450,7 @@ public class BiddingProjectService {
             ////将内容设置数据备份到内容设置备份表
             //biddingContentBakMapper.copySetting(projectPhaseId, versionNum);
             //判断文件夹是否存在，不存在则新建
-            String docPath1 = uploadBuild + "/" + biddingProject.getId();
+            String docPath1 = uploadBase+biddingProject.getId()+"/立项/";
             File docPath = new File(docPath1);
             if (!docPath.exists() && !docPath.isDirectory()) {
                 docPath.mkdirs();
@@ -467,7 +470,7 @@ public class BiddingProjectService {
                     if (fileMap.get(map1.get("enName")) != null) {
                         MultipartFile fileFormal = fileMap.get(map1.get("enName").toString());
                         String fileName1 = fileFormal.getOriginalFilename();
-                        String fileName = DateUtils.format(new Date(), "yyyy-MM-dd-HH-mm-ss") + fileName1;
+                        String fileName = fileName1;
                         File filePath = new File(docPath, fileName);
                         try {
                             fileFormal.transferTo(filePath);
@@ -478,7 +481,7 @@ public class BiddingProjectService {
                         String value = map.get(map1.get("enName").toString());
                         BiddingProjectData biddingProjectData = new BiddingProjectData();
                         biddingProjectData.setId(map1.get("dataId").toString());
-                        biddingProjectData.setValue(filePath.getPath());
+                        biddingProjectData.setValue(filePath.getName());
                         biddingProjectDataMapper.updateByPrimaryKeySelective(biddingProjectData);
                     }
                 }
@@ -518,7 +521,7 @@ public class BiddingProjectService {
             } else {
                 MultipartFile fileFormal = fileMap.get("fileFormal");
                 String fileName1 = fileFormal.getOriginalFilename();
-                String fileName = DateUtils.format(new Date(), "yyyy-MM-dd-HH-mm-ss") + fileName1;
+                String fileName = fileName1;
                 File filePath = new File(docPath, fileName);
                 try {
                     fileFormal.transferTo(filePath);
@@ -526,7 +529,7 @@ public class BiddingProjectService {
                     log.error(e.toString(), e);
                     return new Result<>(false, StatusCode.ERROR, "呀! 服务器开小差了~");
                 }
-                biddingProjectBulid.setFileFormal(filePath.getPath());
+                biddingProjectBulid.setFileFormal(filePath.getName());
             }
             if (map.get("fileAsk") != null) {
                 String fileAsk = map.get("fileAsk").toString();
@@ -534,7 +537,7 @@ public class BiddingProjectService {
             } else {
                 MultipartFile fileAsk = fileMap.get("fileAsk");
                 String fileName1 = fileAsk.getOriginalFilename();
-                String fileName = DateUtils.format(new Date(), "yyyy-MM-dd-HH-mm-ss") + fileName1;
+                String fileName = fileName1;
                 File filePath = new File(docPath, fileName);
                 try {
                     fileAsk.transferTo(filePath);
@@ -542,7 +545,7 @@ public class BiddingProjectService {
                     log.error(e.toString(), e);
                     return new Result<>(false, StatusCode.ERROR, "呀! 服务器开小差了~");
                 }
-                biddingProjectBulid.setFileAsk(filePath.getPath());
+                biddingProjectBulid.setFileAsk(filePath.getName());
             }
             String docInterTime = map.get("docInterTime").toString();
             biddingProjectBulid.setDocInterTime(docInterTime);
@@ -997,7 +1000,7 @@ public class BiddingProjectService {
             ////将内容设置数据备份到内容设置备份表
             //biddingContentBakMapper.copySetting(projectPhaseId, biddingProject1.getVersionNum());
             //判断文件夹是否存在，不存在则新建
-            String docPath1 = uploadDocTerpretation + "/" + biddingProject1.getId();
+            String docPath1 = biddingProject1.getBasePath() +biddingProject1.getId()+"/文件解读/";
             File docPath = new File(docPath1);
             if (!docPath.exists() && !docPath.isDirectory()) {
                 docPath.mkdirs();
@@ -1019,7 +1022,7 @@ public class BiddingProjectService {
                         System.out.println(fileMap.get(biddingContentBak.getEnName()));
                         MultipartFile fileFormal = fileMap.get(biddingContentBak.getEnName());
                         String fileName1 = fileFormal.getOriginalFilename();
-                        String fileName = DateUtils.format(new Date(), "yyyy-MM-dd-HH-mm-ss") + fileName1;
+                        String fileName = fileName1;
                         File filePath = new File(docPath, fileName);
                         try {
                             fileFormal.transferTo(filePath);
@@ -1032,7 +1035,7 @@ public class BiddingProjectService {
                         biddingProjectData.setId(idWorker.nextId() + "");
                         biddingProjectData.setContentSettingsId(biddingContentBak.getId());
                         biddingProjectData.setProjectId(biddingProject.getId());
-                        biddingProjectData.setValue(filePath.getPath());
+                        biddingProjectData.setValue(filePath.getName());
                         biddingProjectDataMapper.insert(biddingProjectData);
                     }
                 }
@@ -1083,7 +1086,7 @@ public class BiddingProjectService {
             } else {
                 MultipartFile fileBuyRules = fileMap.get("fileBuyRules");
                 String fileName1 = fileBuyRules.getOriginalFilename();
-                String fileName = DateUtils.format(new Date(), "yyyy-MM-dd-HH-mm-ss") + fileName1;
+                String fileName = fileName1;
                 File filePath = new File(docPath, fileName);
                 try {
                     fileBuyRules.transferTo(filePath);
@@ -1091,7 +1094,7 @@ public class BiddingProjectService {
                     log.error(e.toString(), e);
                     return new Result<>(false, StatusCode.ERROR, "呀! 服务器开小差了~");
                 }
-                biddingDocInterpretation.setFileBuyRules(filePath.getPath());
+                biddingDocInterpretation.setFileBuyRules(filePath.getName());
             }
 
 
@@ -1101,7 +1104,7 @@ public class BiddingProjectService {
             } else {
                 MultipartFile fileQuotedPrice = fileMap.get("fileQuotedPrice");
                 String fileName1 = fileQuotedPrice.getOriginalFilename();
-                String fileName = DateUtils.format(new Date(), "yyyy-MM-dd-HH-mm-ss") + fileName1;
+                String fileName = fileName1;
                 File filePath = new File(docPath, fileName);
                 try {
                     fileQuotedPrice.transferTo(filePath);
@@ -1109,7 +1112,7 @@ public class BiddingProjectService {
                     log.error(e.toString(), e);
                     return new Result<>(false, StatusCode.ERROR, "呀! 服务器开小差了~");
                 }
-                biddingDocInterpretation.setFileQuotedPrice(filePath.getPath());
+                biddingDocInterpretation.setFileQuotedPrice(filePath.getName());
             }
 
             if (map.get("fileSolicitingOpinions") != null) {
@@ -1118,7 +1121,7 @@ public class BiddingProjectService {
             } else {
                 MultipartFile fileSolicitingOpinions = fileMap.get("fileSolicitingOpinions");
                 String fileName1 = fileSolicitingOpinions.getOriginalFilename();
-                String fileName = DateUtils.format(new Date(), "yyyy-MM-dd-HH-mm-ss") + fileName1;
+                String fileName = fileName1;
                 File filePath = new File(docPath, fileName);
                 try {
                     fileSolicitingOpinions.transferTo(filePath);
@@ -1126,7 +1129,7 @@ public class BiddingProjectService {
                     log.error(e.toString(), e);
                     return new Result<>(false, StatusCode.ERROR, "呀! 服务器开小差了~");
                 }
-                biddingDocInterpretation.setFileSolicitingOpinions(filePath.getPath());
+                biddingDocInterpretation.setFileSolicitingOpinions(filePath.getName());
             }
             String industryInfluence = map.get("industryInfluence").toString();
             biddingDocInterpretation.setIndustryInfluence(industryInfluence);
@@ -1342,7 +1345,7 @@ public class BiddingProjectService {
             //biddingContentBakMapper.copySetting(projectPhaseId, biddingProject1.getVersionNum());
             //******修改2结束（注释）**********
             //判断文件夹是否存在，不存在则新建
-            String docPath1 = uploadDocTerpretation + "/" + biddingProject1.getId();
+            String docPath1 = biddingProject1.getBasePath() +biddingProject1.getId()+"/文件解读/";
             File docPath = new File(docPath1);
             if (!docPath.exists() && !docPath.isDirectory()) {
                 docPath.mkdirs();
@@ -1365,7 +1368,7 @@ public class BiddingProjectService {
             //            System.out.println(fileMap.get(biddingContentBak.getEnName()));
             //            MultipartFile fileFormal = fileMap.get(biddingContentBak.getEnName());
             //            String fileName1 = fileFormal.getOriginalFilename();
-            //            String fileName = DateUtils.format(new Date(), "yyyy-MM-dd-HH-mm-ss") + fileName1;
+            //            String fileName = fileName1;
             //            File filePath = new File(docPath, fileName);
             //            try {
             //                fileFormal.transferTo(filePath);
@@ -1378,7 +1381,7 @@ public class BiddingProjectService {
             //            biddingProjectData.setId(idWorker.nextId() + "");
             //            biddingProjectData.setContentSettingsId(biddingContentBak.getId());
             //            biddingProjectData.setProjectId(biddingProject.getId());
-            //            biddingProjectData.setValue(filePath.getPath());
+            //            biddingProjectData.setValue(filePath.getName());
             //            biddingProjectDataMapper.insert(biddingProjectData);
             //        }
             //    }
@@ -1398,7 +1401,7 @@ public class BiddingProjectService {
                     if (fileMap.get(map1.get("enName")) != null) {
                         MultipartFile fileFormal = fileMap.get(map1.get("enName").toString());
                         String fileName1 = fileFormal.getOriginalFilename();
-                        String fileName = DateUtils.format(new Date(), "yyyy-MM-dd-HH-mm-ss") + fileName1;
+                        String fileName = fileName1;
                         File filePath = new File(docPath, fileName);
                         try {
                             fileFormal.transferTo(filePath);
@@ -1409,7 +1412,7 @@ public class BiddingProjectService {
                         String value = map.get(map1.get("enName").toString());
                         BiddingProjectData biddingProjectData = new BiddingProjectData();
                         biddingProjectData.setId(map1.get("dataId").toString());
-                        biddingProjectData.setValue(filePath.getPath());
+                        biddingProjectData.setValue(filePath.getName());
                         biddingProjectDataMapper.updateByPrimaryKeySelective(biddingProjectData);
                     }
                 }
@@ -1465,7 +1468,7 @@ public class BiddingProjectService {
             } else {
                 MultipartFile fileBuyRules = fileMap.get("fileBuyRules");
                 String fileName1 = fileBuyRules.getOriginalFilename();
-                String fileName = DateUtils.format(new Date(), "yyyy-MM-dd-HH-mm-ss") + fileName1;
+                String fileName = fileName1;
                 File filePath = new File(docPath, fileName);
                 try {
                     fileBuyRules.transferTo(filePath);
@@ -1473,7 +1476,7 @@ public class BiddingProjectService {
                     log.error(e.toString(), e);
                     return new Result<>(false, StatusCode.ERROR, "呀! 服务器开小差了~");
                 }
-                biddingDocInterpretation.setFileBuyRules(filePath.getPath());
+                biddingDocInterpretation.setFileBuyRules(filePath.getName());
             }
 
             if (map.get("fileQuotedPrice") != null) {
@@ -1482,7 +1485,7 @@ public class BiddingProjectService {
             } else {
                 MultipartFile fileQuotedPrice = fileMap.get("fileQuotedPrice");
                 String fileName1 = fileQuotedPrice.getOriginalFilename();
-                String fileName = DateUtils.format(new Date(), "yyyy-MM-dd-HH-mm-ss") + fileName1;
+                String fileName = fileName1;
                 File filePath = new File(docPath, fileName);
                 try {
                     fileQuotedPrice.transferTo(filePath);
@@ -1490,7 +1493,7 @@ public class BiddingProjectService {
                     log.error(e.toString(), e);
                     return new Result<>(false, StatusCode.ERROR, "呀! 服务器开小差了~");
                 }
-                biddingDocInterpretation.setFileQuotedPrice(filePath.getPath());
+                biddingDocInterpretation.setFileQuotedPrice(filePath.getName());
             }
 
             if (map.get("fileSolicitingOpinions") != null) {
@@ -1499,7 +1502,7 @@ public class BiddingProjectService {
             } else {
                 MultipartFile fileSolicitingOpinions = fileMap.get("fileSolicitingOpinions");
                 String fileName1 = fileSolicitingOpinions.getOriginalFilename();
-                String fileName = DateUtils.format(new Date(), "yyyy-MM-dd-HH-mm-ss") + fileName1;
+                String fileName = fileName1;
                 File filePath = new File(docPath, fileName);
                 try {
                     fileSolicitingOpinions.transferTo(filePath);
@@ -1507,7 +1510,7 @@ public class BiddingProjectService {
                     log.error(e.toString(), e);
                     return new Result<>(false, StatusCode.ERROR, "呀! 服务器开小差了~");
                 }
-                biddingDocInterpretation.setFileSolicitingOpinions(filePath.getPath());
+                biddingDocInterpretation.setFileSolicitingOpinions(filePath.getName());
             }
             String industryInfluence = map.get("industryInfluence").toString();
             biddingDocInterpretation.setIndustryInfluence(industryInfluence);
@@ -1747,7 +1750,7 @@ public class BiddingProjectService {
             ////将内容设置数据备份到内容设置备份表
             //biddingContentBakMapper.copySetting(projectPhaseId, biddingProject1.getVersionNum());
             //判断文件夹是否存在，不存在则新建
-            String docPath1 = uploadProCollection + "/" + biddingProject1.getId();
+            String docPath1 = biddingProject1.getBasePath() +biddingProject1.getId()+"/竞品收集/";
             File docPath = new File(docPath1);
             if (!docPath.exists() && !docPath.isDirectory()) {
                 docPath.mkdirs();
@@ -1769,7 +1772,7 @@ public class BiddingProjectService {
                         System.out.println(fileMap.get(biddingContentBak.getEnName()));
                         MultipartFile fileFormal = fileMap.get(biddingContentBak.getEnName());
                         String fileName1 = fileFormal.getOriginalFilename();
-                        String fileName = DateUtils.format(new Date(), "yyyy-MM-dd-HH-mm-ss") + fileName1;
+                        String fileName = fileName1;
                         File filePath = new File(docPath, fileName);
                         try {
                             fileFormal.transferTo(filePath);
@@ -1782,7 +1785,7 @@ public class BiddingProjectService {
                         biddingProjectData.setId(idWorker.nextId() + "");
                         biddingProjectData.setContentSettingsId(biddingContentBak.getId());
                         biddingProjectData.setProjectId(biddingProject.getId());
-                        biddingProjectData.setValue(filePath.getPath());
+                        biddingProjectData.setValue(filePath.getName());
                         biddingProjectDataMapper.insert(biddingProjectData);
                     }
                 }
@@ -1807,7 +1810,7 @@ public class BiddingProjectService {
                 String path = "";
                 for (MultipartFile multipartFile : fileText) {
                     String fileName1 = multipartFile.getOriginalFilename();
-                    String fileName = DateUtils.format(new Date(), "yyyy-MM-dd-HH-mm-ss") + fileName1;
+                    String fileName = fileName1;
                     File filePath = new File(docPath, fileName);
                     try {
                         multipartFile.transferTo(filePath);
@@ -1815,7 +1818,7 @@ public class BiddingProjectService {
                         log.error(e.toString(), e);
                         return new Result<>(false, StatusCode.ERROR, "呀! 服务器开小差了~");
                     }
-                    path += filePath.getPath() + ",";
+                    path += filePath.getName() + ",";
                 }
                 path = path.substring(0, path.length() - 1);
                 biddingProductCollection.setFileText(path);
@@ -1936,7 +1939,7 @@ public class BiddingProjectService {
             ////将内容设置数据备份到内容设置备份表
             //biddingContentBakMapper.copySetting(projectPhaseId, biddingProject1.getVersionNum());
             //判断文件夹是否存在，不存在则新建
-            String docPath1 = uploadProCollection + "/" + biddingProject1.getId();
+            String docPath1 = biddingProject1.getBasePath() +biddingProject1.getId()+"/竞品收集/";
             File docPath = new File(docPath1);
             if (!docPath.exists() && !docPath.isDirectory()) {
                 docPath.mkdirs();
@@ -1958,7 +1961,7 @@ public class BiddingProjectService {
             //            System.out.println(fileMap.get(biddingContentBak.getEnName()));
             //            MultipartFile fileFormal = fileMap.get(biddingContentBak.getEnName());
             //            String fileName1 = fileFormal.getOriginalFilename();
-            //            String fileName = DateUtils.format(new Date(), "yyyy-MM-dd-HH-mm-ss") + fileName1;
+            //            String fileName = fileName1;
             //            File filePath = new File(docPath, fileName);
             //            try {
             //                fileFormal.transferTo(filePath);
@@ -1971,7 +1974,7 @@ public class BiddingProjectService {
             //            biddingProjectData.setId(idWorker.nextId() + "");
             //            biddingProjectData.setContentSettingsId(biddingContentBak.getId());
             //            biddingProjectData.setProjectId(biddingProject.getId());
-            //            biddingProjectData.setValue(filePath.getPath());
+            //            biddingProjectData.setValue(filePath.getName());
             //            biddingProjectDataMapper.insert(biddingProjectData);
             //        }
             //    }
@@ -1990,7 +1993,7 @@ public class BiddingProjectService {
                     if (fileMap.get(map1.get("enName")) != null) {
                         MultipartFile fileFormal = fileMap.get(map1.get("enName").toString());
                         String fileName1 = fileFormal.getOriginalFilename();
-                        String fileName = DateUtils.format(new Date(), "yyyy-MM-dd-HH-mm-ss") + fileName1;
+                        String fileName = fileName1;
                         File filePath = new File(docPath, fileName);
                         try {
                             fileFormal.transferTo(filePath);
@@ -2001,7 +2004,7 @@ public class BiddingProjectService {
                         String value = map.get(map1.get("enName").toString());
                         BiddingProjectData biddingProjectData = new BiddingProjectData();
                         biddingProjectData.setId(map1.get("dataId").toString());
-                        biddingProjectData.setValue(filePath.getPath());
+                        biddingProjectData.setValue(filePath.getName());
                         biddingProjectDataMapper.updateByPrimaryKeySelective(biddingProjectData);
                     }
                 }
@@ -2028,7 +2031,7 @@ public class BiddingProjectService {
                 String path = "";
                 for (MultipartFile multipartFile : fileText) {
                     String fileName1 = multipartFile.getOriginalFilename();
-                    String fileName = DateUtils.format(new Date(), "yyyy-MM-dd-HH-mm-ss") + fileName1;
+                    String fileName = fileName1;
                     File filePath = new File(docPath, fileName);
                     try {
                         multipartFile.transferTo(filePath);
@@ -2036,7 +2039,7 @@ public class BiddingProjectService {
                         log.error(e.toString(), e);
                         return new Result<>(false, StatusCode.ERROR, "呀! 服务器开小差了~");
                     }
-                    path += filePath.getPath() + ",";
+                    path += filePath.getName() + ",";
                 }
                 path = path.substring(0, path.length() - 1);
                 biddingProductCollection.setFileText(path);
@@ -2153,7 +2156,7 @@ public class BiddingProjectService {
             ////将内容设置数据备份到内容设置备份表
             //biddingContentBakMapper.copySetting(projectPhaseId, biddingProject1.getVersionNum());
             //判断文件夹是否存在，不存在则新建
-            String docPath1 = uploadStrategyAnalysis + "/" + biddingProject1.getId();
+            String docPath1 = biddingProject1.getBasePath() +biddingProject1.getId()+"/策略分析/";
             File docPath = new File(docPath1);
             if (!docPath.exists() && !docPath.isDirectory()) {
                 docPath.mkdirs();
@@ -2175,7 +2178,7 @@ public class BiddingProjectService {
                         System.out.println(fileMap.get(biddingContentBak.getEnName()));
                         MultipartFile fileFormal = fileMap.get(biddingContentBak.getEnName());
                         String fileName1 = fileFormal.getOriginalFilename();
-                        String fileName = DateUtils.format(new Date(), "yyyy-MM-dd-HH-mm-ss") + fileName1;
+                        String fileName = fileName1;
                         File filePath = new File(docPath, fileName);
                         try {
                             fileFormal.transferTo(filePath);
@@ -2188,7 +2191,7 @@ public class BiddingProjectService {
                         biddingProjectData.setId(idWorker.nextId() + "");
                         biddingProjectData.setContentSettingsId(biddingContentBak.getId());
                         biddingProjectData.setProjectId(biddingProject.getId());
-                        biddingProjectData.setValue(filePath.getPath());
+                        biddingProjectData.setValue(filePath.getName());
                         biddingProjectDataMapper.insert(biddingProjectData);
                     }
                 }
@@ -2208,7 +2211,7 @@ public class BiddingProjectService {
             } else {
                 MultipartFile fileProductInfo = fileMap.get("fileProductInfo");
                 String fileName1 = fileProductInfo.getOriginalFilename();
-                String fileName = DateUtils.format(new Date(), "yyyy-MM-dd-HH-mm-ss") + fileName1;
+                String fileName = fileName1;
                 File filePath = new File(docPath, fileName);
                 try {
                     fileProductInfo.transferTo(filePath);
@@ -2216,7 +2219,7 @@ public class BiddingProjectService {
                     log.error(e.toString(), e);
                     return new Result<>(false, StatusCode.ERROR, "呀! 服务器开小差了~");
                 }
-                biddingStrategyAnalysis.setFileProductInfo(filePath.getPath());
+                biddingStrategyAnalysis.setFileProductInfo(filePath.getName());
             }
 
             if (map.get("fileQualityLevel") != null) {
@@ -2225,7 +2228,7 @@ public class BiddingProjectService {
             } else {
                 MultipartFile fileQualityLevel = fileMap.get("fileQualityLevel");
                 String fileName1 = fileQualityLevel.getOriginalFilename();
-                String fileName = DateUtils.format(new Date(), "yyyy-MM-dd-HH-mm-ss") + fileName1;
+                String fileName = fileName1;
                 File filePath = new File(docPath, fileName);
                 try {
                     fileQualityLevel.transferTo(filePath);
@@ -2233,7 +2236,7 @@ public class BiddingProjectService {
                     log.error(e.toString(), e);
                     return new Result<>(false, StatusCode.ERROR, "呀! 服务器开小差了~");
                 }
-                biddingStrategyAnalysis.setFileQualityLevel(filePath.getPath());
+                biddingStrategyAnalysis.setFileQualityLevel(filePath.getName());
             }
 
             if (map.get("fileProductGro") != null) {
@@ -2242,7 +2245,7 @@ public class BiddingProjectService {
             } else {
                 MultipartFile fileProductGro = fileMap.get("fileProductGro");
                 String fileName1 = fileProductGro.getOriginalFilename();
-                String fileName = DateUtils.format(new Date(), "yyyy-MM-dd-HH-mm-ss") + fileName1;
+                String fileName = fileName1;
                 File filePath = new File(docPath, fileName);
                 try {
                     fileProductGro.transferTo(filePath);
@@ -2250,7 +2253,7 @@ public class BiddingProjectService {
                     log.error(e.toString(), e);
                     return new Result<>(false, StatusCode.ERROR, "呀! 服务器开小差了~");
                 }
-                biddingStrategyAnalysis.setFileProductGro(filePath.getPath());
+                biddingStrategyAnalysis.setFileProductGro(filePath.getName());
             }
 
             if (map.get("fileProduct") != null) {
@@ -2259,7 +2262,7 @@ public class BiddingProjectService {
             } else {
                 MultipartFile fileProduct = fileMap.get("fileProduct");
                 String fileName1 = fileProduct.getOriginalFilename();
-                String fileName = DateUtils.format(new Date(), "yyyy-MM-dd-HH-mm-ss") + fileName1;
+                String fileName = fileName1;
                 File filePath = new File(docPath, fileName);
                 try {
                     fileProduct.transferTo(filePath);
@@ -2267,7 +2270,7 @@ public class BiddingProjectService {
                     log.error(e.toString(), e);
                     return new Result<>(false, StatusCode.ERROR, "呀! 服务器开小差了~");
                 }
-                biddingStrategyAnalysis.setFileProduct(filePath.getPath());
+                biddingStrategyAnalysis.setFileProduct(filePath.getName());
             }
 
             if (map.get("filePriceLimit") != null) {
@@ -2276,7 +2279,7 @@ public class BiddingProjectService {
             } else {
                 MultipartFile filePriceLimit = fileMap.get("filePriceLimit");
                 String fileName1 = filePriceLimit.getOriginalFilename();
-                String fileName = DateUtils.format(new Date(), "yyyy-MM-dd-HH-mm-ss") + fileName1;
+                String fileName = fileName1;
                 File filePath = new File(docPath, fileName);
                 try {
                     filePriceLimit.transferTo(filePath);
@@ -2284,7 +2287,7 @@ public class BiddingProjectService {
                     log.error(e.toString(), e);
                     return new Result<>(false, StatusCode.ERROR, "呀! 服务器开小差了~");
                 }
-                biddingStrategyAnalysis.setFilePriceLimit(filePath.getPath());
+                biddingStrategyAnalysis.setFilePriceLimit(filePath.getName());
             }
 
             if (map.get("fileCompeInfo") != null) {
@@ -2293,7 +2296,7 @@ public class BiddingProjectService {
             } else {
                 MultipartFile fileCompeInfo = fileMap.get("fileCompeInfo");
                 String fileName1 = fileCompeInfo.getOriginalFilename();
-                String fileName = DateUtils.format(new Date(), "yyyy-MM-dd-HH-mm-ss") + fileName1;
+                String fileName = fileName1;
                 File filePath = new File(docPath, fileName);
                 try {
                     fileCompeInfo.transferTo(filePath);
@@ -2301,7 +2304,7 @@ public class BiddingProjectService {
                     log.error(e.toString(), e);
                     return new Result<>(false, StatusCode.ERROR, "呀! 服务器开小差了~");
                 }
-                biddingStrategyAnalysis.setFileCompeInfo(filePath.getPath());
+                biddingStrategyAnalysis.setFileCompeInfo(filePath.getName());
             }
 
             if (map.get("fileQualityLevels") != null) {
@@ -2310,7 +2313,7 @@ public class BiddingProjectService {
             } else {
                 MultipartFile fileQualityLevels = fileMap.get("fileQualityLevels");
                 String fileName1 = fileQualityLevels.getOriginalFilename();
-                String fileName = DateUtils.format(new Date(), "yyyy-MM-dd-HH-mm-ss") + fileName1;
+                String fileName = fileName1;
                 File filePath = new File(docPath, fileName);
                 try {
                     fileQualityLevels.transferTo(filePath);
@@ -2318,7 +2321,7 @@ public class BiddingProjectService {
                     log.error(e.toString(), e);
                     return new Result<>(false, StatusCode.ERROR, "呀! 服务器开小差了~");
                 }
-                biddingStrategyAnalysis.setFileQualityLevels(filePath.getPath());
+                biddingStrategyAnalysis.setFileQualityLevels(filePath.getName());
             }
 
             if (map.get("fileCompeGro") != null) {
@@ -2327,7 +2330,7 @@ public class BiddingProjectService {
             } else {
                 MultipartFile fileCompeGro = fileMap.get("fileCompeGro");
                 String fileName1 = fileCompeGro.getOriginalFilename();
-                String fileName = DateUtils.format(new Date(), "yyyy-MM-dd-HH-mm-ss") + fileName1;
+                String fileName = fileName1;
                 File filePath = new File(docPath, fileName);
                 try {
                     fileCompeGro.transferTo(filePath);
@@ -2335,7 +2338,7 @@ public class BiddingProjectService {
                     log.error(e.toString(), e);
                     return new Result<>(false, StatusCode.ERROR, "呀! 服务器开小差了~");
                 }
-                biddingStrategyAnalysis.setFileCompeGro(filePath.getPath());
+                biddingStrategyAnalysis.setFileCompeGro(filePath.getName());
             }
 
             if (map.get("fileQuotationEstimate") != null) {
@@ -2344,7 +2347,7 @@ public class BiddingProjectService {
             } else {
                 MultipartFile fileQuotationEstimate = fileMap.get("fileQuotationEstimate");
                 String fileName1 = fileQuotationEstimate.getOriginalFilename();
-                String fileName = DateUtils.format(new Date(), "yyyy-MM-dd-HH-mm-ss") + fileName1;
+                String fileName = fileName1;
                 File filePath = new File(docPath, fileName);
                 try {
                     fileQuotationEstimate.transferTo(filePath);
@@ -2352,7 +2355,7 @@ public class BiddingProjectService {
                     log.error(e.toString(), e);
                     return new Result<>(false, StatusCode.ERROR, "呀! 服务器开小差了~");
                 }
-                biddingStrategyAnalysis.setFileQuotationEstimate(filePath.getPath());
+                biddingStrategyAnalysis.setFileQuotationEstimate(filePath.getName());
             }
 
             if (map.get("fileQuotationOther") != null) {
@@ -2361,7 +2364,7 @@ public class BiddingProjectService {
             } else {
                 MultipartFile fileQuotationOther = fileMap.get("fileQuotationOther");
                 String fileName1 = fileQuotationOther.getOriginalFilename();
-                String fileName = DateUtils.format(new Date(), "yyyy-MM-dd-HH-mm-ss") + fileName1;
+                String fileName = fileName1;
                 File filePath = new File(docPath, fileName);
                 try {
                     fileQuotationOther.transferTo(filePath);
@@ -2369,7 +2372,7 @@ public class BiddingProjectService {
                     log.error(e.toString(), e);
                     return new Result<>(false, StatusCode.ERROR, "呀! 服务器开小差了~");
                 }
-                biddingStrategyAnalysis.setFileQuotationOther(filePath.getPath());
+                biddingStrategyAnalysis.setFileQuotationOther(filePath.getName());
             }
 
             if (map.get("fileNationalPrice") != null) {
@@ -2378,7 +2381,7 @@ public class BiddingProjectService {
             } else {
                 MultipartFile fileNationalPrice = fileMap.get("fileNationalPrice");
                 String fileName1 = fileNationalPrice.getOriginalFilename();
-                String fileName = DateUtils.format(new Date(), "yyyy-MM-dd-HH-mm-ss") + fileName1;
+                String fileName = fileName1;
                 File filePath = new File(docPath, fileName);
                 try {
                     fileNationalPrice.transferTo(filePath);
@@ -2386,7 +2389,7 @@ public class BiddingProjectService {
                     log.error(e.toString(), e);
                     return new Result<>(false, StatusCode.ERROR, "呀! 服务器开小差了~");
                 }
-                biddingStrategyAnalysis.setFileNationalPrice(filePath.getPath());
+                biddingStrategyAnalysis.setFileNationalPrice(filePath.getName());
             }
 
             if (map.get("fileCompetitiveLimit") != null) {
@@ -2395,7 +2398,7 @@ public class BiddingProjectService {
             } else {
                 MultipartFile fileCompetitiveLimit = fileMap.get("fileCompetitiveLimit");
                 String fileName1 = fileCompetitiveLimit.getOriginalFilename();
-                String fileName = DateUtils.format(new Date(), "yyyy-MM-dd-HH-mm-ss") + fileName1;
+                String fileName = fileName1;
                 File filePath = new File(docPath, fileName);
                 try {
                     fileCompetitiveLimit.transferTo(filePath);
@@ -2403,7 +2406,7 @@ public class BiddingProjectService {
                     log.error(e.toString(), e);
                     return new Result<>(false, StatusCode.ERROR, "呀! 服务器开小差了~");
                 }
-                biddingStrategyAnalysis.setFileCompetitiveLimit(filePath.getPath());
+                biddingStrategyAnalysis.setFileCompetitiveLimit(filePath.getName());
             }
 
             String suggestion = map.get("suggestion").toString();
@@ -2613,7 +2616,7 @@ public class BiddingProjectService {
             ////将内容设置数据备份到内容设置备份表
             //biddingContentBakMapper.copySetting(projectPhaseId, biddingProject1.getVersionNum());
             ////判断文件夹是否存在，不存在则新建
-            String docPath1 = uploadStrategyAnalysis + "/" + biddingProject1.getId();
+            String docPath1 = biddingProject1.getBasePath() +biddingProject1.getId()+"/策略分析/";
             File docPath = new File(docPath1);
             if (!docPath.exists() && !docPath.isDirectory()) {
                 docPath.mkdirs();
@@ -2633,7 +2636,7 @@ public class BiddingProjectService {
                     if (fileMap.get(map1.get("enName")) != null) {
                         MultipartFile fileFormal = fileMap.get(map1.get("enName").toString());
                         String fileName1 = fileFormal.getOriginalFilename();
-                        String fileName = DateUtils.format(new Date(), "yyyy-MM-dd-HH-mm-ss") + fileName1;
+                        String fileName = fileName1;
                         File filePath = new File(docPath, fileName);
                         try {
                             fileFormal.transferTo(filePath);
@@ -2644,7 +2647,7 @@ public class BiddingProjectService {
                         String value = map.get(map1.get("enName").toString());
                         BiddingProjectData biddingProjectData = new BiddingProjectData();
                         biddingProjectData.setId(map1.get("dataId").toString());
-                        biddingProjectData.setValue(filePath.getPath());
+                        biddingProjectData.setValue(filePath.getName());
                         biddingProjectDataMapper.updateByPrimaryKeySelective(biddingProjectData);
                     }
                 }
@@ -2665,7 +2668,7 @@ public class BiddingProjectService {
             } else {
                 MultipartFile fileProductInfo = fileMap.get("fileProductInfo");
                 String fileName1 = fileProductInfo.getOriginalFilename();
-                String fileName = DateUtils.format(new Date(), "yyyy-MM-dd-HH-mm-ss") + fileName1;
+                String fileName = fileName1;
                 File filePath = new File(docPath, fileName);
                 try {
                     fileProductInfo.transferTo(filePath);
@@ -2673,7 +2676,7 @@ public class BiddingProjectService {
                     log.error(e.toString(), e);
                     return new Result<>(false, StatusCode.ERROR, "呀! 服务器开小差了~");
                 }
-                biddingStrategyAnalysis.setFileProductInfo(filePath.getPath());
+                biddingStrategyAnalysis.setFileProductInfo(filePath.getName());
             }
 
             if (map.get("fileQualityLevel") != null) {
@@ -2682,7 +2685,7 @@ public class BiddingProjectService {
             } else {
                 MultipartFile fileQualityLevel = fileMap.get("fileQualityLevel");
                 String fileName1 = fileQualityLevel.getOriginalFilename();
-                String fileName = DateUtils.format(new Date(), "yyyy-MM-dd-HH-mm-ss") + fileName1;
+                String fileName = fileName1;
                 File filePath = new File(docPath, fileName);
                 try {
                     fileQualityLevel.transferTo(filePath);
@@ -2690,7 +2693,7 @@ public class BiddingProjectService {
                     log.error(e.toString(), e);
                     return new Result<>(false, StatusCode.ERROR, "呀! 服务器开小差了~");
                 }
-                biddingStrategyAnalysis.setFileQualityLevel(filePath.getPath());
+                biddingStrategyAnalysis.setFileQualityLevel(filePath.getName());
             }
 
             if (map.get("fileProductGro") != null) {
@@ -2699,7 +2702,7 @@ public class BiddingProjectService {
             } else {
                 MultipartFile fileProductGro = fileMap.get("fileProductGro");
                 String fileName1 = fileProductGro.getOriginalFilename();
-                String fileName = DateUtils.format(new Date(), "yyyy-MM-dd-HH-mm-ss") + fileName1;
+                String fileName = fileName1;
                 File filePath = new File(docPath, fileName);
                 try {
                     fileProductGro.transferTo(filePath);
@@ -2707,7 +2710,7 @@ public class BiddingProjectService {
                     log.error(e.toString(), e);
                     return new Result<>(false, StatusCode.ERROR, "呀! 服务器开小差了~");
                 }
-                biddingStrategyAnalysis.setFileProductGro(filePath.getPath());
+                biddingStrategyAnalysis.setFileProductGro(filePath.getName());
             }
 
             if (map.get("fileProduct") != null) {
@@ -2716,7 +2719,7 @@ public class BiddingProjectService {
             } else {
                 MultipartFile fileProduct = fileMap.get("fileProduct");
                 String fileName1 = fileProduct.getOriginalFilename();
-                String fileName = DateUtils.format(new Date(), "yyyy-MM-dd-HH-mm-ss") + fileName1;
+                String fileName = fileName1;
                 File filePath = new File(docPath, fileName);
                 try {
                     fileProduct.transferTo(filePath);
@@ -2724,7 +2727,7 @@ public class BiddingProjectService {
                     log.error(e.toString(), e);
                     return new Result<>(false, StatusCode.ERROR, "呀! 服务器开小差了~");
                 }
-                biddingStrategyAnalysis.setFileProduct(filePath.getPath());
+                biddingStrategyAnalysis.setFileProduct(filePath.getName());
             }
 
             if (map.get("filePriceLimit") != null) {
@@ -2733,7 +2736,7 @@ public class BiddingProjectService {
             } else {
                 MultipartFile filePriceLimit = fileMap.get("filePriceLimit");
                 String fileName1 = filePriceLimit.getOriginalFilename();
-                String fileName = DateUtils.format(new Date(), "yyyy-MM-dd-HH-mm-ss") + fileName1;
+                String fileName = fileName1;
                 File filePath = new File(docPath, fileName);
                 try {
                     filePriceLimit.transferTo(filePath);
@@ -2741,7 +2744,7 @@ public class BiddingProjectService {
                     log.error(e.toString(), e);
                     return new Result<>(false, StatusCode.ERROR, "呀! 服务器开小差了~");
                 }
-                biddingStrategyAnalysis.setFilePriceLimit(filePath.getPath());
+                biddingStrategyAnalysis.setFilePriceLimit(filePath.getName());
             }
 
             if (map.get("fileCompeInfo") != null) {
@@ -2750,7 +2753,7 @@ public class BiddingProjectService {
             } else {
                 MultipartFile fileCompeInfo = fileMap.get("fileCompeInfo");
                 String fileName1 = fileCompeInfo.getOriginalFilename();
-                String fileName = DateUtils.format(new Date(), "yyyy-MM-dd-HH-mm-ss") + fileName1;
+                String fileName = fileName1;
                 File filePath = new File(docPath, fileName);
                 try {
                     fileCompeInfo.transferTo(filePath);
@@ -2758,7 +2761,7 @@ public class BiddingProjectService {
                     log.error(e.toString(), e);
                     return new Result<>(false, StatusCode.ERROR, "呀! 服务器开小差了~");
                 }
-                biddingStrategyAnalysis.setFileCompeInfo(filePath.getPath());
+                biddingStrategyAnalysis.setFileCompeInfo(filePath.getName());
             }
 
             if (map.get("fileQualityLevels") != null) {
@@ -2767,7 +2770,7 @@ public class BiddingProjectService {
             } else {
                 MultipartFile fileQualityLevels = fileMap.get("fileQualityLevels");
                 String fileName1 = fileQualityLevels.getOriginalFilename();
-                String fileName = DateUtils.format(new Date(), "yyyy-MM-dd-HH-mm-ss") + fileName1;
+                String fileName = fileName1;
                 File filePath = new File(docPath, fileName);
                 try {
                     fileQualityLevels.transferTo(filePath);
@@ -2775,7 +2778,7 @@ public class BiddingProjectService {
                     log.error(e.toString(), e);
                     return new Result<>(false, StatusCode.ERROR, "呀! 服务器开小差了~");
                 }
-                biddingStrategyAnalysis.setFileQualityLevels(filePath.getPath());
+                biddingStrategyAnalysis.setFileQualityLevels(filePath.getName());
             }
 
             if (map.get("fileCompeGro") != null) {
@@ -2784,7 +2787,7 @@ public class BiddingProjectService {
             } else {
                 MultipartFile fileCompeGro = fileMap.get("fileCompeGro");
                 String fileName1 = fileCompeGro.getOriginalFilename();
-                String fileName = DateUtils.format(new Date(), "yyyy-MM-dd-HH-mm-ss") + fileName1;
+                String fileName = fileName1;
                 File filePath = new File(docPath, fileName);
                 try {
                     fileCompeGro.transferTo(filePath);
@@ -2792,7 +2795,7 @@ public class BiddingProjectService {
                     log.error(e.toString(), e);
                     return new Result<>(false, StatusCode.ERROR, "呀! 服务器开小差了~");
                 }
-                biddingStrategyAnalysis.setFileCompeGro(filePath.getPath());
+                biddingStrategyAnalysis.setFileCompeGro(filePath.getName());
             }
 
             if (map.get("fileQuotationEstimate") != null) {
@@ -2801,7 +2804,7 @@ public class BiddingProjectService {
             } else {
                 MultipartFile fileQuotationEstimate = fileMap.get("fileQuotationEstimate");
                 String fileName1 = fileQuotationEstimate.getOriginalFilename();
-                String fileName = DateUtils.format(new Date(), "yyyy-MM-dd-HH-mm-ss") + fileName1;
+                String fileName = fileName1;
                 File filePath = new File(docPath, fileName);
                 try {
                     fileQuotationEstimate.transferTo(filePath);
@@ -2809,7 +2812,7 @@ public class BiddingProjectService {
                     log.error(e.toString(), e);
                     return new Result<>(false, StatusCode.ERROR, "呀! 服务器开小差了~");
                 }
-                biddingStrategyAnalysis.setFileQuotationEstimate(filePath.getPath());
+                biddingStrategyAnalysis.setFileQuotationEstimate(filePath.getName());
             }
 
             if (map.get("fileQuotationOther") != null) {
@@ -2818,7 +2821,7 @@ public class BiddingProjectService {
             } else {
                 MultipartFile fileQuotationOther = fileMap.get("fileQuotationOther");
                 String fileName1 = fileQuotationOther.getOriginalFilename();
-                String fileName = DateUtils.format(new Date(), "yyyy-MM-dd-HH-mm-ss") + fileName1;
+                String fileName = fileName1;
                 File filePath = new File(docPath, fileName);
                 try {
                     fileQuotationOther.transferTo(filePath);
@@ -2826,7 +2829,7 @@ public class BiddingProjectService {
                     log.error(e.toString(), e);
                     return new Result<>(false, StatusCode.ERROR, "呀! 服务器开小差了~");
                 }
-                biddingStrategyAnalysis.setFileQuotationOther(filePath.getPath());
+                biddingStrategyAnalysis.setFileQuotationOther(filePath.getName());
             }
 
             if (map.get("fileNationalPrice") != null) {
@@ -2835,7 +2838,7 @@ public class BiddingProjectService {
             } else {
                 MultipartFile fileNationalPrice = fileMap.get("fileNationalPrice");
                 String fileName1 = fileNationalPrice.getOriginalFilename();
-                String fileName = DateUtils.format(new Date(), "yyyy-MM-dd-HH-mm-ss") + fileName1;
+                String fileName = fileName1;
                 File filePath = new File(docPath, fileName);
                 try {
                     fileNationalPrice.transferTo(filePath);
@@ -2843,7 +2846,7 @@ public class BiddingProjectService {
                     log.error(e.toString(), e);
                     return new Result<>(false, StatusCode.ERROR, "呀! 服务器开小差了~");
                 }
-                biddingStrategyAnalysis.setFileNationalPrice(filePath.getPath());
+                biddingStrategyAnalysis.setFileNationalPrice(filePath.getName());
             }
 
             if (map.get("fileCompetitiveLimit") != null) {
@@ -2852,7 +2855,7 @@ public class BiddingProjectService {
             } else {
                 MultipartFile fileCompetitiveLimit = fileMap.get("fileCompetitiveLimit");
                 String fileName1 = fileCompetitiveLimit.getOriginalFilename();
-                String fileName = DateUtils.format(new Date(), "yyyy-MM-dd-HH-mm-ss") + fileName1;
+                String fileName = fileName1;
                 File filePath = new File(docPath, fileName);
                 try {
                     fileCompetitiveLimit.transferTo(filePath);
@@ -2860,7 +2863,7 @@ public class BiddingProjectService {
                     log.error(e.toString(), e);
                     return new Result<>(false, StatusCode.ERROR, "呀! 服务器开小差了~");
                 }
-                biddingStrategyAnalysis.setFileCompetitiveLimit(filePath.getPath());
+                biddingStrategyAnalysis.setFileCompetitiveLimit(filePath.getName());
             }
 
             String suggestion = map.get("suggestion").toString();
@@ -3097,7 +3100,7 @@ public class BiddingProjectService {
             ////将内容设置数据备份到内容设置备份表
             //biddingContentBakMapper.copySetting(projectPhaseId, biddingProject1.getVersionNum());
             //判断文件夹是否存在，不存在则新建
-            String docPath1 = uploadInfoFilling + "/" + biddingProject1.getId();
+            String docPath1 = biddingProject1.getBasePath() +biddingProject1.getId()+"/信息填报/";
             File docPath = new File(docPath1);
             if (!docPath.exists() && !docPath.isDirectory()) {
                 docPath.mkdirs();
@@ -3119,7 +3122,7 @@ public class BiddingProjectService {
                         System.out.println(fileMap.get(biddingContentBak.getEnName()));
                         MultipartFile fileFormal = fileMap.get(biddingContentBak.getEnName());
                         String fileName1 = fileFormal.getOriginalFilename();
-                        String fileName = DateUtils.format(new Date(), "yyyy-MM-dd-HH-mm-ss") + fileName1;
+                        String fileName = fileName1;
                         File filePath = new File(docPath, fileName);
                         try {
                             fileFormal.transferTo(filePath);
@@ -3132,7 +3135,7 @@ public class BiddingProjectService {
                         biddingProjectData.setId(idWorker.nextId() + "");
                         biddingProjectData.setContentSettingsId(biddingContentBak.getId());
                         biddingProjectData.setProjectId(biddingProject.getId());
-                        biddingProjectData.setValue(filePath.getPath());
+                        biddingProjectData.setValue(filePath.getName());
                         biddingProjectDataMapper.insert(biddingProjectData);
                     }
                 }
@@ -3152,7 +3155,7 @@ public class BiddingProjectService {
             } else {
                 MultipartFile fileOnlineFilling = fileMap.get("fileOnlineFilling");
                 String fileName1 = fileOnlineFilling.getOriginalFilename();
-                String fileName = DateUtils.format(new Date(), "yyyy-MM-dd-HH-mm-ss") + fileName1;
+                String fileName = fileName1;
                 File filePath = new File(docPath, fileName);
                 try {
                     fileOnlineFilling.transferTo(filePath);
@@ -3160,7 +3163,7 @@ public class BiddingProjectService {
                     log.error(e.toString(), e);
                     return new Result<>(false, StatusCode.ERROR, "呀! 服务器开小差了~");
                 }
-                biddingInfoFilling.setFileOnlineFilling(filePath.getPath());
+                biddingInfoFilling.setFileOnlineFilling(filePath.getName());
             }
 
             if (map.get("fileApplicationSeal") != null) {
@@ -3169,7 +3172,7 @@ public class BiddingProjectService {
             } else {
                 MultipartFile fileApplicationSeal = fileMap.get("fileApplicationSeal");
                 String fileName1 = fileApplicationSeal.getOriginalFilename();
-                String fileName = DateUtils.format(new Date(), "yyyy-MM-dd-HH-mm-ss") + fileName1;
+                String fileName = fileName1;
                 File filePath = new File(docPath, fileName);
                 try {
                     fileApplicationSeal.transferTo(filePath);
@@ -3177,7 +3180,7 @@ public class BiddingProjectService {
                     log.error(e.toString(), e);
                     return new Result<>(false, StatusCode.ERROR, "呀! 服务器开小差了~");
                 }
-                biddingInfoFilling.setFileApplicationSeal(filePath.getPath());
+                biddingInfoFilling.setFileApplicationSeal(filePath.getName());
             }
 
             if (map.get("fileInfoList") != null) {
@@ -3186,7 +3189,7 @@ public class BiddingProjectService {
             } else {
                 MultipartFile fileInfoList = fileMap.get("fileInfoList");
                 String fileName1 = fileInfoList.getOriginalFilename();
-                String fileName = DateUtils.format(new Date(), "yyyy-MM-dd-HH-mm-ss") + fileName1;
+                String fileName = fileName1;
                 File filePath = new File(docPath, fileName);
                 try {
                     fileInfoList.transferTo(filePath);
@@ -3194,7 +3197,7 @@ public class BiddingProjectService {
                     log.error(e.toString(), e);
                     return new Result<>(false, StatusCode.ERROR, "呀! 服务器开小差了~");
                 }
-                biddingInfoFilling.setFileInfoList(filePath.getPath());
+                biddingInfoFilling.setFileInfoList(filePath.getName());
             }
 
             if (map.get("fileNameOa") != null) {
@@ -3203,7 +3206,7 @@ public class BiddingProjectService {
             } else {
                 MultipartFile fileNameOa = fileMap.get("fileNameOa");
                 String fileName1 = fileNameOa.getOriginalFilename();
-                String fileName = DateUtils.format(new Date(), "yyyy-MM-dd-HH-mm-ss") + fileName1;
+                String fileName = fileName1;
                 File filePath = new File(docPath, fileName);
                 try {
                     fileNameOa.transferTo(filePath);
@@ -3211,7 +3214,7 @@ public class BiddingProjectService {
                     log.error(e.toString(), e);
                     return new Result<>(false, StatusCode.ERROR, "呀! 服务器开小差了~");
                 }
-                biddingInfoFilling.setFileNameOa(filePath.getPath());
+                biddingInfoFilling.setFileNameOa(filePath.getName());
             }
 
             if (map.get("fileDetailsSpecial") != null) {
@@ -3220,7 +3223,7 @@ public class BiddingProjectService {
             } else {
                 MultipartFile fileDetailsSpecial = fileMap.get("fileDetailsSpecial");
                 String fileName1 = fileDetailsSpecial.getOriginalFilename();
-                String fileName = DateUtils.format(new Date(), "yyyy-MM-dd-HH-mm-ss") + fileName1;
+                String fileName = fileName1;
                 File filePath = new File(docPath, fileName);
                 try {
                     fileDetailsSpecial.transferTo(filePath);
@@ -3228,7 +3231,7 @@ public class BiddingProjectService {
                     log.error(e.toString(), e);
                     return new Result<>(false, StatusCode.ERROR, "呀! 服务器开小差了~");
                 }
-                biddingInfoFilling.setFileDetailsSpecial(filePath.getPath());
+                biddingInfoFilling.setFileDetailsSpecial(filePath.getName());
             }
 
             String SubmissionTime = map.get("SubmissionTime").toString();
@@ -3240,7 +3243,7 @@ public class BiddingProjectService {
             } else {
                 MultipartFile filePriceApp = fileMap.get("filePriceApp");
                 String fileName1 = filePriceApp.getOriginalFilename();
-                String fileName = DateUtils.format(new Date(), "yyyy-MM-dd-HH-mm-ss") + fileName1;
+                String fileName = fileName1;
                 File filePath = new File(docPath, fileName);
                 try {
                     filePriceApp.transferTo(filePath);
@@ -3248,7 +3251,7 @@ public class BiddingProjectService {
                     log.error(e.toString(), e);
                     return new Result<>(false, StatusCode.ERROR, "呀! 服务器开小差了~");
                 }
-                biddingInfoFilling.setFilePriceApp(filePath.getPath());
+                biddingInfoFilling.setFilePriceApp(filePath.getName());
             }
 
             if (map.get("filePriceLetter") != null) {
@@ -3257,7 +3260,7 @@ public class BiddingProjectService {
             } else {
                 MultipartFile filePriceLetter = fileMap.get("filePriceLetter");
                 String fileName1 = filePriceLetter.getOriginalFilename();
-                String fileName = DateUtils.format(new Date(), "yyyy-MM-dd-HH-mm-ss") + fileName1;
+                String fileName = fileName1;
                 File filePath = new File(docPath, fileName);
                 try {
                     filePriceLetter.transferTo(filePath);
@@ -3265,7 +3268,7 @@ public class BiddingProjectService {
                     log.error(e.toString(), e);
                     return new Result<>(false, StatusCode.ERROR, "呀! 服务器开小差了~");
                 }
-                biddingInfoFilling.setFilePriceLetter(filePath.getPath());
+                biddingInfoFilling.setFilePriceLetter(filePath.getName());
             }
 
             if (map.get("fileInfoChange") != null) {
@@ -3274,7 +3277,7 @@ public class BiddingProjectService {
             } else {
                 MultipartFile fileInfoChange = fileMap.get("fileInfoChange");
                 String fileName1 = fileInfoChange.getOriginalFilename();
-                String fileName = DateUtils.format(new Date(), "yyyy-MM-dd-HH-mm-ss") + fileName1;
+                String fileName = fileName1;
                 File filePath = new File(docPath, fileName);
                 try {
                     fileInfoChange.transferTo(filePath);
@@ -3282,7 +3285,7 @@ public class BiddingProjectService {
                     log.error(e.toString(), e);
                     return new Result<>(false, StatusCode.ERROR, "呀! 服务器开小差了~");
                 }
-                biddingInfoFilling.setFileInfoChange(filePath.getPath());
+                biddingInfoFilling.setFileInfoChange(filePath.getName());
             }
 
             if (map.get("fileOther") != null) {
@@ -3291,7 +3294,7 @@ public class BiddingProjectService {
             } else {
                 MultipartFile fileOther = fileMap.get("fileOther");
                 String fileName1 = fileOther.getOriginalFilename();
-                String fileName = DateUtils.format(new Date(), "yyyy-MM-dd-HH-mm-ss") + fileName1;
+                String fileName = fileName1;
                 File filePath = new File(docPath, fileName);
                 try {
                     fileOther.transferTo(filePath);
@@ -3299,7 +3302,7 @@ public class BiddingProjectService {
                     log.error(e.toString(), e);
                     return new Result<>(false, StatusCode.ERROR, "呀! 服务器开小差了~");
                 }
-                biddingInfoFilling.setFileOther(filePath.getPath());
+                biddingInfoFilling.setFileOther(filePath.getName());
             }
 
 
@@ -3509,7 +3512,7 @@ public class BiddingProjectService {
             ////将内容设置数据备份到内容设置备份表
             //biddingContentBakMapper.copySetting(projectPhaseId, biddingProject1.getVersionNum());
             //判断文件夹是否存在，不存在则新建
-            String docPath1 = uploadInfoFilling + "/" + biddingProject1.getId();
+            String docPath1 = biddingProject1.getBasePath() +biddingProject1.getId()+"/信息填报/";
             File docPath = new File(docPath1);
             if (!docPath.exists() && !docPath.isDirectory()) {
                 docPath.mkdirs();
@@ -3529,7 +3532,7 @@ public class BiddingProjectService {
                     if (fileMap.get(map1.get("enName")) != null) {
                         MultipartFile fileFormal = fileMap.get(map1.get("enName").toString());
                         String fileName1 = fileFormal.getOriginalFilename();
-                        String fileName = DateUtils.format(new Date(), "yyyy-MM-dd-HH-mm-ss") + fileName1;
+                        String fileName = fileName1;
                         File filePath = new File(docPath, fileName);
                         try {
                             fileFormal.transferTo(filePath);
@@ -3540,7 +3543,7 @@ public class BiddingProjectService {
                         String value = map.get(map1.get("enName").toString());
                         BiddingProjectData biddingProjectData = new BiddingProjectData();
                         biddingProjectData.setId(map1.get("dataId").toString());
-                        biddingProjectData.setValue(filePath.getPath());
+                        biddingProjectData.setValue(filePath.getName());
                         biddingProjectDataMapper.updateByPrimaryKeySelective(biddingProjectData);
                     }
                 }
@@ -3560,7 +3563,7 @@ public class BiddingProjectService {
             } else {
                 MultipartFile fileOnlineFilling = fileMap.get("fileOnlineFilling");
                 String fileName1 = fileOnlineFilling.getOriginalFilename();
-                String fileName = DateUtils.format(new Date(), "yyyy-MM-dd-HH-mm-ss") + fileName1;
+                String fileName = fileName1;
                 File filePath = new File(docPath, fileName);
                 try {
                     fileOnlineFilling.transferTo(filePath);
@@ -3568,7 +3571,7 @@ public class BiddingProjectService {
                     log.error(e.toString(), e);
                     return new Result<>(false, StatusCode.ERROR, "呀! 服务器开小差了~");
                 }
-                biddingInfoFilling.setFileOnlineFilling(filePath.getPath());
+                biddingInfoFilling.setFileOnlineFilling(filePath.getName());
             }
 
             if (map.get("fileApplicationSeal") != null) {
@@ -3577,7 +3580,7 @@ public class BiddingProjectService {
             } else {
                 MultipartFile fileApplicationSeal = fileMap.get("fileApplicationSeal");
                 String fileName1 = fileApplicationSeal.getOriginalFilename();
-                String fileName = DateUtils.format(new Date(), "yyyy-MM-dd-HH-mm-ss") + fileName1;
+                String fileName = fileName1;
                 File filePath = new File(docPath, fileName);
                 try {
                     fileApplicationSeal.transferTo(filePath);
@@ -3585,7 +3588,7 @@ public class BiddingProjectService {
                     log.error(e.toString(), e);
                     return new Result<>(false, StatusCode.ERROR, "呀! 服务器开小差了~");
                 }
-                biddingInfoFilling.setFileApplicationSeal(filePath.getPath());
+                biddingInfoFilling.setFileApplicationSeal(filePath.getName());
             }
 
             if (map.get("fileInfoList") != null) {
@@ -3594,7 +3597,7 @@ public class BiddingProjectService {
             } else {
                 MultipartFile fileInfoList = fileMap.get("fileInfoList");
                 String fileName1 = fileInfoList.getOriginalFilename();
-                String fileName = DateUtils.format(new Date(), "yyyy-MM-dd-HH-mm-ss") + fileName1;
+                String fileName = fileName1;
                 File filePath = new File(docPath, fileName);
                 try {
                     fileInfoList.transferTo(filePath);
@@ -3602,7 +3605,7 @@ public class BiddingProjectService {
                     log.error(e.toString(), e);
                     return new Result<>(false, StatusCode.ERROR, "呀! 服务器开小差了~");
                 }
-                biddingInfoFilling.setFileInfoList(filePath.getPath());
+                biddingInfoFilling.setFileInfoList(filePath.getName());
             }
 
             if (map.get("fileNameOa") != null) {
@@ -3611,7 +3614,7 @@ public class BiddingProjectService {
             } else {
                 MultipartFile fileNameOa = fileMap.get("fileNameOa");
                 String fileName1 = fileNameOa.getOriginalFilename();
-                String fileName = DateUtils.format(new Date(), "yyyy-MM-dd-HH-mm-ss") + fileName1;
+                String fileName = fileName1;
                 File filePath = new File(docPath, fileName);
                 try {
                     fileNameOa.transferTo(filePath);
@@ -3619,7 +3622,7 @@ public class BiddingProjectService {
                     log.error(e.toString(), e);
                     return new Result<>(false, StatusCode.ERROR, "呀! 服务器开小差了~");
                 }
-                biddingInfoFilling.setFileNameOa(filePath.getPath());
+                biddingInfoFilling.setFileNameOa(filePath.getName());
             }
 
             if (map.get("fileDetailsSpecial") != null) {
@@ -3628,7 +3631,7 @@ public class BiddingProjectService {
             } else {
                 MultipartFile fileDetailsSpecial = fileMap.get("fileDetailsSpecial");
                 String fileName1 = fileDetailsSpecial.getOriginalFilename();
-                String fileName = DateUtils.format(new Date(), "yyyy-MM-dd-HH-mm-ss") + fileName1;
+                String fileName = fileName1;
                 File filePath = new File(docPath, fileName);
                 try {
                     fileDetailsSpecial.transferTo(filePath);
@@ -3636,7 +3639,7 @@ public class BiddingProjectService {
                     log.error(e.toString(), e);
                     return new Result<>(false, StatusCode.ERROR, "呀! 服务器开小差了~");
                 }
-                biddingInfoFilling.setFileDetailsSpecial(filePath.getPath());
+                biddingInfoFilling.setFileDetailsSpecial(filePath.getName());
             }
 
             String SubmissionTime = map.get("SubmissionTime").toString();
@@ -3648,7 +3651,7 @@ public class BiddingProjectService {
             } else {
                 MultipartFile filePriceApp = fileMap.get("filePriceApp");
                 String fileName1 = filePriceApp.getOriginalFilename();
-                String fileName = DateUtils.format(new Date(), "yyyy-MM-dd-HH-mm-ss") + fileName1;
+                String fileName = fileName1;
                 File filePath = new File(docPath, fileName);
                 try {
                     filePriceApp.transferTo(filePath);
@@ -3656,7 +3659,7 @@ public class BiddingProjectService {
                     log.error(e.toString(), e);
                     return new Result<>(false, StatusCode.ERROR, "呀! 服务器开小差了~");
                 }
-                biddingInfoFilling.setFilePriceApp(filePath.getPath());
+                biddingInfoFilling.setFilePriceApp(filePath.getName());
             }
 
             if (map.get("filePriceLetter") != null) {
@@ -3665,7 +3668,7 @@ public class BiddingProjectService {
             } else {
                 MultipartFile filePriceLetter = fileMap.get("filePriceLetter");
                 String fileName1 = filePriceLetter.getOriginalFilename();
-                String fileName = DateUtils.format(new Date(), "yyyy-MM-dd-HH-mm-ss") + fileName1;
+                String fileName = fileName1;
                 File filePath = new File(docPath, fileName);
                 try {
                     filePriceLetter.transferTo(filePath);
@@ -3673,7 +3676,7 @@ public class BiddingProjectService {
                     log.error(e.toString(), e);
                     return new Result<>(false, StatusCode.ERROR, "呀! 服务器开小差了~");
                 }
-                biddingInfoFilling.setFilePriceLetter(filePath.getPath());
+                biddingInfoFilling.setFilePriceLetter(filePath.getName());
             }
 
             if (map.get("fileInfoChange") != null) {
@@ -3682,7 +3685,7 @@ public class BiddingProjectService {
             } else {
                 MultipartFile fileInfoChange = fileMap.get("fileInfoChange");
                 String fileName1 = fileInfoChange.getOriginalFilename();
-                String fileName = DateUtils.format(new Date(), "yyyy-MM-dd-HH-mm-ss") + fileName1;
+                String fileName = fileName1;
                 File filePath = new File(docPath, fileName);
                 try {
                     fileInfoChange.transferTo(filePath);
@@ -3690,7 +3693,7 @@ public class BiddingProjectService {
                     log.error(e.toString(), e);
                     return new Result<>(false, StatusCode.ERROR, "呀! 服务器开小差了~");
                 }
-                biddingInfoFilling.setFileInfoChange(filePath.getPath());
+                biddingInfoFilling.setFileInfoChange(filePath.getName());
             }
 
             if (map.get("fileOther") != null) {
@@ -3699,7 +3702,7 @@ public class BiddingProjectService {
             } else {
                 MultipartFile fileOther = fileMap.get("fileOther");
                 String fileName1 = fileOther.getOriginalFilename();
-                String fileName = DateUtils.format(new Date(), "yyyy-MM-dd-HH-mm-ss") + fileName1;
+                String fileName = fileName1;
                 File filePath = new File(docPath, fileName);
                 try {
                     fileOther.transferTo(filePath);
@@ -3707,7 +3710,7 @@ public class BiddingProjectService {
                     log.error(e.toString(), e);
                     return new Result<>(false, StatusCode.ERROR, "呀! 服务器开小差了~");
                 }
-                biddingInfoFilling.setFileOther(filePath.getPath());
+                biddingInfoFilling.setFileOther(filePath.getName());
             }
 
 
@@ -3944,7 +3947,7 @@ public class BiddingProjectService {
             ////将内容设置数据备份到内容设置备份表
             //biddingContentBakMapper.copySetting(projectPhaseId, biddingProject1.getVersionNum());
             //判断文件夹是否存在，不存在则新建
-            String docPath1 = uploadOfficialNotice + "/" + biddingProject1.getId();
+            String docPath1 = biddingProject1.getBasePath() +biddingProject1.getId()+"/官方公告/";
             File docPath = new File(docPath1);
             if (!docPath.exists() && !docPath.isDirectory()) {
                 docPath.mkdirs();
@@ -3966,7 +3969,7 @@ public class BiddingProjectService {
                         System.out.println(fileMap.get(biddingContentBak.getEnName()));
                         MultipartFile fileFormal = fileMap.get(biddingContentBak.getEnName());
                         String fileName1 = fileFormal.getOriginalFilename();
-                        String fileName = DateUtils.format(new Date(), "yyyy-MM-dd-HH-mm-ss") + fileName1;
+                        String fileName = fileName1;
                         File filePath = new File(docPath, fileName);
                         try {
                             fileFormal.transferTo(filePath);
@@ -3979,7 +3982,7 @@ public class BiddingProjectService {
                         biddingProjectData.setId(idWorker.nextId() + "");
                         biddingProjectData.setContentSettingsId(biddingContentBak.getId());
                         biddingProjectData.setProjectId(biddingProject.getId());
-                        biddingProjectData.setValue(filePath.getPath());
+                        biddingProjectData.setValue(filePath.getName());
                         biddingProjectDataMapper.insert(biddingProjectData);
                     }
                 }
@@ -3999,7 +4002,7 @@ public class BiddingProjectService {
             } else {
                 MultipartFile fileAnnounce = fileMap.get("fileAnnounce");
                 String fileName1 = fileAnnounce.getOriginalFilename();
-                String fileName = DateUtils.format(new Date(), "yyyy-MM-dd-HH-mm-ss") + fileName1;
+                String fileName = fileName1;
                 File filePath = new File(docPath, fileName);
                 try {
                     fileAnnounce.transferTo(filePath);
@@ -4007,7 +4010,7 @@ public class BiddingProjectService {
                     log.error(e.toString(), e);
                     return new Result<>(false, StatusCode.ERROR, "呀! 服务器开小差了~");
                 }
-                biddingOfficialNotice.setFileAnnounce(filePath.getPath());
+                biddingOfficialNotice.setFileAnnounce(filePath.getName());
             }
 
             if (map.get("distributorRequire") != null) {
@@ -4016,7 +4019,7 @@ public class BiddingProjectService {
             } else {
                 MultipartFile distributorRequire = fileMap.get("distributorRequire");
                 String fileName1 = distributorRequire.getOriginalFilename();
-                String fileName = DateUtils.format(new Date(), "yyyy-MM-dd-HH-mm-ss") + fileName1;
+                String fileName = fileName1;
                 File filePath = new File(docPath, fileName);
                 try {
                     distributorRequire.transferTo(filePath);
@@ -4024,7 +4027,7 @@ public class BiddingProjectService {
                     log.error(e.toString(), e);
                     return new Result<>(false, StatusCode.ERROR, "呀! 服务器开小差了~");
                 }
-                biddingOfficialNotice.setDistributorRequire(filePath.getPath());
+                biddingOfficialNotice.setDistributorRequire(filePath.getName());
             }
 
             String suggestion = map.get("suggestion").toString();
@@ -4203,7 +4206,7 @@ public class BiddingProjectService {
             ////将内容设置数据备份到内容设置备份表
             //biddingContentBakMapper.copySetting(projectPhaseId, biddingProject1.getVersionNum());
             //判断文件夹是否存在，不存在则新建
-            String docPath1 = uploadOfficialNotice + "/" + biddingProject1.getId();
+            String docPath1 = biddingProject1.getBasePath() +biddingProject1.getId()+"/官方公告/";
             File docPath = new File(docPath1);
             if (!docPath.exists() && !docPath.isDirectory()) {
                 docPath.mkdirs();
@@ -4222,7 +4225,7 @@ public class BiddingProjectService {
                     if (fileMap.get(map1.get("enName")) != null) {
                         MultipartFile fileFormal = fileMap.get(map1.get("enName").toString());
                         String fileName1 = fileFormal.getOriginalFilename();
-                        String fileName = DateUtils.format(new Date(), "yyyy-MM-dd-HH-mm-ss") + fileName1;
+                        String fileName = fileName1;
                         File filePath = new File(docPath, fileName);
                         try {
                             fileFormal.transferTo(filePath);
@@ -4233,7 +4236,7 @@ public class BiddingProjectService {
                         String value = map.get(map1.get("enName").toString());
                         BiddingProjectData biddingProjectData = new BiddingProjectData();
                         biddingProjectData.setId(map1.get("dataId").toString());
-                        biddingProjectData.setValue(filePath.getPath());
+                        biddingProjectData.setValue(filePath.getName());
                         biddingProjectDataMapper.updateByPrimaryKeySelective(biddingProjectData);
                     }
                 }
@@ -4253,7 +4256,7 @@ public class BiddingProjectService {
             } else {
                 MultipartFile fileAnnounce = fileMap.get("fileAnnounce");
                 String fileName1 = fileAnnounce.getOriginalFilename();
-                String fileName = DateUtils.format(new Date(), "yyyy-MM-dd-HH-mm-ss") + fileName1;
+                String fileName = fileName1;
                 File filePath = new File(docPath, fileName);
                 try {
                     fileAnnounce.transferTo(filePath);
@@ -4261,7 +4264,7 @@ public class BiddingProjectService {
                     log.error(e.toString(), e);
                     return new Result<>(false, StatusCode.ERROR, "呀! 服务器开小差了~");
                 }
-                biddingOfficialNotice.setFileAnnounce(filePath.getPath());
+                biddingOfficialNotice.setFileAnnounce(filePath.getName());
             }
 
             if (map.get("distributorRequire") != null) {
@@ -4270,7 +4273,7 @@ public class BiddingProjectService {
             } else {
                 MultipartFile distributorRequire = fileMap.get("distributorRequire");
                 String fileName1 = distributorRequire.getOriginalFilename();
-                String fileName = DateUtils.format(new Date(), "yyyy-MM-dd-HH-mm-ss") + fileName1;
+                String fileName = fileName1;
                 File filePath = new File(docPath, fileName);
                 try {
                     distributorRequire.transferTo(filePath);
@@ -4278,7 +4281,7 @@ public class BiddingProjectService {
                     log.error(e.toString(), e);
                     return new Result<>(false, StatusCode.ERROR, "呀! 服务器开小差了~");
                 }
-                biddingOfficialNotice.setDistributorRequire(filePath.getPath());
+                biddingOfficialNotice.setDistributorRequire(filePath.getName());
             }
 
             String suggestion = map.get("suggestion").toString();
@@ -4483,7 +4486,7 @@ public class BiddingProjectService {
             ////将内容设置数据备份到内容设置备份表
             //biddingContentBakMapper.copySetting(projectPhaseId, biddingProject1.getVersionNum());
             //判断文件夹是否存在，不存在则新建
-            String docPath1 = uploadProjectSummary + "/" + biddingProject1.getId();
+            String docPath1 = biddingProject1.getBasePath() +biddingProject1.getId()+"/项目总结/";
             File docPath = new File(docPath1);
             if (!docPath.exists() && !docPath.isDirectory()) {
                 docPath.mkdirs();
@@ -4505,7 +4508,7 @@ public class BiddingProjectService {
                         System.out.println(fileMap.get(biddingContentBak.getEnName()));
                         MultipartFile fileFormal = fileMap.get(biddingContentBak.getEnName());
                         String fileName1 = fileFormal.getOriginalFilename();
-                        String fileName = DateUtils.format(new Date(), "yyyy-MM-dd-HH-mm-ss") + fileName1;
+                        String fileName = fileName1;
                         File filePath = new File(docPath, fileName);
                         try {
                             fileFormal.transferTo(filePath);
@@ -4518,7 +4521,7 @@ public class BiddingProjectService {
                         biddingProjectData.setId(idWorker.nextId() + "");
                         biddingProjectData.setContentSettingsId(biddingContentBak.getId());
                         biddingProjectData.setProjectId(biddingProject.getId());
-                        biddingProjectData.setValue(filePath.getPath());
+                        biddingProjectData.setValue(filePath.getName());
                         biddingProjectDataMapper.insert(biddingProjectData);
                     }
                 }
@@ -4731,7 +4734,7 @@ public class BiddingProjectService {
             ////将内容设置数据备份到内容设置备份表
             //biddingContentBakMapper.copySetting(projectPhaseId, biddingProject1.getVersionNum());
             //判断文件夹是否存在，不存在则新建
-            String docPath1 = uploadProjectSummary + "/" + biddingProject1.getId();
+            String docPath1 = biddingProject1.getBasePath() +biddingProject1.getId()+"/项目总结/";
             File docPath = new File(docPath1);
             if (!docPath.exists() && !docPath.isDirectory()) {
                 docPath.mkdirs();
@@ -4751,7 +4754,7 @@ public class BiddingProjectService {
                     if (fileMap.get(map1.get("enName")) != null) {
                         MultipartFile fileFormal = fileMap.get(map1.get("enName").toString());
                         String fileName1 = fileFormal.getOriginalFilename();
-                        String fileName = DateUtils.format(new Date(), "yyyy-MM-dd-HH-mm-ss") + fileName1;
+                        String fileName = fileName1;
                         File filePath = new File(docPath, fileName);
                         try {
                             fileFormal.transferTo(filePath);
@@ -4762,7 +4765,7 @@ public class BiddingProjectService {
                         String value = map.get(map1.get("enName").toString());
                         BiddingProjectData biddingProjectData = new BiddingProjectData();
                         biddingProjectData.setId(map1.get("dataId").toString());
-                        biddingProjectData.setValue(filePath.getPath());
+                        biddingProjectData.setValue(filePath.getName());
                         biddingProjectDataMapper.updateByPrimaryKeySelective(biddingProjectData);
                     }
                 }

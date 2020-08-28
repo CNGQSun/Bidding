@@ -17,8 +17,8 @@ public class JwtUtil {
     private String key = "aasgrant";
 
     // 有效期 10 秒
-    private long expirationTime = 60;
-    //private long expirationTime = 36000000;
+    //private long expirationTime = 60;
+    private long expirationTime = 36000000;
 
     // 生成JWT
     public String createJWT(String id, String subject) {

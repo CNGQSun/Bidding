@@ -47,6 +47,16 @@ public class BiddingProject implements Serializable {
 
 	private String isBid;
 
+	private String basePath;
+
+	public String getBasePath() {
+		return basePath;
+	}
+
+	public void setBasePath(String basePath) {
+		this.basePath = basePath;
+	}
+
 	public String getUserId() {
 		return userId;
 	}

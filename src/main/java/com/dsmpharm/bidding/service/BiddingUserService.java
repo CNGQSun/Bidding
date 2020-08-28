@@ -43,11 +43,11 @@ public class BiddingUserService {
     private BiddingUserFrameworkMapper biddingUserFrameworkMapper;
 
 
-
     @Resource
     private IdWorker idWorker;
     @Resource
     private JwtUtil jwtUtil;
+
     public void insert(BiddingUser biddingUser) {
         biddingUser.setId(idWorker.nextId() + "");
         biddingUserMapper.insert(biddingUser);
@@ -55,6 +55,7 @@ public class BiddingUserService {
 
     /**
      * 查询所有未删除的用户
+     *
      * @param map
      * @return
      */
@@ -72,13 +73,14 @@ public class BiddingUserService {
             PageResult pageResult = new PageResult(pageInfo.getTotal(), users);
             return new Result<>(true, StatusCode.OK, "查询成功", pageResult);
         } catch (Exception e) {
-            log.error(e.toString(),e);
+            log.error(e.toString(), e);
             return new Result<>(false, StatusCode.ERROR, "呀! 服务器开小差了~");
         }
     }
 
     /**
      * 根据ID查询用户详情
+     *
      * @param id
      * @return
      */
@@ -86,10 +88,10 @@ public class BiddingUserService {
         try {
             Map map = biddingUserMapper.selectById(id);
             if (map != null) {
-                return new Result<>(true, StatusCode.OK, "查询成功",map);
+                return new Result<>(true, StatusCode.OK, "查询成功", map);
             }
         } catch (Exception e) {
-            log.error(e.toString(),e);
+            log.error(e.toString(), e);
             return new Result<>(false, StatusCode.ERROR, "呀! 服务器开小差了~");
         }
         return new Result<>(false, StatusCode.ERROR, "查询失败");
@@ -97,6 +99,7 @@ public class BiddingUserService {
 
     /**
      * 根据id修改用户信息
+     *
      * @param biddingUser
      * @param role
      * @return
@@ -105,17 +108,17 @@ public class BiddingUserService {
         try {
             biddingUser.setStatus("0");
             int i = biddingUserMapper.updateByPrimaryKeySelective(biddingUser);
-            BiddingUserRole biddingUserRole=new BiddingUserRole();
+            BiddingUserRole biddingUserRole = new BiddingUserRole();
             biddingUserRole.setUserId(biddingUser.getId());
             biddingUserRole.setDelflag("0");
             BiddingUserRole biddingUserRole1 = biddingUserRoleMapper.selectOne(biddingUserRole);
             biddingUserRole1.setRoleId(role);
             int i1 = biddingUserRoleMapper.updateByPrimaryKeySelective(biddingUserRole1);
-            if (i>0&&i1>0){
+            if (i > 0 && i1 > 0) {
                 return new Result<>(true, StatusCode.OK, "修改成功");
             }
         } catch (Exception e) {
-            log.error(e.toString(),e);
+            log.error(e.toString(), e);
             return new Result<>(false, StatusCode.ERROR, "呀! 服务器开小差了~");
         }
         return new Result<>(false, StatusCode.ERROR, "修改失败");
@@ -171,7 +174,7 @@ public class BiddingUserService {
         int insertRole = 0;
         try {
             int i = biddingUserMapper.selectCount(biddingUser);
-            if (i>0){
+            if (i > 0) {
                 return new Result<>(false, StatusCode.ERROR, "该用户已存在");
             }
             biddingUser.setId(idWorker.nextId() + "");
@@ -184,7 +187,7 @@ public class BiddingUserService {
             biddingUserRole.setDelflag("0");
             insertRole = biddingUserRoleMapper.insert(biddingUserRole);
         } catch (Exception e) {
-            log.error(e.toString(),e);
+            log.error(e.toString(), e);
             return new Result<>(false, StatusCode.ERROR, "呀! 服务器开小差了~");
         }
         if (insertRole > 0 && insertUser > 0) {
@@ -216,7 +219,7 @@ public class BiddingUserService {
             biddingUserRole.setDelflag("0");
             insertRole = biddingUserRoleMapper.insert(biddingUserRole);
         } catch (Exception e) {
-            log.error(e.toString(),e);
+            log.error(e.toString(), e);
             return new Result<>(false, StatusCode.ERROR, "呀! 服务器开小差了~");
         }
         if (insertRole > 0 && insertUser > 0) {
@@ -227,25 +230,26 @@ public class BiddingUserService {
 
     /**
      * 根据ID删除用户信息
+     *
      * @param id
      * @return
      */
     public Result deleteById(String id) {
         try {
-            BiddingUser biddingUser=new BiddingUser();
+            BiddingUser biddingUser = new BiddingUser();
             biddingUser.setId(id);
             biddingUser.setDelflag("0");
             int i = biddingUserMapper.selectCount(biddingUser);
-            if (i<=0){
+            if (i <= 0) {
                 return new Result<>(false, StatusCode.ERROR, "该记录不存在");
             }
             biddingUser.setDelflag("1");
             int i1 = biddingUserMapper.updateByPrimaryKeySelective(biddingUser);
-            if (i1>0){
+            if (i1 > 0) {
                 return new Result<>(true, StatusCode.OK, "删除成功");
             }
         } catch (Exception e) {
-            log.error(e.toString(),e);
+            log.error(e.toString(), e);
             return new Result<>(false, StatusCode.ERROR, "呀! 服务器开小差了~");
         }
         return new Result<>(false, StatusCode.ERROR, "删除失败");
@@ -253,6 +257,7 @@ public class BiddingUserService {
 
     /**
      * 根据IDS批量删除用户信息
+     *
      * @param ids
      * @return
      */
@@ -260,12 +265,12 @@ public class BiddingUserService {
         String[] split = ids.split(",");
         try {
             for (int i = 0; i < split.length; i++) {
-                String id=split[i];
-                BiddingUser biddingUser=new BiddingUser();
+                String id = split[i];
+                BiddingUser biddingUser = new BiddingUser();
                 biddingUser.setId(id);
                 biddingUser.setDelflag("0");
                 int j = biddingUserMapper.selectCount(biddingUser);
-                if (j<=0){
+                if (j <= 0) {
                     return new Result<>(false, StatusCode.ERROR, "有记录不存在");
                 }
                 biddingUser.setDelflag("1");
@@ -274,13 +279,14 @@ public class BiddingUserService {
             return new Result<>(true, StatusCode.OK, "删除成功");
 
         } catch (Exception e) {
-            log.error(e.toString(),e);
+            log.error(e.toString(), e);
             return new Result<>(false, StatusCode.ERROR, "呀! 服务器开小差了~");
         }
     }
 
     /**
      * 用户登录
+     *
      * @param map
      * @return
      */
@@ -289,20 +295,20 @@ public class BiddingUserService {
             String userId = map.get("userId").toString();
             String password = map.get("password").toString();
             BiddingUser biddingUser = biddingUserMapper.selectByPrimaryKey(userId);
-            if (biddingUser==null||biddingUser.getDelflag().equals("1")||biddingUser.getStatus().equals("1")){
+            if (biddingUser == null || biddingUser.getDelflag().equals("1") || biddingUser.getStatus().equals("1")) {
                 return new Result<>(false, StatusCode.ERROR, "账号不存在或未启用，请联系管理员");
             }
             //给用户输入的密码加密
-            Md5Hash md5HashPassword = new Md5Hash(password,biddingUser.getPhoneNumber());
+            Md5Hash md5HashPassword = new Md5Hash(password, biddingUser.getPhoneNumber());
             //迭代一次
             md5HashPassword.setIterations(1);
 
             //开始比较用户输入的密码加密后是否与数据库里存储的加密密码一致
-            if ((md5HashPassword.toString()).equals(biddingUser.getPassword())){
+            if ((md5HashPassword.toString()).equals(biddingUser.getPassword())) {
                 //密码正确
                 BiddingUserRole biddingUserRole = biddingUserRoleMapper.selectByUserId(biddingUser.getId());
                 BiddingRole biddingRole = biddingRoleMapper.selectByPrimaryKey(biddingUserRole.getRoleId());
-                BiddingLoginUser biddingLoginUser=new BiddingLoginUser();
+                BiddingLoginUser biddingLoginUser = new BiddingLoginUser();
                 biddingLoginUser.setId(biddingUser.getId());
                 biddingLoginUser.setDelflag(biddingUser.getDelflag());
                 biddingLoginUser.setDept(biddingUser.getDept());
@@ -316,36 +322,72 @@ public class BiddingUserService {
                 biddingLoginUser.setRoleName(biddingRole.getName());
 
 
-                if (biddingUserRole.getRoleId().equals("1")){
-                    List<BiddingUserFramework>  biddingUserFrameworks=biddingUserFrameworkMapper.selectByGraParent(userId);
-                    if (biddingUserFrameworks!=null&&biddingUserFrameworks.size()>0){
+                if (biddingUserRole.getRoleId().equals("1")) {
+                    List<BiddingUserFramework> biddingUserFrameworks = biddingUserFrameworkMapper.selectByGraParent(userId);
+                    if (biddingUserFrameworks != null && biddingUserFrameworks.size() > 0) {
                         //大区经理不空岗，不可以创建项目
                         biddingLoginUser.setIsEmpty("1");
-                    }else {
+                    } else {
                         //大区经理空岗 可以创建项目
                         biddingLoginUser.setIsEmpty("0");
                     }
                 }
 
-                if (biddingUserRole.getRoleId().equals("2")){
-                    List<BiddingUserFramework>  biddingUserFrameworks=biddingUserFrameworkMapper.selectByParent(userId);
-                    if (biddingUserFrameworks!=null&&biddingUserFrameworks.size()>0){
+                if (biddingUserRole.getRoleId().equals("2")) {
+                    List<BiddingUserFramework> biddingUserFrameworks = biddingUserFrameworkMapper.selectByParent(userId);
+                    if (biddingUserFrameworks != null && biddingUserFrameworks.size() > 0) {
                         //商务经理不空岗，不可以创建项目
                         biddingLoginUser.setIsEmpty("1");
-                    }else {
+                    } else {
                         //商务经理空岗 可以创建项目
                         biddingLoginUser.setIsEmpty("0");
                     }
                 }
                 // 登陆成功，返回令牌给用户
-                String token = jwtUtil.createJWT(biddingUser.getId(),biddingUser.getPhoneNumber());
+                String token = jwtUtil.createJWT(biddingUser.getId(), biddingUser.getPhoneNumber());
                 biddingLoginUser.setToken(token);
-                return new Result<>(true, StatusCode.OK, "登录成功",biddingLoginUser);
+                return new Result<>(true, StatusCode.OK, "登录成功", biddingLoginUser);
+            }
+        } catch (Exception e) {
+            log.error(e.toString(), e);
+            return new Result<>(false, StatusCode.ERROR, "呀! 服务器开小差了~");
+        }
+        return new Result<>(false, StatusCode.ERROR, "登录失败，请联系管理员");
+    }
+
+    public Result changePassword(Map map, String userId) {
+        try {
+            String oldPassword = map.get("oldPassword").toString();
+            String newPassword = map.get("newPassword").toString();
+            String conPassword = map.get("conPassword").toString();
+            BiddingUser biddingUser = biddingUserMapper.selectByPrimaryKey(userId);
+            if (biddingUser == null || biddingUser.getDelflag().equals("1") || biddingUser.getStatus().equals("1")) {
+                return new Result<>(false, StatusCode.ERROR, "账号不存在或未启用，请联系管理员");
+            }
+            //给用户输入的密码加密
+            Md5Hash md5HashPassword = new Md5Hash(oldPassword, biddingUser.getPhoneNumber());
+            //迭代一次
+            md5HashPassword.setIterations(1);
+            //开始比较用户输入的密码加密后是否与数据库里存储的加密密码一致
+            if ((md5HashPassword.toString()).equals(biddingUser.getPassword())) {
+                if (!newPassword.equals(conPassword)) {
+                    return new Result<>(false, StatusCode.ERROR, "两次密码输入不一致");
+                }
+                if (newPassword.equals(oldPassword)) {
+                    return new Result<>(false, StatusCode.ERROR, "新密码与旧密码一致");
+                }
+                //给用户输入的密码加密
+                Md5Hash md5HashNewPassword = new Md5Hash(newPassword, biddingUser.getPhoneNumber());
+                biddingUser.setPassword(md5HashNewPassword.toString());
+                int i = biddingUserMapper.updateByPrimaryKeySelective(biddingUser);
+                if (i > 0) {
+                    return new Result<>(true, StatusCode.OK, "密码修改成功");
+                }
             }
         } catch (Exception e) {
             log.error(e.toString(),e);
             return new Result<>(false, StatusCode.ERROR, "呀! 服务器开小差了~");
         }
-        return new Result<>(false, StatusCode.ERROR, "登录失败，请联系管理员");
+        return new Result<>(false, StatusCode.ERROR, "密码修改失败");
     }
 }
