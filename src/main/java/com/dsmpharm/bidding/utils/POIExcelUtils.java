@@ -44,7 +44,7 @@ public class POIExcelUtils {
     /**表头行*/
     private HSSFRow tableHeadRow;
     /**工作薄自适应宽度倍数因子*/
-    private final double SHEETWIDTHMULTIPLEFACTOR = 1.1211;
+    private final double SHEETWIDTHMULTIPLEFACTOR = 1.2211;
     /**表格数据样式*/
     private HSSFCellStyle tabDataStyle;
     /**Excel文档对象*/
@@ -505,6 +505,7 @@ public class POIExcelUtils {
         wb = new HSSFWorkbook();
         if(!isEmpty(sheetNameArr) && sheetNameArr.length>0 && !isEmpty(tableTitleArr) && tableTitleArr.length>0){
             for(int i = 0;i<sheetNameArr.length;i++){
+
                 /**创建一个sheet页*/
                 st = wb.createSheet(sheetNameArr[i]);
                 /**表格标题样式**/
@@ -537,4 +538,57 @@ public class POIExcelUtils {
             }
         }
     }
+//使用方法
+    ////多个sheet页同时导出
+    //String DBType = "SQLServer2008";
+    //List<Map> queryList = biddingSettingsExtraMapper.selectByProjectId(projectId);
+    //List<Map> queryList2 = biddingSettingsExtraMapper.selectByProjectId(projectId);
+    //String docPath1 = uploadBase+projectId+"/" ;
+    //File docPath = new File(docPath1);
+    //if (!docPath.exists() && !docPath.isDirectory()) {
+    //    docPath.mkdirs();
+    //}
+    //String exportFilePath3 = uploadBase+projectId+"/text.xls";
+    //String[] sheetNameArr = {"用户信息","学生信息"};
+    //String[] tableTitleArr = {"用户信息表","学生信息表"};
+    //String[] headTablesColumnsNameArr = {"ID,名称,属性值","ID,名称,属性值"};
+    //String[] tablesColumnNameArr = {"id,name,value","id,name,value"};
+    //List<Object> list = new ArrayList<Object>();
+    //list.add(queryList);
+    //list.add(queryList2);
+    ////new POIExcelUtils(exportFilePath3,sheetNameArr,tablesColumnArr,list);
+    //POIExcelUtils poiExcel = new POIExcelUtils(sheetNameArr,tableTitleArr,headTablesColumnsNameArr,list,tablesColumnNameArr);
+    //poiExcel.excelDataExport(exportFilePath3);
+    //return null;
+    //单个sheet页导出
+	/*
+	//sheet页的名字
+	String sheetName = "用户列表";
+	//表格标题名
+	String tableTitle = "用户信息表";
+	//表头列名数组
+	String[] headTableColumnsNameArr = {"用户名","密码","年龄","性别","手机号","邮箱"};
+	String sql = "select * from userinfo";
+	String DBType = "SQLServer2008";
+	List<UserInfo> queryList = dBHandleUtils.findAll(sql, DBType, UserInfo.class);
+	String[] columnNameArr = {"userName","password","age","sex","tel","email"};
+	POIExcelUtils poiExcel = new POIExcelUtils(sheetName,tableTitle,headTableColumnsNameArr,queryList,columnNameArr);
+	//设置导出路径
+	String exportFilePath = "C:\\Users\\Administrator\\Desktop\,est\\userinfo.xls";
+	poiExcel.excelDataExport(exportFilePath);
+
+	//sheet页的名字
+	String sheetName2 = "学生列表";
+	//表格标题名
+	String tableTitle2 = "学生信息表";
+	//表头列名数组
+	String[] headTableColumnsNameArr2 = {"学号","姓名","年龄","性别"};
+	String sql2 = "select * from studentinfo";
+	List<StudentInfo> queryList2 = dBHandleUtils.findAll(sql2, DBType, StudentInfo.class);
+	String[] columnNameArr2 = {"sid","studName","age","sex"};
+	poiExcel = new POIExcelUtils(sheetName2,tableTitle2,headTableColumnsNameArr2,queryList2,columnNameArr2);
+	//设置导出路径
+	String exportFilePath2 = "C:\\Users\\Administrator\\Desktop\,est\\student.xls";
+	poiExcel.excelDataExport(exportFilePath2);
+	*/
 }

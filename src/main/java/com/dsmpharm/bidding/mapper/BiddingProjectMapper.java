@@ -1,10 +1,11 @@
 package com.dsmpharm.bidding.mapper;
 
+import com.dsmpharm.bidding.entity.BiddingDocInterpretationDo;
+import com.dsmpharm.bidding.entity.BiddingProjectBulidDo;
 import com.dsmpharm.bidding.pojo.*;
 import org.apache.ibatis.annotations.Param;
 import tk.mybatis.mapper.common.Mapper;
 
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -119,46 +120,46 @@ public interface BiddingProjectMapper extends Mapper<BiddingProject> {
      * @param projectId
      * @return
      */
-    List<LinkedHashMap> selectBuildList(@Param("projectId") String projectId);
+    List<BiddingProjectBulidDo> selectBuildList(@Param("projectId") String projectId);
     /**
      * 查询文件解读
      * @param projectId
      * @return
      */
-    List<Map> selectInterpretationList(@Param("projectId") String projectId);
+    List<BiddingDocInterpretationDo> selectInterpretationList(@Param("projectId") String projectId);
 
     /**
      * 查询竞品收集
      * @param projectId
      * @return
      */
-    List<Map> selectProCollectionList(@Param("projectId") String projectId);
+    List<BiddingProductCollection> selectProCollectionList(@Param("projectId") String projectId);
 
     /**
      * 查询策略分析
      * @param projectId
      * @return
      */
-    List<Map> selectStrategyAnalysisList(@Param("projectId") String projectId);
+    List<BiddingStrategyAnalysis> selectStrategyAnalysisList(@Param("projectId") String projectId);
 
     /**
      * 查询信息填报
      * @param projectId
      * @return
      */
-    List<Map> selectInfoFillingList(@Param("projectId") String projectId);
+    List<BiddingInfoFilling> selectInfoFillingList(@Param("projectId") String projectId);
 
     /**
      * 官方公告
      * @param projectId
      * @return
      */
-    List<Map> selectOfficialNoticeList(@Param("projectId")String projectId);
+    List<BiddingOfficialNotice> selectOfficialNoticeList(@Param("projectId")String projectId);
 
     /**
      * 项目总结
      * @param projectId
      * @return
      */
-    List<Map> selectProjectSummaryList(@Param("projectId")String projectId);
+    List<BiddingProjectSummary> selectProjectSummaryList(@Param("projectId")String projectId);
 }

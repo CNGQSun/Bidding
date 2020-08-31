@@ -112,9 +112,9 @@ public class BiddingPriceInfoController {
 	@ApiImplicitParams({
 			@ApiImplicitParam(name = "projectId", value = "项目ID", required = true, paramType = "query", dataType = "String"),
 	})
-	@PostMapping(value = "/export")
-	public Result exportProject(HttpServletRequest request, HttpServletResponse response,@RequestParam Map map) {
-		Result result = biddingPriceInfoService.exportProject(map);
+	@GetMapping(value = "/export")
+	public Result exportProject(HttpServletRequest request, HttpServletResponse response) {
+		Result result = biddingPriceInfoService.exportProject(response);
 		return result;
 	}
 
