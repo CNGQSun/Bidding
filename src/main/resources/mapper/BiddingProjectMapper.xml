@@ -255,32 +255,32 @@ where bp.id=#{projectId}
         LEFT JOIN bidding_doc_interpretation bdi on bdi.id=bp.doc_interpretation_id
         where bp.id=#{projectId}
     </select>
-    <select id="selectProCollectionList" resultType="com.dsmpharm.bidding.pojo.BiddingProductCollection">
+    <select id="selectProCollectionList" resultType="com.dsmpharm.bidding.entity.BiddingProductCollectionDo">
     SELECT DISTINCT bpc.*
     FROM bidding_project bp
     LEFT JOIN bidding_product_collection bpc on bpc.id=bp.product_collection_id
     where bp.id=#{projectId}
     </select>
-    <select id="selectStrategyAnalysisList" resultType="com.dsmpharm.bidding.pojo.BiddingStrategyAnalysis">
+    <select id="selectStrategyAnalysisList" resultType="com.dsmpharm.bidding.entity.BiddingStrategyAnalysisDo">
         SELECT DISTINCT bsa.*
         FROM bidding_project bp
         LEFT JOIN bidding_strategy_analysis bsa on bsa.id=bp.strategy_analysis_id
         where bp.id=#{projectId}
     </select>
-    <select id="selectInfoFillingList" resultType="com.dsmpharm.bidding.pojo.BiddingInfoFilling">
+    <select id="selectInfoFillingList" resultType="com.dsmpharm.bidding.entity.BiddingInfoFillingDo">
           SELECT DISTINCT bif.*
   FROM bidding_project bp
   LEFT JOIN bidding_info_filling bif on bif.id=bp.info_filling_id
   where bp.id=#{projectId}
     </select>
-    <select id="selectOfficialNoticeList" resultType="com.dsmpharm.bidding.pojo.BiddingOfficialNotice">
+    <select id="selectOfficialNoticeList" resultType="com.dsmpharm.bidding.entity.BiddingOfficialNoticeDo">
           SELECT DISTINCT bon.*
   FROM bidding_project bp
   LEFT JOIN bidding_official_notice bon on bon.id=bp.official_notice_id
   where bp.id=#{projectId}
     </select>
 
-    <select id="selectProjectSummaryList" resultType="com.dsmpharm.bidding.pojo.BiddingProjectSummary">
+    <select id="selectProjectSummaryList" resultType="com.dsmpharm.bidding.entity.BiddingProjectSummaryDo">
     SELECT DISTINCT bon.*
     FROM bidding_project bp
     LEFT JOIN bidding_project_summary bon on bon.id=bp.project_summary_id

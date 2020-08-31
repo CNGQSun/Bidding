@@ -1,7 +1,6 @@
 package com.dsmpharm.bidding.mapper;
 
-import com.dsmpharm.bidding.entity.BiddingDocInterpretationDo;
-import com.dsmpharm.bidding.entity.BiddingProjectBulidDo;
+import com.dsmpharm.bidding.entity.*;
 import com.dsmpharm.bidding.pojo.*;
 import org.apache.ibatis.annotations.Param;
 import tk.mybatis.mapper.common.Mapper;
@@ -133,33 +132,33 @@ public interface BiddingProjectMapper extends Mapper<BiddingProject> {
      * @param projectId
      * @return
      */
-    List<BiddingProductCollection> selectProCollectionList(@Param("projectId") String projectId);
+    List<BiddingProductCollectionDo> selectProCollectionList(@Param("projectId") String projectId);
 
     /**
      * 查询策略分析
      * @param projectId
      * @return
      */
-    List<BiddingStrategyAnalysis> selectStrategyAnalysisList(@Param("projectId") String projectId);
+    List<BiddingStrategyAnalysisDo> selectStrategyAnalysisList(@Param("projectId") String projectId);
 
     /**
      * 查询信息填报
      * @param projectId
      * @return
      */
-    List<BiddingInfoFilling> selectInfoFillingList(@Param("projectId") String projectId);
+    List<BiddingInfoFillingDo> selectInfoFillingList(@Param("projectId") String projectId);
 
     /**
      * 官方公告
      * @param projectId
      * @return
      */
-    List<BiddingOfficialNotice> selectOfficialNoticeList(@Param("projectId")String projectId);
+    List<BiddingOfficialNoticeDo> selectOfficialNoticeList(@Param("projectId")String projectId);
 
     /**
      * 项目总结
      * @param projectId
      * @return
      */
-    List<BiddingProjectSummary> selectProjectSummaryList(@Param("projectId")String projectId);
+    List<BiddingProjectSummaryDo> selectProjectSummaryList(@Param("projectId")String projectId);
 }
