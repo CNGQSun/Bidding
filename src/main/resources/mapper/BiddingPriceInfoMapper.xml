@@ -11,11 +11,12 @@
         select * from bidding_price_info
         where pro_id=#{proId} and product_en=#{enName} and delflag='0' and is_bid='0'
     </select>
-    <select id="selectByproductEn" resultType="com.dsmpharm.bidding.pojo.BiddingPriceInfo">
- 		        SELECT bpi.*,bp.pro_name proName,bpd.name productName FROM bidding_price_info bpi
+    <select id="selectByproductEn" resultType="java.util.Map">
+ 		        SELECT bpi.*,bp.pro_name proName,bpd.name productName
+ 		        FROM bidding_price_info bpi
  		        LEFT JOIN bidding_province bp on bp.id=bpi.pro_id
  		        LEFT JOIN bidding_user bu on bu.id=bpi.user_id
  		        LEFT JOIN bidding_product bpd on bpd.en_name=bpi.product_en
- 		        WHERE product_en=#{productEnName} AND is_bid='0'
+ 		        WHERE product_en=#{productEnName}
     </select>
 </mapper>

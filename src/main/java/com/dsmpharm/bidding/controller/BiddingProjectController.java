@@ -17,7 +17,6 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.*;
 import java.util.List;
 import java.util.Map;
 
@@ -113,6 +112,28 @@ public class BiddingProjectController {
         String authorization = request.getHeader("Authorization");
         String userId = jwtUtil.parseJWT(authorization).getId();
         Result result = biddingProjectService.listDeal(map, userId);
+        return result;
+    }
+
+    /**
+     * GA查看项目
+     *
+     * @param request
+     * @param map
+     * @return
+     */
+    @ApiOperation(value = "分页、条件查询全部项目（GA或其他可以查看所有项目的角色调用）")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "currentPage", value = "当前页", required = true, paramType = "query", dataType = "String"),
+            @ApiImplicitParam(name = "pageSize", value = "每页展示条数", required = true, paramType = "query", dataType = "String"),
+            @ApiImplicitParam(name = "name", value = "项目名", required = true, paramType = "query", dataType = "String"),
+            @ApiImplicitParam(name = "status", value = "项目状态", required = true, paramType = "query", dataType = "String"),
+    })
+    @PostMapping(value = "/list/ga")
+    public Result findListGa(HttpServletRequest request, @RequestParam Map map) {
+        String authorization = request.getHeader("Authorization");
+        String userId = jwtUtil.parseJWT(authorization).getId();
+        Result result = biddingProjectService.findListGa(map, userId);
         return result;
     }
 
@@ -673,51 +694,24 @@ public class BiddingProjectController {
         return result;
     }
 
+    /**
+     * 下载文件
+     * @param response
+     * @param filePath
+     * @param projectId
+     * @return
+     */
     @ApiOperation(value = "下载文件")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "filePath", value = "文件名", required = true, paramType = "query", dataType = "String"),
+            @ApiImplicitParam(name = "projectId", value = "项目ID", required = true, paramType = "query", dataType = "String"),
+            @ApiImplicitParam(name = "projectPhaseId", value = "下载文件所处阶段 1,2,3,4,5,6,7 申诉函下载对应的是阶段5", required = true, paramType = "query", dataType = "String"),
     })
     @PostMapping("/downloadFile")
-    private String downloadFile(HttpServletResponse response, @RequestParam String filePath) {
+    private Result downloadFile(HttpServletResponse response, @RequestParam String filePath,@RequestParam String projectId,@RequestParam String projectPhaseId) {
 
-        File file = new File(filePath);
-        String fileName = file.getName();
-        if (file.exists()) {
-            response.setContentType("application/force-download");// 设置强制下载不打开
-            response.addHeader("Content-Disposition", "attachment;fileName=" + fileName);
-            byte[] buffer = new byte[1024];
-            FileInputStream fis = null;
-            BufferedInputStream bis = null;
-            try {
-                fis = new FileInputStream(file);
-                bis = new BufferedInputStream(fis);
-                OutputStream outputStream = response.getOutputStream();
-                int i = bis.read(buffer);
-                while (i != -1) {
-                    outputStream.write(buffer, 0, i);
-                    i = bis.read(buffer);
-                }
-                return "下载成功";
-            } catch (Exception e) {
-                log.error(e.toString(),e);
-            } finally {
-                if (bis != null) {
-                    try {
-                        bis.close();
-                    } catch (IOException e) {
-                        log.error(e.toString(),e);
-                    }
-                }
-                if (fis != null) {
-                    try {
-                        fis.close();
-                    } catch (IOException e) {
-                        log.error(e.toString(),e);
-                    }
-                }
-            }
-        }
-        return "下载失败";
+        Result result=biddingProjectService.downloadFile(response,filePath,projectId,projectPhaseId);
+        return result;
     }
 
     /**

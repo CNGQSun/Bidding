@@ -44,7 +44,7 @@ public class POIExcelUtils {
     /**表头行*/
     private HSSFRow tableHeadRow;
     /**工作薄自适应宽度倍数因子*/
-    private final double SHEETWIDTHMULTIPLEFACTOR = 1.2211;
+    private final double SHEETWIDTHMULTIPLEFACTOR = 1.8211;
     /**表格数据样式*/
     private HSSFCellStyle tabDataStyle;
     /**Excel文档对象*/
@@ -168,7 +168,10 @@ public class POIExcelUtils {
                             //设置私有属性可操作
                             f.setAccessible(true);
                             //获取字段的值
-                            String value = f.get(t).toString();
+                            String value="";
+                            if (f.get(t)!=null){
+                                value = f.get(t).toString();
+                            }
                             dataCell = tableDataRow.createCell(i);
                             //设置单元格数据
                             dataCell.setCellValue(value);

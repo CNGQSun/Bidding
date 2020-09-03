@@ -13,8 +13,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
-import java.io.File;
-import java.io.IOException;
+import javax.servlet.http.HttpServletResponse;
+import java.io.*;
 import java.util.*;
 
 /**
@@ -130,7 +130,7 @@ public class BiddingProjectService {
             //将内容设置数据备份到内容设置备份表
             biddingContentBakMapper.copySetting(projectPhaseId, versionNum);
             //判断文件夹是否存在，不存在则新建
-            String docPath1 = uploadBase+biddingProject.getId()+"/立项/" ;
+            String docPath1 = uploadBase + biddingProject.getId() + "/立项/";
             File docPath = new File(docPath1);
             if (!docPath.exists() && !docPath.isDirectory()) {
                 docPath.mkdirs();
@@ -344,7 +344,7 @@ public class BiddingProjectService {
                     appFlowApprovalMapper.insert(appFlowApproval);
                 }
                 //如果是0说明要提交审批，因此需要将该项目之前的审批数据‘删除’
-                    appFlowApprovalMapper.updateApp(appFlowApproval.getUserId(),biddingProject.getId());
+                appFlowApprovalMapper.updateApp(appFlowApproval.getUserId(), biddingProject.getId());
                 //如果是保存
             } else if (isSubmt.equals("1")) {
                 biddingProjectBulid.setGoStatus("2");//0 进行中 1 未进行 2 草稿 3 待审核 4 审核通过 5 审核驳回 6跳过此阶段
@@ -408,10 +408,10 @@ public class BiddingProjectService {
             biddingProjectBulidMapper.insert(biddingProjectBulid);
             return new Result<>(true, StatusCode.OK, "保存成功");
         } catch (IllegalStateException e) {
-            log.error(e.toString(),e);
+            log.error(e.toString(), e);
             return new Result<>(false, StatusCode.ERROR, "呀! 服务器开小差了~");
         } catch (NumberFormatException e) {
-            log.error(e.toString(),e);
+            log.error(e.toString(), e);
             return new Result<>(false, StatusCode.ERROR, "呀! 服务器开小差了~");
         }
     }
@@ -441,23 +441,27 @@ public class BiddingProjectService {
             }
             String projectPhaseId = map.get("projectPhaseId").toString();
             //如果角色是GA，那他只有填写意见的权限
-            //if (biddingUserRole.getRoleId().equals("5")){
-            //
-            //}
+            if (biddingUserRole.getRoleId().equals("5")) {
+                String suggestion = map.get("suggestion").toString();
+                biddingProjectBulid.setSuggestion(suggestion);
+                //将立项数据插入
+                biddingProjectBulidMapper.updateByPrimaryKeySelective(biddingProjectBulid);
+                return new Result<>(true, StatusCode.OK, "修改成功");
+            }
             String versionNum = biddingProject.getVersionNum();
             ////设置所有内容设置版本号
             //int i = biddingContentSettingsMapper.updateAllNum(versionNum, projectPhaseId);
             ////将内容设置数据备份到内容设置备份表
             //biddingContentBakMapper.copySetting(projectPhaseId, versionNum);
             //判断文件夹是否存在，不存在则新建
-            String docPath1 = uploadBase+biddingProject.getId()+"/立项/";
+            String docPath1 = uploadBase + biddingProject.getId() + "/立项/";
             File docPath = new File(docPath1);
             if (!docPath.exists() && !docPath.isDirectory()) {
                 docPath.mkdirs();
             }
             //获取内容设置表中的字段信息
             //List<BiddingContentBak> settingsList = biddingContentBakMapper.selectByPhaseId(projectPhaseId, versionNum);
-            List<Map> settingsList = biddingContentBakMapper.selectByUpdate1(projectPhaseId, versionNum,biddingProject.getId());
+            List<Map> settingsList = biddingContentBakMapper.selectByUpdate1(projectPhaseId, versionNum, biddingProject.getId());
             for (Map map1 : settingsList) {
                 if ((map.get(map1.get("enName"))) != null) {
                     String value = map.get(map1.get("enName").toString());
@@ -697,7 +701,7 @@ public class BiddingProjectService {
                     appFlowApprovalMapper.insert(appFlowApproval);
                 }
                 //如果是0说明要提交审批，因此需要将该项目之前的审批数据‘删除’
-                appFlowApprovalMapper.updateApp(appFlowApproval.getUserId(),biddingProject.getId());
+                appFlowApprovalMapper.updateApp(appFlowApproval.getUserId(), biddingProject.getId());
                 //如果是保存
             } else if (isSubmt.equals("1")) {
                 biddingProjectBulid.setGoStatus("2");//0 进行中 1 未进行 2 草稿 3 待审核 4 审核通过 5 审核驳回 6跳过此阶段
@@ -771,10 +775,10 @@ public class BiddingProjectService {
             biddingProjectBulidMapper.updateByPrimaryKeySelective(biddingProjectBulid);
             return new Result<>(true, StatusCode.OK, "修改成功");
         } catch (IllegalStateException e) {
-            log.error(e.toString(),e);
+            log.error(e.toString(), e);
             return new Result<>(false, StatusCode.ERROR, "呀! 服务器开小差了~");
         } catch (NumberFormatException e) {
-            log.error(e.toString(),e);
+            log.error(e.toString(), e);
             return new Result<>(false, StatusCode.ERROR, "呀! 服务器开小差了~");
         }
     }
@@ -842,17 +846,17 @@ public class BiddingProjectService {
                 }
                 if (biddingProjectBulid != null) {
                     map1.put("goStatus", biddingProjectBulid.getGoStatus());
-                }else if (biddingDocInterpretation != null) {
+                } else if (biddingDocInterpretation != null) {
                     map1.put("goStatus", biddingDocInterpretation.getGoStatus());
-                }else if (biddingProductCollection != null) {
+                } else if (biddingProductCollection != null) {
                     map1.put("goStatus", biddingProductCollection.getGoStatus());
-                }else if (biddingStrategyAnalysis != null) {
+                } else if (biddingStrategyAnalysis != null) {
                     map1.put("goStatus", biddingStrategyAnalysis.getGoStatus());
-                }else if (biddingInfoFilling != null) {
+                } else if (biddingInfoFilling != null) {
                     map1.put("goStatus", biddingInfoFilling.getGoStatus());
-                }else if (biddingOfficialNotice != null) {
+                } else if (biddingOfficialNotice != null) {
                     map1.put("goStatus", biddingOfficialNotice.getGoStatus());
-                }else if (biddingProjectSummary != null) {
+                } else if (biddingProjectSummary != null) {
                     map1.put("goStatus", biddingProjectSummary.getGoStatus());
                 }
             }
@@ -861,7 +865,7 @@ public class BiddingProjectService {
             PageResult pageResult = new PageResult(pageInfo.getTotal(), maps);
             return new Result<>(true, StatusCode.OK, "查询成功", pageResult);
         } catch (NumberFormatException e) {
-            log.error(e.toString(),e);
+            log.error(e.toString(), e);
             return new Result<>(false, StatusCode.ERROR, "呀! 服务器开小差了~");
         }
     }
@@ -877,7 +881,7 @@ public class BiddingProjectService {
             List<BiddingContentSettings> settingsList = biddingContentSettingsMapper.selectByPhaseId(projectPhaseId);
             return new Result<>(true, StatusCode.OK, "查询成功", settingsList);
         } catch (Exception e) {
-            log.error(e.toString(),e);
+            log.error(e.toString(), e);
             return new Result<>(false, StatusCode.ERROR, "呀! 服务器开小差了~");
         }
     }
@@ -945,17 +949,17 @@ public class BiddingProjectService {
                 }
                 if (biddingProjectBulid != null) {
                     map1.put("goStatus", biddingProjectBulid.getGoStatus());
-                }else if (biddingDocInterpretation != null) {
+                } else if (biddingDocInterpretation != null) {
                     map1.put("goStatus", biddingDocInterpretation.getGoStatus());
-                }else if (biddingProductCollection != null) {
+                } else if (biddingProductCollection != null) {
                     map1.put("goStatus", biddingProductCollection.getGoStatus());
-                }else if (biddingStrategyAnalysis != null) {
+                } else if (biddingStrategyAnalysis != null) {
                     map1.put("goStatus", biddingStrategyAnalysis.getGoStatus());
-                }else if (biddingInfoFilling != null) {
+                } else if (biddingInfoFilling != null) {
                     map1.put("goStatus", biddingInfoFilling.getGoStatus());
-                }else if (biddingOfficialNotice != null) {
+                } else if (biddingOfficialNotice != null) {
                     map1.put("goStatus", biddingOfficialNotice.getGoStatus());
-                }else if (biddingProjectSummary != null) {
+                } else if (biddingProjectSummary != null) {
                     map1.put("goStatus", biddingProjectSummary.getGoStatus());
                 }
             }
@@ -964,7 +968,7 @@ public class BiddingProjectService {
             PageResult pageResult = new PageResult(pageInfo.getTotal(), maps);
             return new Result<>(true, StatusCode.OK, "查询成功", pageResult);
         } catch (NumberFormatException e) {
-            log.error(e.toString(),e);
+            log.error(e.toString(), e);
             return new Result<>(false, StatusCode.ERROR, "呀! 服务器开小差了~");
         }
     }
@@ -1000,7 +1004,7 @@ public class BiddingProjectService {
             ////将内容设置数据备份到内容设置备份表
             //biddingContentBakMapper.copySetting(projectPhaseId, biddingProject1.getVersionNum());
             //判断文件夹是否存在，不存在则新建
-            String docPath1 = biddingProject1.getBasePath() +biddingProject1.getId()+"/文件解读/";
+            String docPath1 = biddingProject1.getBasePath() + biddingProject1.getId() + "/文件解读/";
             File docPath = new File(docPath1);
             if (!docPath.exists() && !docPath.isDirectory()) {
                 docPath.mkdirs();
@@ -1243,7 +1247,7 @@ public class BiddingProjectService {
                     appFlowApprovalMapper.insert(appFlowApproval);
                 }
                 //如果是0说明要提交审批，因此需要将该项目之前的审批数据‘删除’
-                appFlowApprovalMapper.updateApp(appFlowApproval.getUserId(),biddingProject1.getId());
+                appFlowApprovalMapper.updateApp(appFlowApproval.getUserId(), biddingProject1.getId());
             } else if (isSubmit.equals("1")) {
                 //0 进行中 1 未进行 2 草稿 3 待审核 4 审核通过 5 审核驳回 6跳过此阶段
                 biddingDocInterpretation.setGoStatus("2");
@@ -1299,7 +1303,7 @@ public class BiddingProjectService {
             biddingDocInterpretationMapper.insert(biddingDocInterpretation);
             return new Result<>(true, StatusCode.OK, "保存成功");
         } catch (NumberFormatException e) {
-            log.error(e.toString(),e);
+            log.error(e.toString(), e);
             return new Result<>(true, StatusCode.ERROR, "呀! 服务器开小差了~");
         }
     }
@@ -1335,6 +1339,15 @@ public class BiddingProjectService {
             if (biddingDocInterpretation == null) {
                 return new Result<>(false, StatusCode.ERROR, "该条记录不存在");
             }
+            if (biddingUserRole.getRoleId().equals("5")) {
+                String suggestion = map.get("suggestion").toString();
+                biddingDocInterpretation.setSuggestion(suggestion);
+                //将文件解读的数据插入
+                //******修改9开始******
+                biddingDocInterpretationMapper.updateByPrimaryKeySelective(biddingDocInterpretation);
+                //******修改9结束******
+                return new Result<>(true, StatusCode.OK, "修改成功");
+            }
             String versionNum = biddingProject1.getVersionNum();
             //*****修改1结束（新增）******
 
@@ -1345,7 +1358,7 @@ public class BiddingProjectService {
             //biddingContentBakMapper.copySetting(projectPhaseId, biddingProject1.getVersionNum());
             //******修改2结束（注释）**********
             //判断文件夹是否存在，不存在则新建
-            String docPath1 = biddingProject1.getBasePath() +biddingProject1.getId()+"/文件解读/";
+            String docPath1 = biddingProject1.getBasePath() + biddingProject1.getId() + "/文件解读/";
             File docPath = new File(docPath1);
             if (!docPath.exists() && !docPath.isDirectory()) {
                 docPath.mkdirs();
@@ -1388,7 +1401,7 @@ public class BiddingProjectService {
             //}
             //*******修改3结束（注释）*******
             //*******修改4开始（新增）*******
-            List<Map> settingsList = biddingContentBakMapper.selectByUpdate1(projectPhaseId, versionNum,biddingProject1.getId());
+            List<Map> settingsList = biddingContentBakMapper.selectByUpdate1(projectPhaseId, versionNum, biddingProject1.getId());
             for (Map map1 : settingsList) {
                 if ((map.get(map1.get("enName"))) != null) {
                     String value = map.get(map1.get("enName").toString());
@@ -1654,7 +1667,7 @@ public class BiddingProjectService {
                     appFlowApprovalMapper.insert(appFlowApproval);
                 }
                 //如果是0说明要提交审批，因此需要将该项目之前的审批数据‘删除’
-                appFlowApprovalMapper.updateApp(appFlowApproval.getUserId(),biddingProject1.getId());
+                appFlowApprovalMapper.updateApp(appFlowApproval.getUserId(), biddingProject1.getId());
             } else if (isSubmit.equals("1")) {
                 //0 进行中 1 未进行 2 草稿 3 待审核 4 审核通过 5 审核驳回 6跳过此阶段
                 biddingDocInterpretation.setGoStatus("2");
@@ -1715,7 +1728,7 @@ public class BiddingProjectService {
             //******修改9结束******
             return new Result<>(true, StatusCode.OK, "修改成功");
         } catch (NumberFormatException e) {
-            log.error(e.toString(),e);
+            log.error(e.toString(), e);
             return new Result<>(true, StatusCode.ERROR, "呀! 服务器开小差了~");
         }
     }
@@ -1750,7 +1763,7 @@ public class BiddingProjectService {
             ////将内容设置数据备份到内容设置备份表
             //biddingContentBakMapper.copySetting(projectPhaseId, biddingProject1.getVersionNum());
             //判断文件夹是否存在，不存在则新建
-            String docPath1 = biddingProject1.getBasePath() +biddingProject1.getId()+"/竞品收集/";
+            String docPath1 = biddingProject1.getBasePath() + biddingProject1.getId() + "/竞品收集/";
             File docPath = new File(docPath1);
             if (!docPath.exists() && !docPath.isDirectory()) {
                 docPath.mkdirs();
@@ -1898,7 +1911,7 @@ public class BiddingProjectService {
             biddingProductCollectionMapper.insert(biddingProductCollection);
             return new Result<>(true, StatusCode.OK, "保存成功");
         } catch (NumberFormatException e) {
-            log.error(e.toString(),e);
+            log.error(e.toString(), e);
             return new Result<>(true, StatusCode.ERROR, "呀! 服务器开小差了~");
         }
     }
@@ -1932,6 +1945,15 @@ public class BiddingProjectService {
             if (biddingProductCollection == null) {
                 return new Result<>(false, StatusCode.ERROR, "该条记录不存在");
             }
+            if (biddingUserRole.getRoleId().equals("5")) {
+                String suggestion = map.get("suggestion").toString();
+                biddingProductCollection.setSuggestion(suggestion);
+                //将文件解读的数据插入
+                //******修改9开始******
+                biddingProductCollectionMapper.updateByPrimaryKeySelective(biddingProductCollection);
+                //******修改9结束******
+                return new Result<>(true, StatusCode.OK, "修改成功");
+            }
             String versionNum = biddingProject1.getVersionNum();
             //*****修改1结束（新增）******
             ////修改对应阶段的内容设置的版本号
@@ -1939,7 +1961,7 @@ public class BiddingProjectService {
             ////将内容设置数据备份到内容设置备份表
             //biddingContentBakMapper.copySetting(projectPhaseId, biddingProject1.getVersionNum());
             //判断文件夹是否存在，不存在则新建
-            String docPath1 = biddingProject1.getBasePath() +biddingProject1.getId()+"/竞品收集/";
+            String docPath1 = biddingProject1.getBasePath() + biddingProject1.getId() + "/竞品收集/";
             File docPath = new File(docPath1);
             if (!docPath.exists() && !docPath.isDirectory()) {
                 docPath.mkdirs();
@@ -1980,7 +2002,7 @@ public class BiddingProjectService {
             //    }
             //}
             //*******修改4开始（新增）*******
-            List<Map> settingsList = biddingContentBakMapper.selectByUpdate1(projectPhaseId, versionNum,biddingProject1.getId());
+            List<Map> settingsList = biddingContentBakMapper.selectByUpdate1(projectPhaseId, versionNum, biddingProject1.getId());
             for (Map map1 : settingsList) {
                 if ((map.get(map1.get("enName"))) != null) {
                     String value = map.get(map1.get("enName").toString());
@@ -2121,7 +2143,7 @@ public class BiddingProjectService {
             biddingProductCollectionMapper.updateByPrimaryKeySelective(biddingProductCollection);
             return new Result<>(true, StatusCode.OK, "修改成功");
         } catch (NumberFormatException e) {
-            log.error(e.toString(),e);
+            log.error(e.toString(), e);
             return new Result<>(true, StatusCode.ERROR, "呀! 服务器开小差了~");
         }
     }
@@ -2156,7 +2178,7 @@ public class BiddingProjectService {
             ////将内容设置数据备份到内容设置备份表
             //biddingContentBakMapper.copySetting(projectPhaseId, biddingProject1.getVersionNum());
             //判断文件夹是否存在，不存在则新建
-            String docPath1 = biddingProject1.getBasePath() +biddingProject1.getId()+"/策略分析/";
+            String docPath1 = biddingProject1.getBasePath() + biddingProject1.getId() + "/策略分析/";
             File docPath = new File(docPath1);
             if (!docPath.exists() && !docPath.isDirectory()) {
                 docPath.mkdirs();
@@ -2518,7 +2540,7 @@ public class BiddingProjectService {
                     appFlowApprovalMapper.insert(appFlowApproval);
                 }
                 //如果是0说明要提交审批，因此需要将该项目之前的审批数据‘删除’
-                appFlowApprovalMapper.updateApp(appFlowApproval.getUserId(),biddingProject1.getId());
+                appFlowApprovalMapper.updateApp(appFlowApproval.getUserId(), biddingProject1.getId());
             } else if (isSubmit.equals("1")) {
                 //0 进行中 1 未进行 2 草稿 3 待审核 4 审核通过 5 审核驳回 6跳过此阶段
                 biddingStrategyAnalysis.setGoStatus("2");
@@ -2574,7 +2596,7 @@ public class BiddingProjectService {
             biddingStrategyAnalysisMapper.insert(biddingStrategyAnalysis);
             return new Result<>(true, StatusCode.OK, "保存成功");
         } catch (NumberFormatException e) {
-            log.error(e.toString(),e);
+            log.error(e.toString(), e);
             return new Result<>(true, StatusCode.ERROR, "呀! 服务器开小差了~");
         }
     }
@@ -2609,6 +2631,15 @@ public class BiddingProjectService {
             if (biddingStrategyAnalysis == null) {
                 return new Result<>(false, StatusCode.ERROR, "该条记录不存在");
             }
+            if (biddingUserRole.getRoleId().equals("5")) {
+                String suggestion = map.get("suggestion").toString();
+                biddingStrategyAnalysis.setSuggestion(suggestion);
+                //将文件解读的数据插入
+                //******修改9开始******
+                biddingStrategyAnalysisMapper.updateByPrimaryKeySelective(biddingStrategyAnalysis);
+                //******修改9结束******
+                return new Result<>(true, StatusCode.OK, "修改成功");
+            }
             String versionNum = biddingProject1.getVersionNum();
             //*****修改1结束（新增）******
             ////修改对应阶段的内容设置的版本号
@@ -2616,14 +2647,14 @@ public class BiddingProjectService {
             ////将内容设置数据备份到内容设置备份表
             //biddingContentBakMapper.copySetting(projectPhaseId, biddingProject1.getVersionNum());
             ////判断文件夹是否存在，不存在则新建
-            String docPath1 = biddingProject1.getBasePath() +biddingProject1.getId()+"/策略分析/";
+            String docPath1 = biddingProject1.getBasePath() + biddingProject1.getId() + "/策略分析/";
             File docPath = new File(docPath1);
             if (!docPath.exists() && !docPath.isDirectory()) {
                 docPath.mkdirs();
             }
             //获取内容设置表中的字段信息
             //*******修改4开始（新增）*******
-            List<Map> settingsList = biddingContentBakMapper.selectByUpdate1(projectPhaseId, versionNum,biddingProject1.getId());
+            List<Map> settingsList = biddingContentBakMapper.selectByUpdate1(projectPhaseId, versionNum, biddingProject1.getId());
             for (Map map1 : settingsList) {
                 if ((map.get(map1.get("enName"))) != null) {
                     String value = map.get(map1.get("enName").toString());
@@ -3006,7 +3037,7 @@ public class BiddingProjectService {
                     appFlowApprovalMapper.insert(appFlowApproval);
                 }
                 //如果是0说明要提交审批，因此需要将该项目之前的审批数据‘删除’
-                appFlowApprovalMapper.updateApp(appFlowApproval.getUserId(),biddingProject1.getId());
+                appFlowApprovalMapper.updateApp(appFlowApproval.getUserId(), biddingProject1.getId());
             } else if (isSubmit.equals("1")) {
                 //0 进行中 1 未进行 2 草稿 3 待审核 4 审核通过 5 审核驳回 6跳过此阶段
                 biddingStrategyAnalysis.setGoStatus("2");
@@ -3065,7 +3096,7 @@ public class BiddingProjectService {
             biddingStrategyAnalysisMapper.updateByPrimaryKeySelective(biddingStrategyAnalysis);
             return new Result<>(true, StatusCode.OK, "修改成功");
         } catch (NumberFormatException e) {
-            log.error(e.toString(),e);
+            log.error(e.toString(), e);
             return new Result<>(true, StatusCode.ERROR, "呀! 服务器开小差了~");
         }
     }
@@ -3100,7 +3131,7 @@ public class BiddingProjectService {
             ////将内容设置数据备份到内容设置备份表
             //biddingContentBakMapper.copySetting(projectPhaseId, biddingProject1.getVersionNum());
             //判断文件夹是否存在，不存在则新建
-            String docPath1 = biddingProject1.getBasePath() +biddingProject1.getId()+"/信息填报/";
+            String docPath1 = biddingProject1.getBasePath() + biddingProject1.getId() + "/信息填报/";
             File docPath = new File(docPath1);
             if (!docPath.exists() && !docPath.isDirectory()) {
                 docPath.mkdirs();
@@ -3415,7 +3446,7 @@ public class BiddingProjectService {
                     appFlowApprovalMapper.insert(appFlowApproval);
                 }
                 //如果是0说明要提交审批，因此需要将该项目之前的审批数据‘删除’
-                appFlowApprovalMapper.updateApp(appFlowApproval.getUserId(),biddingProject1.getId());
+                appFlowApprovalMapper.updateApp(appFlowApproval.getUserId(), biddingProject1.getId());
             } else if (isSubmit.equals("1")) {
                 //0 进行中 1 未进行 2 草稿 3 待审核 4 审核通过 5 审核驳回 6跳过此阶段
                 biddingInfoFilling.setGoStatus("2");
@@ -3470,7 +3501,7 @@ public class BiddingProjectService {
             biddingInfoFillingMapper.insert(biddingInfoFilling);
             return new Result<>(true, StatusCode.OK, "保存成功");
         } catch (NumberFormatException e) {
-            log.error(e.toString(),e);
+            log.error(e.toString(), e);
             return new Result<>(true, StatusCode.ERROR, "呀! 服务器开小差了~");
         }
     }
@@ -3505,6 +3536,15 @@ public class BiddingProjectService {
             if (biddingInfoFilling == null) {
                 return new Result<>(false, StatusCode.ERROR, "该条记录不存在");
             }
+            if (biddingUserRole.getRoleId().equals("5")) {
+                String suggestion = map.get("suggestion").toString();
+                biddingInfoFilling.setSuggestion(suggestion);
+                //将文件解读的数据插入
+                //******修改9开始******
+                biddingInfoFillingMapper.updateByPrimaryKeySelective(biddingInfoFilling);
+                //******修改9结束******
+                return new Result<>(true, StatusCode.OK, "修改成功");
+            }
             String versionNum = biddingProject1.getVersionNum();
             //*****修改1结束（新增）******
             ////修改对应阶段的内容设置的版本号
@@ -3512,14 +3552,14 @@ public class BiddingProjectService {
             ////将内容设置数据备份到内容设置备份表
             //biddingContentBakMapper.copySetting(projectPhaseId, biddingProject1.getVersionNum());
             //判断文件夹是否存在，不存在则新建
-            String docPath1 = biddingProject1.getBasePath() +biddingProject1.getId()+"/信息填报/";
+            String docPath1 = biddingProject1.getBasePath() + biddingProject1.getId() + "/信息填报/";
             File docPath = new File(docPath1);
             if (!docPath.exists() && !docPath.isDirectory()) {
                 docPath.mkdirs();
             }
             //获取内容设置表中的字段信息
             //*******修改4开始（新增）*******
-            List<Map> settingsList = biddingContentBakMapper.selectByUpdate1(projectPhaseId, versionNum,biddingProject1.getId());
+            List<Map> settingsList = biddingContentBakMapper.selectByUpdate1(projectPhaseId, versionNum, biddingProject1.getId());
             for (Map map1 : settingsList) {
                 if ((map.get(map1.get("enName"))) != null) {
                     String value = map.get(map1.get("enName").toString());
@@ -3854,7 +3894,7 @@ public class BiddingProjectService {
                     appFlowApprovalMapper.insert(appFlowApproval);
                 }
                 //如果是0说明要提交审批，因此需要将该项目之前的审批数据‘删除’
-                appFlowApprovalMapper.updateApp(appFlowApproval.getUserId(),biddingProject1.getId());
+                appFlowApprovalMapper.updateApp(appFlowApproval.getUserId(), biddingProject1.getId());
             } else if (isSubmit.equals("1")) {
                 //0 进行中 1 未进行 2 草稿 3 待审核 4 审核通过 5 审核驳回 6跳过此阶段
                 biddingInfoFilling.setGoStatus("2");
@@ -3912,7 +3952,7 @@ public class BiddingProjectService {
             biddingInfoFillingMapper.updateByPrimaryKeySelective(biddingInfoFilling);
             return new Result<>(true, StatusCode.OK, "修改成功");
         } catch (NumberFormatException e) {
-            log.error(e.toString(),e);
+            log.error(e.toString(), e);
             return new Result<>(true, StatusCode.ERROR, "呀! 服务器开小差了~");
         }
     }
@@ -3947,7 +3987,7 @@ public class BiddingProjectService {
             ////将内容设置数据备份到内容设置备份表
             //biddingContentBakMapper.copySetting(projectPhaseId, biddingProject1.getVersionNum());
             //判断文件夹是否存在，不存在则新建
-            String docPath1 = biddingProject1.getBasePath() +biddingProject1.getId()+"/官方公告/";
+            String docPath1 = biddingProject1.getBasePath() + biddingProject1.getId() + "/官方公告/";
             File docPath = new File(docPath1);
             if (!docPath.exists() && !docPath.isDirectory()) {
                 docPath.mkdirs();
@@ -4107,7 +4147,7 @@ public class BiddingProjectService {
                     appFlowApprovalMapper.insert(appFlowApproval);
                 }
                 //如果是0说明要提交审批，因此需要将该项目之前的审批数据‘删除’
-                appFlowApprovalMapper.updateApp(appFlowApproval.getUserId(),biddingProject1.getId());
+                appFlowApprovalMapper.updateApp(appFlowApproval.getUserId(), biddingProject1.getId());
             } else if (isSubmit.equals("1")) {
                 //0 进行中 1 未进行 2 草稿 3 待审核 4 审核通过 5 审核驳回 6跳过此阶段
                 biddingOfficialNotice.setGoStatus("2");
@@ -4163,7 +4203,7 @@ public class BiddingProjectService {
             biddingOfficialNoticeMapper.insert(biddingOfficialNotice);
             return new Result<>(true, StatusCode.OK, "保存成功");
         } catch (NumberFormatException e) {
-            log.error(e.toString(),e);
+            log.error(e.toString(), e);
             return new Result<>(false, StatusCode.ERROR, "呀! 服务器开小差了~");
         }
     }
@@ -4198,6 +4238,16 @@ public class BiddingProjectService {
             if (biddingOfficialNotice == null) {
                 return new Result<>(false, StatusCode.ERROR, "该条记录不存在");
             }
+
+            if (biddingUserRole.getRoleId().equals("5")) {
+                String suggestion = map.get("suggestion").toString();
+                biddingOfficialNotice.setSuggestion(suggestion);
+                //将文件解读的数据插入
+                //******修改9开始******
+                biddingOfficialNoticeMapper.updateByPrimaryKeySelective(biddingOfficialNotice);
+                //******修改9结束******
+                return new Result<>(true, StatusCode.OK, "修改成功");
+            }
             String versionNum = biddingProject1.getVersionNum();
             //*****修改1结束（新增）******
 
@@ -4206,13 +4256,13 @@ public class BiddingProjectService {
             ////将内容设置数据备份到内容设置备份表
             //biddingContentBakMapper.copySetting(projectPhaseId, biddingProject1.getVersionNum());
             //判断文件夹是否存在，不存在则新建
-            String docPath1 = biddingProject1.getBasePath() +biddingProject1.getId()+"/官方公告/";
+            String docPath1 = biddingProject1.getBasePath() + biddingProject1.getId() + "/官方公告/";
             File docPath = new File(docPath1);
             if (!docPath.exists() && !docPath.isDirectory()) {
                 docPath.mkdirs();
             }
             //获取内容设置表中的字段信息
-            List<Map> settingsList = biddingContentBakMapper.selectByUpdate1(projectPhaseId, versionNum,biddingProject1.getId());
+            List<Map> settingsList = biddingContentBakMapper.selectByUpdate1(projectPhaseId, versionNum, biddingProject1.getId());
             for (Map map1 : settingsList) {
                 if ((map.get(map1.get("enName"))) != null) {
                     String value = map.get(map1.get("enName").toString());
@@ -4392,7 +4442,7 @@ public class BiddingProjectService {
                     appFlowApprovalMapper.insert(appFlowApproval);
                 }
                 //如果是0说明要提交审批，因此需要将该项目之前的审批数据‘删除’
-                appFlowApprovalMapper.updateApp(appFlowApproval.getUserId(),biddingProject1.getId());
+                appFlowApprovalMapper.updateApp(appFlowApproval.getUserId(), biddingProject1.getId());
             } else if (isSubmit.equals("1")) {
                 //0 进行中 1 未进行 2 草稿 3 待审核 4 审核通过 5 审核驳回 6跳过此阶段
                 biddingOfficialNotice.setGoStatus("2");
@@ -4451,7 +4501,7 @@ public class BiddingProjectService {
             biddingOfficialNoticeMapper.updateByPrimaryKeySelective(biddingOfficialNotice);
             return new Result<>(true, StatusCode.OK, "修改成功");
         } catch (NumberFormatException e) {
-            log.error(e.toString(),e);
+            log.error(e.toString(), e);
             return new Result<>(false, StatusCode.ERROR, "呀! 服务器开小差了~");
         }
     }
@@ -4486,7 +4536,7 @@ public class BiddingProjectService {
             ////将内容设置数据备份到内容设置备份表
             //biddingContentBakMapper.copySetting(projectPhaseId, biddingProject1.getVersionNum());
             //判断文件夹是否存在，不存在则新建
-            String docPath1 = biddingProject1.getBasePath() +biddingProject1.getId()+"/项目总结/";
+            String docPath1 = biddingProject1.getBasePath() + biddingProject1.getId() + "/项目总结/";
             File docPath = new File(docPath1);
             if (!docPath.exists() && !docPath.isDirectory()) {
                 docPath.mkdirs();
@@ -4638,7 +4688,7 @@ public class BiddingProjectService {
                     appFlowApprovalMapper.insert(appFlowApproval);
                 }
                 //如果是0说明要提交审批，因此需要将该项目之前的审批数据‘删除’
-                appFlowApprovalMapper.updateApp(appFlowApproval.getUserId(),biddingProject1.getId());
+                appFlowApprovalMapper.updateApp(appFlowApproval.getUserId(), biddingProject1.getId());
             } else if (isSubmit.equals("1")) {
                 //0 进行中 1 未进行 2 草稿 3 待审核 4 审核通过 5 审核驳回 6跳过此阶段
                 biddingProjectSummary.setGoStatus("2");
@@ -4692,7 +4742,7 @@ public class BiddingProjectService {
             biddingProjectSummaryMapper.insert(biddingProjectSummary);
             return new Result<>(true, StatusCode.OK, "保存成功");
         } catch (NumberFormatException e) {
-            log.error(e.toString(),e);
+            log.error(e.toString(), e);
             return new Result<>(false, StatusCode.ERROR, "呀! 服务器开小差了~");
         }
     }
@@ -4727,6 +4777,15 @@ public class BiddingProjectService {
             if (biddingProjectSummary == null) {
                 return new Result<>(false, StatusCode.ERROR, "该条记录不存在");
             }
+            if (biddingUserRole.getRoleId().equals("5")) {
+                String suggestion = map.get("suggestion").toString();
+                biddingProjectSummary.setSuggestion(suggestion);
+                //将文件解读的数据插入
+                //******修改9开始******
+                biddingProjectSummaryMapper.updateByPrimaryKeySelective(biddingProjectSummary);
+                //******修改9结束******
+                return new Result<>(true, StatusCode.OK, "修改成功");
+            }
             String versionNum = biddingProject1.getVersionNum();
             //*****修改1结束（新增）******
             ////修改对应阶段的内容设置的版本号
@@ -4734,14 +4793,14 @@ public class BiddingProjectService {
             ////将内容设置数据备份到内容设置备份表
             //biddingContentBakMapper.copySetting(projectPhaseId, biddingProject1.getVersionNum());
             //判断文件夹是否存在，不存在则新建
-            String docPath1 = biddingProject1.getBasePath() +biddingProject1.getId()+"/项目总结/";
+            String docPath1 = biddingProject1.getBasePath() + biddingProject1.getId() + "/项目总结/";
             File docPath = new File(docPath1);
             if (!docPath.exists() && !docPath.isDirectory()) {
                 docPath.mkdirs();
             }
             //获取内容设置表中的字段信息
             //*******修改4开始（新增）*******
-            List<Map> settingsList = biddingContentBakMapper.selectByUpdate1(projectPhaseId, versionNum,biddingProject1.getId());
+            List<Map> settingsList = biddingContentBakMapper.selectByUpdate1(projectPhaseId, versionNum, biddingProject1.getId());
             for (Map map1 : settingsList) {
                 if ((map.get(map1.get("enName"))) != null) {
                     String value = map.get(map1.get("enName").toString());
@@ -4914,7 +4973,7 @@ public class BiddingProjectService {
                     appFlowApprovalMapper.insert(appFlowApproval);
                 }
                 //如果是0说明要提交审批，因此需要将该项目之前的审批数据‘删除’
-                appFlowApprovalMapper.updateApp(appFlowApproval.getUserId(),biddingProject1.getId());
+                appFlowApprovalMapper.updateApp(appFlowApproval.getUserId(), biddingProject1.getId());
             } else if (isSubmit.equals("1")) {
                 //0 进行中 1 未进行 2 草稿 3 待审核 4 审核通过 5 审核驳回 6跳过此阶段
                 biddingProjectSummary.setGoStatus("2");
@@ -4971,7 +5030,7 @@ public class BiddingProjectService {
             biddingProjectSummaryMapper.updateByPrimaryKeySelective(biddingProjectSummary);
             return new Result<>(true, StatusCode.OK, "修改成功");
         } catch (NumberFormatException e) {
-            log.error(e.toString(),e);
+            log.error(e.toString(), e);
             return new Result<>(false, StatusCode.ERROR, "呀! 服务器开小差了~");
         }
     }
@@ -4999,8 +5058,8 @@ public class BiddingProjectService {
                 List<Map> mapSetting = biddingProjectMapper.selectSetting(projectId, projectPhaseId);
                 maps.put("mapSetting", mapSetting);
                 //获取审核未通过的审批信息
-                List<AppFlowApproval> approvals= appFlowApprovalMapper.selectByPhaseId(biddingProject.getProjectBulidId());
-                maps.put("appInfo",approvals);
+                List<AppFlowApproval> approvals = appFlowApprovalMapper.selectByPhaseId(biddingProject.getProjectBulidId());
+                maps.put("appInfo", approvals);
                 List<Map> addContent = biddingProjectMapper.selectAddContent(projectId, biddingProject.getProjectBulidId());
                 for (Map map1 : addContent) {
                     if (map1.get("typeId").toString().equals("4")) {
@@ -5014,8 +5073,8 @@ public class BiddingProjectService {
                 maps.put("addContent", addContent);
             } else if (projectPhaseId.equals("2")) {
                 //获取审核未通过的审批信息
-                List<AppFlowApproval> approvals= appFlowApprovalMapper.selectByPhaseId(biddingProject.getDocInterpretationId());
-                maps.put("appInfo",approvals);
+                List<AppFlowApproval> approvals = appFlowApprovalMapper.selectByPhaseId(biddingProject.getDocInterpretationId());
+                maps.put("appInfo", approvals);
                 Map mapDocInterpretation = biddingProjectMapper.selectInterpretation(projectId);
                 maps.put("mapDocInterpretation", mapDocInterpretation);
                 List<Map> mapSetting = biddingProjectMapper.selectSetting(projectId, projectPhaseId);
@@ -5033,8 +5092,8 @@ public class BiddingProjectService {
                 maps.put("addContent", addContent);
             } else if (projectPhaseId.equals("3")) {
                 //获取审核未通过的审批信息
-                List<AppFlowApproval> approvals= appFlowApprovalMapper.selectByPhaseId(biddingProject.getProductCollectionId());
-                maps.put("appInfo",approvals);
+                List<AppFlowApproval> approvals = appFlowApprovalMapper.selectByPhaseId(biddingProject.getProductCollectionId());
+                maps.put("appInfo", approvals);
                 //*****1，此处需要更改开始*****
                 Map mapProCollection = biddingProjectMapper.selectProCollection(projectId);
                 maps.put("mapProCollection", mapProCollection);
@@ -5056,8 +5115,8 @@ public class BiddingProjectService {
                 maps.put("addContent", addContent);
             } else if (projectPhaseId.equals("4")) {
                 //获取审核未通过的审批信息
-                List<AppFlowApproval> approvals= appFlowApprovalMapper.selectByPhaseId(biddingProject.getStrategyAnalysisId());
-                maps.put("appInfo",approvals);
+                List<AppFlowApproval> approvals = appFlowApprovalMapper.selectByPhaseId(biddingProject.getStrategyAnalysisId());
+                maps.put("appInfo", approvals);
                 //*****1，此处需要更改开始*****
                 Map mapStrategyAnalysis = biddingProjectMapper.selectStrategyAnalysis(projectId);
                 maps.put("mapStrategyAnalysis", mapStrategyAnalysis);
@@ -5079,8 +5138,8 @@ public class BiddingProjectService {
                 maps.put("addContent", addContent);
             } else if (projectPhaseId.equals("5")) {
                 //获取审核未通过的审批信息
-                List<AppFlowApproval> approvals= appFlowApprovalMapper.selectByPhaseId(biddingProject.getInfoFillingId());
-                maps.put("appInfo",approvals);
+                List<AppFlowApproval> approvals = appFlowApprovalMapper.selectByPhaseId(biddingProject.getInfoFillingId());
+                maps.put("appInfo", approvals);
                 //*****1，此处需要更改开始*****
                 Map mapInfoFilling = biddingProjectMapper.selectInfoFilling(projectId);
                 maps.put("mapInfoFilling", mapInfoFilling);
@@ -5102,8 +5161,8 @@ public class BiddingProjectService {
                 maps.put("addContent", addContent);
             } else if (projectPhaseId.equals("6")) {
                 //获取审核未通过的审批信息
-                List<AppFlowApproval> approvals= appFlowApprovalMapper.selectByPhaseId(biddingProject.getOfficialNoticeId());
-                maps.put("appInfo",approvals);
+                List<AppFlowApproval> approvals = appFlowApprovalMapper.selectByPhaseId(biddingProject.getOfficialNoticeId());
+                maps.put("appInfo", approvals);
                 //*****1，此处需要更改开始*****
                 Map OfficialNotice = biddingProjectMapper.selectOfficialNotice(projectId);
                 maps.put("OfficialNotice", OfficialNotice);
@@ -5125,8 +5184,8 @@ public class BiddingProjectService {
                 maps.put("addContent", addContent);
             } else if (projectPhaseId.equals("7")) {
                 //获取审核未通过的审批信息
-                List<AppFlowApproval> approvals= appFlowApprovalMapper.selectByPhaseId(biddingProject.getProjectSummaryId());
-                maps.put("appInfo",approvals);
+                List<AppFlowApproval> approvals = appFlowApprovalMapper.selectByPhaseId(biddingProject.getProjectSummaryId());
+                maps.put("appInfo", approvals);
                 //*****1，此处需要更改开始*****
                 Map ProjectSummary = biddingProjectMapper.selectProjectSummary(projectId);
                 maps.put("ProjectSummary", ProjectSummary);
@@ -5150,7 +5209,7 @@ public class BiddingProjectService {
 
             return new Result<>(true, StatusCode.OK, "查询成功", maps);
         } catch (Exception e) {
-            log.error(e.toString(),e);
+            log.error(e.toString(), e);
             return new Result<>(false, StatusCode.ERROR, "服务器错误");
         }
     }
@@ -5170,7 +5229,7 @@ public class BiddingProjectService {
             List<BiddingContentBak> settingsList = biddingContentBakMapper.selectByPhaseId(projectPhaseId, biddingProject.getVersionNum());
             return new Result<>(true, StatusCode.OK, "查询成功", settingsList);
         } catch (Exception e) {
-            log.error(e.toString(),e);
+            log.error(e.toString(), e);
             return new Result<>(false, StatusCode.ERROR, "呀! 服务器开小差了~");
         }
     }
@@ -5208,11 +5267,196 @@ public class BiddingProjectService {
             }
             return new Result<>(true, StatusCode.OK, "查询成功", lists);
         } catch (Exception e) {
-            log.error(e.toString(),e);
+            log.error(e.toString(), e);
             return new Result<>(false, StatusCode.ERROR, "呀! 服务器开小差了~");
         }
 
     }
 
 
+    /**
+     * GA查看项目列表
+     *
+     * @param map
+     * @param userId
+     * @return
+     */
+    public Result findListGa(Map map, String userId) {
+        try {
+            Integer currentPage = Integer.valueOf(map.get("currentPage").toString());
+            Integer pageSize = Integer.valueOf(map.get("pageSize").toString());
+            String name = map.get("name").toString();
+            String status = map.get("status").toString();
+            List<Map> mapList = biddingProjectMapper.selectByNoDelGa(name, status);
+            PageHelper.startPage(currentPage, pageSize);
+            List<Map> maps = biddingProjectMapper.selectByNoDelGa(name, status);
+            for (Map map1 : maps) {
+                String typeId = null;
+                String projectId = null;
+                String isSkip = null;
+                if (map1.get("id") != null) {
+                    projectId = map1.get("id").toString();
+                }
+                if (map1.get("type_id") != null) {
+                    typeId = map1.get("type_id").toString();
+                }
+                if (map1.get("is_skip") != null) {
+                    isSkip = map1.get("is_skip").toString();
+                }
+                BiddingProjectType biddingProjectType = biddingProjectTypeMapper.selectByPrimaryKey(typeId);
+                if (biddingProjectType != null) {
+                    String projectPhaseId = biddingProjectType.getProjectPhaseId();
+                    if (isSkip.equals("0")) {
+                        projectPhaseId = biddingProjectType.getProjectPhaseId().replace("3,", "");
+                    }
+                    map1.put("projectPhaseId", projectPhaseId);
+                }
+                BiddingProjectBulid biddingProjectBulid = null;
+                BiddingDocInterpretation biddingDocInterpretation = null;
+                BiddingProductCollection biddingProductCollection = null;
+                BiddingStrategyAnalysis biddingStrategyAnalysis = null;
+                BiddingInfoFilling biddingInfoFilling = null;
+                BiddingOfficialNotice biddingOfficialNotice = null;
+                BiddingProjectSummary biddingProjectSummary = null;
+                if (map1.get("project_phase_now") != null) {
+                    if ((map1.get("project_phase_now").toString()).equals("1")) {
+                        biddingProjectBulid = biddingProjectMapper.selectGoStatus1(projectId);
+                    } else if ((map1.get("project_phase_now").toString()).equals("2")) {
+                        biddingDocInterpretation = biddingProjectMapper.selectGoStatus2(projectId);
+                    } else if ((map1.get("project_phase_now").toString()).equals("3")) {
+                        biddingProductCollection = biddingProjectMapper.selectGoStatus3(projectId);
+                    } else if ((map1.get("project_phase_now").toString()).equals("4")) {
+                        biddingStrategyAnalysis = biddingProjectMapper.selectGoStatus4(projectId);
+                    } else if ((map1.get("project_phase_now").toString()).equals("5")) {
+                        biddingInfoFilling = biddingProjectMapper.selectGoStatus5(projectId);
+                    } else if ((map1.get("project_phase_now").toString()).equals("6")) {
+                        biddingOfficialNotice = biddingProjectMapper.selectGoStatus6(projectId);
+                    } else if ((map1.get("project_phase_now").toString()).equals("7")) {
+                        biddingProjectSummary = biddingProjectMapper.selectGoStatus7(projectId);
+                    }
+                }
+                if (biddingProjectBulid != null) {
+                    map1.put("goStatus", biddingProjectBulid.getGoStatus());
+                } else if (biddingDocInterpretation != null) {
+                    map1.put("goStatus", biddingDocInterpretation.getGoStatus());
+                } else if (biddingProductCollection != null) {
+                    map1.put("goStatus", biddingProductCollection.getGoStatus());
+                } else if (biddingStrategyAnalysis != null) {
+                    map1.put("goStatus", biddingStrategyAnalysis.getGoStatus());
+                } else if (biddingInfoFilling != null) {
+                    map1.put("goStatus", biddingInfoFilling.getGoStatus());
+                } else if (biddingOfficialNotice != null) {
+                    map1.put("goStatus", biddingOfficialNotice.getGoStatus());
+                } else if (biddingProjectSummary != null) {
+                    map1.put("goStatus", biddingProjectSummary.getGoStatus());
+                }
+            }
+            PageInfo pageInfo = new PageInfo<>(maps);
+            pageInfo.setTotal(mapList.size());
+            PageResult pageResult = new PageResult(pageInfo.getTotal(), maps);
+            return new Result<>(true, StatusCode.OK, "查询成功", pageResult);
+        } catch (NumberFormatException e) {
+            log.error(e.toString(), e);
+            return new Result<>(false, StatusCode.ERROR, "呀! 服务器开小差了~");
+        }
+    }
+
+    /**
+     * 下载文件
+     * @param response
+     * @param filePath
+     * @param projectId
+     * @return
+     */
+    public Result downloadFile(HttpServletResponse response, String filePath, String projectId,String projectPhaseId) {
+        File file = new File(filePath);
+        String fileName = file.getName();
+        if (file.exists()) {
+            response.setContentType("application/force-download");// 设置强制下载不打开
+            response.addHeader("Content-Disposition", "attachment;fileName=" + fileName);
+            byte[] buffer = new byte[1024];
+            FileInputStream fis = null;
+            BufferedInputStream bis = null;
+            try {
+                fis = new FileInputStream(file);
+                bis = new BufferedInputStream(fis);
+                OutputStream outputStream = response.getOutputStream();
+                int i = bis.read(buffer);
+                while (i != -1) {
+                    outputStream.write(buffer, 0, i);
+                    i = bis.read(buffer);
+                }
+            } catch (Exception e) {
+                log.error(e.toString(), e);
+            } finally {
+                if (bis != null) {
+                    try {
+                        bis.close();
+                    } catch (IOException e) {
+                        log.error(e.toString(), e);
+                    }
+                }
+                if (fis != null) {
+                    try {
+                        fis.close();
+                    } catch (IOException e) {
+                        log.error(e.toString(), e);
+                    }
+                }
+            }
+        } else {
+            BiddingProject biddingProject = biddingProjectMapper.selectByPrimaryKey(projectId);
+            String phaseName="";
+            if(projectPhaseId.equals("1")){
+                phaseName="/立项/";
+            }else if (projectPhaseId.equals("2")){
+                phaseName="/文件解读/";
+            }else if (projectPhaseId.equals("3")){
+                phaseName="/竞品收集/";
+            }else if (projectPhaseId.equals("4")){
+                phaseName="/策略分析/";
+            }else if (projectPhaseId.equals("5")){
+                phaseName="/信息填报/";
+            }else if (projectPhaseId.equals("6")){
+                phaseName="/官方公告/";
+            }else if (projectPhaseId.equals("7")){
+                phaseName="/项目总结/";
+            }
+            fileName = file.getName();
+            file = new File(biddingProject.getBasePath()+biddingProject.getId()+phaseName+filePath);
+            response.setContentType("application/force-download");// 设置强制下载不打开
+            response.addHeader("Content-Disposition", "attachment;fileName=" + fileName);
+            byte[] buffer = new byte[1024];
+            FileInputStream fis = null;
+            BufferedInputStream bis = null;
+            try {
+                fis = new FileInputStream(file);
+                bis = new BufferedInputStream(fis);
+                OutputStream outputStream = response.getOutputStream();
+                int i = bis.read(buffer);
+                while (i != -1) {
+                    outputStream.write(buffer, 0, i);
+                    i = bis.read(buffer);
+                }
+            } catch (Exception e) {
+                log.error(e.toString(), e);
+            } finally {
+                if (bis != null) {
+                    try {
+                        bis.close();
+                    } catch (IOException e) {
+                        log.error(e.toString(), e);
+                    }
+                }
+                if (fis != null) {
+                    try {
+                        fis.close();
+                    } catch (IOException e) {
+                        log.error(e.toString(), e);
+                    }
+                }
+            }
+        }
+        return new Result<>(false, StatusCode.ERROR, "下载失败");
+    }
 }

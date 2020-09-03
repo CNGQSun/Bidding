@@ -2,6 +2,7 @@ package com.dsmpharm.bidding.service;
 
 import com.dsmpharm.bidding.mapper.BiddingFileAddcontentMapper;
 import com.dsmpharm.bidding.pojo.BiddingFileAddcontent;
+import com.dsmpharm.bidding.utils.DateUtils;
 import com.dsmpharm.bidding.utils.IdWorker;
 import com.dsmpharm.bidding.utils.Result;
 import com.dsmpharm.bidding.utils.StatusCode;
@@ -15,6 +16,7 @@ import javax.annotation.Resource;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /** 
@@ -53,17 +55,17 @@ public class BiddingFileAddcontentService {
 			for (MultipartFile multipartFile : files) {
 				biddingFileAddcontent=new BiddingFileAddcontent();
 				String fileName1 = multipartFile.getOriginalFilename();
-				String fileName = fileName1;
+				String fileName = DateUtils.format(new Date(), "HH-mm-ss")+"-"+fileName1;
 				File filePath = new File(docPath, fileName);
 				try {
 					multipartFile.transferTo(filePath);
 				} catch (IOException e) {
 					log.error(e.toString(), e);
 				}
-				biddingFileAddcontent.setFilePath(filePath.getName());
+				biddingFileAddcontent.setFilePath(filePath.getPath());
 				BiddingFileAddcontent biddingFileAddcontent1 = null;
 				try {
-					biddingFileAddcontentMapper.insertAddcontent(filePath.getName());
+					biddingFileAddcontentMapper.insertAddcontent(filePath.getPath());
 					biddingFileAddcontent1 = biddingFileAddcontentMapper.selectOne(biddingFileAddcontent);
 				} catch (Exception e) {
 					log.error(e.toString(),e);

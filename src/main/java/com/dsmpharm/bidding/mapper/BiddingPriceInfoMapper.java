@@ -5,6 +5,7 @@ import org.apache.ibatis.annotations.Param;
 import tk.mybatis.mapper.common.Mapper;
 
 import java.util.List;
+import java.util.Map;
 
 /** 
  * <br/>
@@ -31,5 +32,5 @@ public interface BiddingPriceInfoMapper extends Mapper<BiddingPriceInfo> {
      * @param productEnName
      * @return
      */
-    List<BiddingPriceInfo> selectByproductEn(@Param("productEnName") String productEnName);
+    List<Map> selectByproductEn(@Param("productEnName") String productEnName);
 }

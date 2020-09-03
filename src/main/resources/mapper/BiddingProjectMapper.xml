@@ -287,5 +287,28 @@ where bp.id=#{projectId}
     where bp.id=#{projectId}
     </select>
 
+    <select id="selectByNoDelGa" resultType="java.util.Map">
+        select DISTINCT bp.*,bpb.name projectName,bpph.name phaseName,bpt.name typeName
+        from bidding_project bp
+        LEFT JOIN bidding_project_bulid bpb on bpb.id=bp.project_bulid_id
+        LEFT JOIN bidding_doc_interpretation bdi on bdi.id=bp.doc_interpretation_id
+        LEFT JOIN bidding_product_collection bpc on bpc.id=bp.product_collection_id
+        LEFT JOIN bidding_strategy_analysis bsa on bsa.id=bp.strategy_analysis_id
+        LEFT JOIN bidding_info_filling bif on bif.id=bp.info_filling_id
+        LEFT JOIN bidding_official_notice bon on bon.id=bp.official_notice_id
+        LEFT JOIN bidding_project_summary bps on bps.id=bp.project_summary_id
+        LEFT JOIN bidding_project_product bpp on bpp.project_id=bp.id
+        LEFT JOIN bidding_project_phase bpph on bpph.id=bp.project_phase_now
+        LEFT JOIN bidding_project_type bpt on bpt.id =bp.type_id
+        WHERE bp.delflag='0'
+        <if test="status !=null and  status!='' ">
+            and bp.status= #{status}
+        </if>
+        <if test="name !=null and name !='' ">
+            and bpb.name like concat('%',#{name},'%')
+        </if>
+        ORDER BY bp.id DESC
+    </select>
+
 
 </mapper>

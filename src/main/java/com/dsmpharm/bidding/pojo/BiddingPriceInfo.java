@@ -16,13 +16,11 @@ public class BiddingPriceInfo implements Serializable {
 
     @Id
     private String id;
-
     private String area;
-
     private String userId;
-
+    private String userName;
     private String proId;
-
+    private String region;
     private String productEn;
 
     private String bidPrice;
@@ -37,7 +35,23 @@ public class BiddingPriceInfo implements Serializable {
 
     private String delflag;
 
-    public String getId() {
+	public String getUserName() {
+		return userName;
+	}
+
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
+
+	public String getRegion() {
+		return region;
+	}
+
+	public void setRegion(String region) {
+		this.region = region;
+	}
+
+	public String getId() {
 		return id;
 	}
     public void setId(String id) {

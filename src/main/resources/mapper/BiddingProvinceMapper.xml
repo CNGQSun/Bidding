@@ -7,4 +7,7 @@
     <select id="selectAllNoDel" resultType="com.dsmpharm.bidding.pojo.BiddingProvince">
           select * from bidding_province  order by pro_name
     </select>
+    <select id="selectByProName" resultType="com.dsmpharm.bidding.pojo.BiddingProvince">
+        select * from bidding_province where pro_name like concat(#{proName},'%')
+    </select>
 </mapper>

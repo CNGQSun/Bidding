@@ -161,4 +161,12 @@ public interface BiddingProjectMapper extends Mapper<BiddingProject> {
      * @return
      */
     List<BiddingProjectSummaryDo> selectProjectSummaryList(@Param("projectId")String projectId);
+
+    /**
+     * GA查看项目
+     * @param name
+     * @param status
+     * @return
+     */
+    List<Map> selectByNoDelGa(@Param("name") String name, @Param("status") String status);
 }
