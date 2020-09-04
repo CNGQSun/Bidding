@@ -44,7 +44,7 @@ public class POIExcelUtils {
     /**表头行*/
     private HSSFRow tableHeadRow;
     /**工作薄自适应宽度倍数因子*/
-    private final double SHEETWIDTHMULTIPLEFACTOR = 1.8211;
+    //private final double SHEETWIDTHMULTIPLEFACTOR = 1.8211;
     /**表格数据样式*/
     private HSSFCellStyle tabDataStyle;
     /**Excel文档对象*/
@@ -64,7 +64,7 @@ public class POIExcelUtils {
      * @param columnNameArr 字段名数组
      * @date 2018-10-14
      */
-    public <T>POIExcelUtils(String sheetName,String tableTitle,String[] headTableColumnsNameArr,List<T> queryList,String[] columnNameArr){
+    public <T>POIExcelUtils(String sheetName,String tableTitle,String[] headTableColumnsNameArr,List<T> queryList,String[] columnNameArr,double SHEETWIDTHMULTIPLEFACTOR){
         wb = new HSSFWorkbook();
         /**创建一个sheet页*/
         st = wb.createSheet(sheetName);
@@ -90,7 +90,7 @@ public class POIExcelUtils {
         tabDataStyle = wb.createCellStyle();
 
         /*设置sheet页的样式和表格标题、定义表头等基本信息*/
-        setExcelSheetStyleAndBaseInfo(tableTitle,headTableColumnsNameArr,queryList,columnNameArr);
+        setExcelSheetStyleAndBaseInfo(tableTitle,headTableColumnsNameArr,queryList,columnNameArr,SHEETWIDTHMULTIPLEFACTOR);
     }
 
     /**
@@ -103,7 +103,7 @@ public class POIExcelUtils {
      * @param columnNameArr 字段名数组
      * @date 2018-10-14
      */
-    public <T>void setExcelSheetStyleAndBaseInfo(String tableTitle,String[] headTableColumnsNameArr,List<T> queryList,String[] columnNameArr){
+    public <T>void setExcelSheetStyleAndBaseInfo(String tableTitle,String[] headTableColumnsNameArr,List<T> queryList,String[] columnNameArr,double SHEETWIDTHMULTIPLEFACTOR){
         /**1、设置表格标题格式*/
         HSSFCellStyle rnTabTitleStyle = setCellBorderStyle(tabTitleStyle);
         //设置字体
@@ -136,7 +136,7 @@ public class POIExcelUtils {
         setTabDataCellStyleAndContent(queryList,columnNameArr,rnTabDataStyle);
 
         //*初始化工作薄自适应宽度
-        setSheetWidthSelfAdaption(headTableColumnsNameArr);
+        setSheetWidthSelfAdaption(headTableColumnsNameArr,SHEETWIDTHMULTIPLEFACTOR);
     }
 
     /**
@@ -271,7 +271,7 @@ public class POIExcelUtils {
      * @param headTableColumnsNameArr 表头列名数组
      * @date 2018-10-14
      */
-    private void setSheetWidthSelfAdaption(String[] headTableColumnsNameArr){
+    private void setSheetWidthSelfAdaption(String[] headTableColumnsNameArr,double SHEETWIDTHMULTIPLEFACTOR){
         if(null != headTableColumnsNameArr && headTableColumnsNameArr.length > 0){
             //获取表头列数
             int headTableColumns = headTableColumnsNameArr.length;
@@ -312,7 +312,7 @@ public class POIExcelUtils {
      * @param tableWidthMultipleFactor 工作薄自适应宽度倍数因子
      * @date 2018-10-14
      */
-    public void setSheetWidthSelfAdaption(String[] headTableColumnsNameArr,int tableWidthMultipleFactor){
+    public void setSheetWidthSelfAdaption(String[] headTableColumnsNameArr,int tableWidthMultipleFactor,double SHEETWIDTHMULTIPLEFACTOR){
         if(null != headTableColumnsNameArr && headTableColumnsNameArr.length > 0){
             //获取表头列数
             int headTableColumns = headTableColumnsNameArr.length;
@@ -504,7 +504,7 @@ public class POIExcelUtils {
      * @date 2018-10-14
      */
     @SuppressWarnings("unchecked")
-    public <T>POIExcelUtils(String[] sheetNameArr,String[] tableTitleArr,String[] headTablesColumnsNameArr,List<Object> queryList,String[] tablesColumnNameArr){
+    public <T>POIExcelUtils(String[] sheetNameArr,String[] tableTitleArr,String[] headTablesColumnsNameArr,List<Object> queryList,String[] tablesColumnNameArr,double SHEETWIDTHMULTIPLEFACTOR){
         wb = new HSSFWorkbook();
         if(!isEmpty(sheetNameArr) && sheetNameArr.length>0 && !isEmpty(tableTitleArr) && tableTitleArr.length>0){
             for(int i = 0;i<sheetNameArr.length;i++){
@@ -536,7 +536,7 @@ public class POIExcelUtils {
                     //获取每个sheet页的列名
                     String[] tableColumnNameArr = tablesColumnNameArr[i].split(",");
                     /**设置sheet页的样式和表格标题、定义表头等基本信息*/
-                    setExcelSheetStyleAndBaseInfo(tableTitleArr[i],headTableColumnsNameArr,(List<T>)queryList.get(i),tableColumnNameArr);
+                    setExcelSheetStyleAndBaseInfo(tableTitleArr[i],headTableColumnsNameArr,(List<T>)queryList.get(i),tableColumnNameArr,SHEETWIDTHMULTIPLEFACTOR);
                 }
             }
         }

@@ -177,7 +177,6 @@ public class BiddingUserService {
             if (i > 0) {
                 return new Result<>(false, StatusCode.ERROR, "该用户已存在");
             }
-            biddingUser.setId(idWorker.nextId() + "");
             biddingUser.setDept("市场准入及商务部");
             insertUser = biddingUserMapper.insert(biddingUser);
             BiddingUserRole biddingUserRole = new BiddingUserRole();
@@ -389,5 +388,30 @@ public class BiddingUserService {
             return new Result<>(false, StatusCode.ERROR, "呀! 服务器开小差了~");
         }
         return new Result<>(false, StatusCode.ERROR, "密码修改失败");
+    }
+
+    public Result changeAllPassword(String userId) {
+        try {
+            BiddingUser biddingUser = biddingUserMapper.selectByPrimaryKey(userId);
+            if (biddingUser==null ||biddingUser.getDelflag().equals("1")){
+                return new Result<>(false, StatusCode.ERROR, "该用户不存在");
+            }
+            //加盐,第一个参数是密码,第二个参数是所加盐(本项目用手机号作为盐)
+            Md5Hash md5HashStudent = new Md5Hash(biddingUser.getPhoneNumber(), biddingUser.getPhoneNumber());
+            //设置迭代次数
+            md5HashStudent.setIterations(1);
+            //将加密后的密码转化为string类型
+            String password = md5HashStudent.toString();
+            //设置加密后的password
+            biddingUser.setPassword(password);
+            int i = biddingUserMapper.updateByPrimaryKeySelective(biddingUser);
+            if (i>0){
+                return new Result<>(true, StatusCode.OK, "密码重置成功");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new Result<>(false, StatusCode.ERROR, "呀! 服务器开小差了~");
+        }
+        return new Result<>(false, StatusCode.ERROR, "密码重置失败");
     }
 }

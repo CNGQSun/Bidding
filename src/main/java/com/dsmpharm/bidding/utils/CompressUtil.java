@@ -8,6 +8,9 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 
+/**
+ * 压缩文件或文件夹工具类
+ */
 public class CompressUtil {
     /**
      * @param path   要压缩的文件路径

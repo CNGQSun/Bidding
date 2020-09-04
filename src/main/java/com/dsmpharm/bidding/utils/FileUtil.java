@@ -3,6 +3,7 @@ package com.dsmpharm.bidding.utils;
 import java.io.*;
 
 /**
+ * 文件拷贝工具类
  * @author:Grant
  * @date:2020/09/01
  */

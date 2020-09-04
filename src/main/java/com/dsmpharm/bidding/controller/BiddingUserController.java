@@ -40,6 +40,7 @@ public class BiddingUserController {
 	 */
 	@ApiOperation(value="添加用户 提交" )
 	@ApiImplicitParams({
+			@ApiImplicitParam(name = "userId", value = "工号（用户ID）", required = true, paramType = "query", dataType = "String"),
 			@ApiImplicitParam(name = "name", value = "用户名", required = true, paramType = "query", dataType = "String"),
 			@ApiImplicitParam(name = "email", value = "邮箱", required = true, paramType = "query", dataType = "String"),
 			@ApiImplicitParam(name = "phoneNumber", value = "手机号", required = true, paramType = "query", dataType = "String"),
@@ -48,10 +49,12 @@ public class BiddingUserController {
 	@PostMapping("/sub")
 	public Result insertSub(@RequestParam Map map){
 		BiddingUser biddingUser=new BiddingUser();
+		String userId = map.get("userId").toString();
 		String name = map.get("name").toString();
 		String email = map.get("email").toString();
 		String phoneNumber = map.get("phoneNumber").toString();
 		String role = map.get("role").toString();//此处为role_id
+		biddingUser.setId(userId);
 		biddingUser.setName(name);
 		biddingUser.setEmail(email);
 		biddingUser.setPhoneNumber(phoneNumber);
@@ -215,6 +218,27 @@ public class BiddingUserController {
 			return new Result<>(false, StatusCode.ACCESS_ERROR, "token异常，请重新登录");
 		}
 		Result result=biddingUserService.changePassword(map,userId);
+		return result;
+	}
+
+	/**
+	 * 管理员重置用户密码
+	 */
+	@ApiOperation(value="管理员重置用户密码" )
+	@ApiImplicitParams({
+			@ApiImplicitParam(name = "userId", value = "用户ID", required = true, paramType = "query", dataType = "String"),
+	})
+	@PostMapping(value = "/change/admin")
+	private Result changeAllPassword(HttpServletRequest request, @RequestParam String userId){
+		String authorization = request.getHeader("Authorization");
+		String loginUserId = null;
+		try {
+			loginUserId = jwtUtil.parseJWT(authorization).getId();
+		} catch (Exception e) {
+			log.error(e.toString(),e);
+			return new Result<>(false, StatusCode.ACCESS_ERROR, "token异常，请重新登录");
+		}
+		Result result=biddingUserService.changeAllPassword(userId);
 		return result;
 	}
 }

@@ -11,6 +11,9 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
+/**
+ * 处理日期工具类
+ */
 public class DateUtils {
 	private static Logger log = LoggerFactory.getLogger(DateUtils.class);
 

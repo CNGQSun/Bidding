@@ -106,16 +106,16 @@ public class BiddingPriceInfoController {
     /**
      * 导出项目
      *
-     * @param projectId
+     * @param projectIds
      * @return
      */
     @ApiOperation(value = "导出项目")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "projectId", value = "项目ID", required = true, paramType = "query", dataType = "String"),
+            @ApiImplicitParam(name = "projectIds", value = "项目ID,多个id用,隔开", required = true, paramType = "query", dataType = "String"),
     })
     @GetMapping(value = "/export")
-    public Result exportProject(HttpServletResponse response, String projectId) {
-        Result result = biddingPriceInfoService.exportProject(projectId, response);
+    public Result exportProject(HttpServletResponse response, String projectIds) {
+        Result result = biddingPriceInfoService.exportProject(projectIds, response);
         return result;
     }
 
@@ -139,7 +139,7 @@ public class BiddingPriceInfoController {
      * 导出中标文件
      * @return
      */
-    @ApiOperation(value = "上传中标文件")
+    @ApiOperation(value = "下载中标文件")
     @GetMapping(value = "/exportBid")
     public Result downloadFile(HttpServletResponse response) {
         Result result = biddingPriceInfoService.downloadFile(response);
