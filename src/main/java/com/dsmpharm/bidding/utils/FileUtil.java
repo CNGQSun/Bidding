@@ -1,5 +1,9 @@
 package com.dsmpharm.bidding.utils;
 
+import com.dsmpharm.bidding.controller.BiddingProductController;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.*;
 
 /**
@@ -8,6 +12,7 @@ import java.io.*;
  * @date:2020/09/01
  */
 public class FileUtil {
+    private static Logger log = LoggerFactory.getLogger(FileUtil.class);
     //文件夹拷贝    不管是路径还是File对象都可直接使用
     //拷贝文件夹方法
     // String 对象
@@ -31,7 +36,7 @@ public class FileUtil {
             try {
                 FileUtil.copyFile(src,dest);
             } catch (IOException e) {
-                e.printStackTrace();
+                log.error(e.toString(), e);
             }
         }else if(src.isDirectory()){//目录
             //确保文件夹存在

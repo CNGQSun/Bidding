@@ -1,11 +1,14 @@
 package com.dsmpharm.bidding.utils;
 
+import com.dsmpharm.bidding.controller.BiddingPriceInfoController;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.FileNotFoundException;
@@ -15,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ExcelUtil {
+    private static Logger log = LoggerFactory.getLogger(ExcelUtil.class);
     /**
      * 根据文档格式返回相应的文档对象
      * @param file
@@ -38,9 +42,9 @@ public class ExcelUtil {
                     return null;
                 }
             } catch (FileNotFoundException e) {
-                e.printStackTrace();
+                log.error(e.toString(), e);
             } catch (IOException e) {
-                e.printStackTrace();
+                log.error(e.toString(), e);
             }
         }
         return workbook;

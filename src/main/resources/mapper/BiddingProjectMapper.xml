@@ -217,7 +217,7 @@ where bp.id=#{projectId}
     </select>
     <select id="selectByAppeal" resultType="java.util.Map">
         select DISTINCT bp.*,bpb.name projectName,bpb.province_id proId,bpph.name phaseName,bpt.name typeName,
-        bif.file_price_letter,bdi.quality_level qualityLevel
+        bif.file_price_letter,bdi.quality_level qualityLevel,bpb.product_id productId
         from bidding_project bp
         LEFT JOIN bidding_project_bulid bpb on bpb.id=bp.project_bulid_id
         LEFT JOIN bidding_doc_interpretation bdi on bdi.id=bp.doc_interpretation_id

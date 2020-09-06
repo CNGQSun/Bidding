@@ -103,7 +103,7 @@ public class CompressUtil {
     //    try {
     //        generateFile(path, format);
     //    } catch (Exception e) {
-    //        e.printStackTrace();
+    //        log.error(e.toString(), e);
     //        System.out.println(e.getMessage());
     //    }
     //

@@ -19,4 +19,31 @@
  		        LEFT JOIN bidding_product bpd on bpd.en_name=bpi.product_en
  		        WHERE product_en=#{productEnName}
     </select>
+
+    <delete id="createBak">
+        TRUNCATE table bidding_price_info_bak
+    </delete>
+    <select id="insertBak" >
+        insert into bidding_price_info_bak (area,user_name,user_id,region,pro_id,product_en,bid_price,is_bid,bid_time,remarks,strike_price,delflag)
+        values (#{biddingPriceInfo.area},#{biddingPriceInfo.userName},#{biddingPriceInfo.userId},#{biddingPriceInfo.region},#{biddingPriceInfo.proId},#{biddingPriceInfo.productEn},#{biddingPriceInfo.bidPrice},#{biddingPriceInfo.isBid},#{biddingPriceInfo.bidTime},#{biddingPriceInfo.remarks},#{biddingPriceInfo.strikePrice},#{biddingPriceInfo.delflag})
+    </select>
+
+    <select id="copyData" >
+       insert into bidding_price_info
+       select area,user_name,user_id,region,pro_id,product_en,bid_price,is_bid,bid_time,remarks,strike_price,delflag
+       from bidding_price_info_bak;
+</select>
+    <update id="updateAll">
+          UPDATE bidding_price_info SET delflag='1'
+    </update>
+    <select id="selectAllByNoDel" resultType="com.dsmpharm.bidding.pojo.BiddingPriceInfo">
+        select * from bidding_price_info where delflag='0'
+    </select>
+    <select id="selectCountNum" resultType="int">
+        select count (*) from bidding_price_info where delflag='1'
+    </select>
+    <delete id="deleteCountNum">
+        delete top(2000) FROM bidding_price_info WHERE delflag='1'
+    </delete>
+
 </mapper>

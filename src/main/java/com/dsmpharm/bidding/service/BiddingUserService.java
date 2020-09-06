@@ -409,7 +409,7 @@ public class BiddingUserService {
                 return new Result<>(true, StatusCode.OK, "密码重置成功");
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.toString(), e);
             return new Result<>(false, StatusCode.ERROR, "呀! 服务器开小差了~");
         }
         return new Result<>(false, StatusCode.ERROR, "密码重置失败");

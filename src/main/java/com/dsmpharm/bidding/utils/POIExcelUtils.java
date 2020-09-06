@@ -1,5 +1,6 @@
 package com.dsmpharm.bidding.utils;
 
+import com.dsmpharm.bidding.controller.BiddingDocInterpretationController;
 import jxl.Workbook;
 import jxl.format.Alignment;
 import jxl.format.Colour;
@@ -7,6 +8,8 @@ import jxl.format.UnderlineStyle;
 import jxl.write.*;
 import org.apache.poi.hssf.usermodel.*;
 import org.apache.poi.ss.util.CellRangeAddress;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -21,7 +24,7 @@ import java.util.List;
  * @date 2018-10-14
  */
 public class POIExcelUtils {
-
+    private static Logger log = LoggerFactory.getLogger(POIExcelUtils.class);
 
     /**Excel文档对象*/
     private HSSFWorkbook wb;
@@ -183,7 +186,7 @@ public class POIExcelUtils {
                             dataCell.setCellValue("");
                         }
                     } catch (Exception e) {
-                        e.printStackTrace();
+                        log.error(e.toString(), e);
                     }
                 }
                 dataRow++;
@@ -365,14 +368,14 @@ public class POIExcelUtils {
             //调用write方法导出xls文件
             wb.write(out);
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error(e.toString(), e);
         }finally{
             if(null != out){
                 try {
                     out.flush();
                     out.close();
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    log.error(e.toString(), e);
                 }
             }
         }
@@ -410,7 +413,7 @@ public class POIExcelUtils {
         try {
             wbk = Workbook.createWorkbook(file);
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error(e.toString(), e);
         }
         //工作簿的名字以及工作薄的位置
         for(int i = 0;i<sheetName.length;i++){
@@ -425,7 +428,7 @@ public class POIExcelUtils {
             //关闭资源，释放内存
             wbk.close();
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.toString(), e);
         }
     }
 
@@ -451,7 +454,7 @@ public class POIExcelUtils {
                     ws.setColumnView(i,20); //设置列宽
                     ws.addCell(label);  //添加标题
                 }catch(Exception e){
-                    e.printStackTrace();
+                    log.error(e.toString(), e);
                 }
             }
 
@@ -476,7 +479,7 @@ public class POIExcelUtils {
                             //将生成的单元格添加到工作表中
                             ws.addCell(labelC);
                         }catch(Exception e){
-                            e.printStackTrace();
+                            log.error(e.toString(), e);
                         }
                     }else{
                         Label labelC = new Label(j, m+1,"");
@@ -484,7 +487,7 @@ public class POIExcelUtils {
                         try {
                             ws.addCell(labelC);
                         } catch (Exception e) {
-                            e.printStackTrace();
+                            log.error(e.toString(), e);
                         }
                     }
                 }

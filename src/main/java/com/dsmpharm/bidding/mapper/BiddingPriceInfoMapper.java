@@ -33,4 +33,31 @@ public interface BiddingPriceInfoMapper extends Mapper<BiddingPriceInfo> {
      * @return
      */
     List<Map> selectByproductEn(@Param("productEnName") String productEnName);
+
+    /**
+     * 清空备份表
+     * @return
+     */
+    int createBak();
+
+    /**
+     * 将数据插入备份表
+     * @param biddingPriceInfo
+     * @return
+     */
+     void insertBak(@Param("biddingPriceInfo") BiddingPriceInfo biddingPriceInfo);
+
+    /**
+     * 将数据从备份表拷贝到主表
+     * @return
+     */
+     void copyData();
+
+    int updateAll();
+
+    List<BiddingPriceInfo> selectAllByNoDel();
+
+    int selectCountNum();
+
+    void deleteCountNum();
 }
