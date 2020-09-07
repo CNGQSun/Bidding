@@ -17,7 +17,7 @@
  		        LEFT JOIN bidding_province bp on bp.id=bpi.pro_id
  		        LEFT JOIN bidding_user bu on bu.id=bpi.user_id
  		        LEFT JOIN bidding_product bpd on bpd.en_name=bpi.product_en
- 		        WHERE product_en=#{productEnName}
+ 		        WHERE bpi.delflag='0'and product_en=#{productEnName}
     </select>
 
     <delete id="createBak">

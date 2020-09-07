@@ -17,6 +17,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -1209,7 +1210,7 @@ public class BiddingPriceInfoService {
             if (file.exists()) {
                 response.setContentType("application/force-download");// 设置强制下载不打开
                 try {
-                    response.addHeader("Content-Disposition", "attachment;fileName=" + java.net.URLEncoder.encode(fileName, "GB2312"));
+                    response.setHeader("Content-Disposition", "attachment;filename=" + URLEncoder.encode(fileName, "UTF-8"));
                 } catch (UnsupportedEncodingException e) {
                     log.error(e.toString(), e);
                 }
@@ -1409,7 +1410,8 @@ public class BiddingPriceInfoService {
             if (file.exists()) {
                 response.setContentType("application/force-download");// 设置强制下载不打开
                 try {
-                    response.addHeader("Content-Disposition", "attachment;fileName=" + java.net.URLEncoder.encode(fileName, "GB2312"));
+                    //response.addHeader("Content-Disposition", "attachment;fileName=" + java.net.URLEncoder.encode(fileName, "GB2312"));
+                    response.setHeader("Content-Disposition", "attachment;filename=" + URLEncoder.encode(fileName, "UTF-8"));
                 } catch (UnsupportedEncodingException e) {
                     log.error(e.toString(), e);
                 }

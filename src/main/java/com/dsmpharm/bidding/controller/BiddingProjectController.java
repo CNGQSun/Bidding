@@ -707,7 +707,7 @@ public class BiddingProjectController {
             @ApiImplicitParam(name = "projectId", value = "项目ID", required = true, paramType = "query", dataType = "String"),
             @ApiImplicitParam(name = "projectPhaseId", value = "下载文件所处阶段 1,2,3,4,5,6,7 申诉函下载对应的是阶段5", required = true, paramType = "query", dataType = "String"),
     })
-    @PostMapping("/downloadFile")
+    @GetMapping("/downloadFile")
     private Result downloadFile(HttpServletResponse response, @RequestParam String filePath,@RequestParam String projectId,@RequestParam String projectPhaseId) {
 
         Result result=biddingProjectService.downloadFile(response,filePath,projectId,projectPhaseId);

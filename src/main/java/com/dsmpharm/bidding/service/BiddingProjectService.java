@@ -15,6 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
+import java.net.URLEncoder;
 import java.util.*;
 
 /**
@@ -5373,7 +5374,12 @@ public class BiddingProjectService {
         String fileName = file.getName();
         if (file.exists()) {
             response.setContentType("application/force-download");// 设置强制下载不打开
-            response.addHeader("Content-Disposition", "attachment;fileName=" + fileName);
+            try {
+                //response.addHeader("Content-Disposition","attachment;fileName=" +new String(fileName.getBytes("UTF-8"),"iso-8859-1"));
+                response.setHeader("Content-Disposition", "attachment;filename=" + URLEncoder.encode(fileName,"UTF-8"));
+            } catch (UnsupportedEncodingException e) {
+                log.error(e.toString(), e);
+            }
             byte[] buffer = new byte[1024];
             FileInputStream fis = null;
             BufferedInputStream bis = null;
@@ -5425,7 +5431,15 @@ public class BiddingProjectService {
             fileName = file.getName();
             file = new File(biddingProject.getBasePath()+biddingProject.getId()+phaseName+filePath);
             response.setContentType("application/force-download");// 设置强制下载不打开
-            response.addHeader("Content-Disposition", "attachment;fileName=" + fileName);
+            try {
+                //response.addHeader("Content-Disposition","attachment;fileName=" +new String(fileName.getBytes("UTF-8"),"GBK"));
+                response.setHeader("Content-Disposition", "attachment;filename=" + URLEncoder.encode(fileName,"UTF-8"));
+
+            } catch (UnsupportedEncodingException e) {
+                log.error(e.toString(), e);
+            }
+
+            //response.addHeader("Content-Disposition", "attachment;fileName=" + fileName);
             byte[] buffer = new byte[1024];
             FileInputStream fis = null;
             BufferedInputStream bis = null;
@@ -5457,6 +5471,6 @@ public class BiddingProjectService {
                 }
             }
         }
-        return new Result<>(false, StatusCode.ERROR, "下载失败");
+        return null;
     }
 }

@@ -129,7 +129,7 @@ public class BiddingPriceInfoController {
 	@ApiImplicitParams({
 			@ApiImplicitParam(name = "file", value = "上传的文件", required = true, paramType = "query", dataType = "String"),
 	})
-	@GetMapping(value = "/upload")
+	@PostMapping(value = "/upload")
 	public Result uploadFile(HttpServletResponse response,HttpServletRequest request, @RequestParam MultipartFile file) {
 		Result result = biddingPriceInfoService.uploadFile(response,request,file);
 		return result;
