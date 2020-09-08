@@ -135,23 +135,4 @@ public class BiddingUserFrameworkController {
 		Result result = biddingUserFrameworkService.deleteIds(ids);
 		return result;
 	}
-
-	///**
-	//* 条件查询，无分页
-	//*/
-	//@PostMapping(value = "/list")
-	//public Result findSearch(@RequestBody BiddingUserFramework biddingUserFramework) {
-	//List<BiddingUserFramework> biddingUserFrameworks = biddingUserFrameworkService.list(biddingUserFramework);
-	//	return new Result<>(true, StatusCode.OK, "查询成功", biddingUserFrameworks);
-	//}
-	//
-	///**
-	//* 条件查询，无分页
-	//*/
-	//@PostMapping(value = "/list/{currentPage}/{pageSize}")
-	//public Result findSearch(@RequestBody BiddingUserFramework biddingUserFramework, @PathVariable int currentPage, @PathVariable int pageSize) {
-	//	List<BiddingUserFramework> biddingUserFrameworks = biddingUserFrameworkService.list(biddingUserFramework, currentPage, pageSize);
-	//	Integer count = biddingUserFrameworkService.selectCount(biddingUserFramework);
-	//	return new Result<>(true, StatusCode.OK, "查询成功", new PageResult<BiddingUserFramework>(count, biddingUserFrameworks));
-	//}
 }

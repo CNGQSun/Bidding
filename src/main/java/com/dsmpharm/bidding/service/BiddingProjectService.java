@@ -150,7 +150,7 @@ public class BiddingProjectService {
                     biddingProjectDataMapper.insert(biddingProjectData);
                 } else {
                     if (fileMap.get(biddingContentBak.getEnName()) != null) {
-                        System.out.println(fileMap.get(biddingContentBak.getEnName()));
+                        //System.out.println(fileMap.get(biddingContentBak.getEnName()));
                         MultipartFile fileFormal = fileMap.get(biddingContentBak.getEnName());
                         String fileName1 = fileFormal.getOriginalFilename();
                         String fileName = fileName1;
@@ -1024,7 +1024,7 @@ public class BiddingProjectService {
                     biddingProjectDataMapper.insert(biddingProjectData);
                 } else {
                     if (fileMap.get(biddingContentBak.getEnName()) != null) {
-                        System.out.println(fileMap.get(biddingContentBak.getEnName()));
+                        //System.out.println(fileMap.get(biddingContentBak.getEnName()));
                         MultipartFile fileFormal = fileMap.get(biddingContentBak.getEnName());
                         String fileName1 = fileFormal.getOriginalFilename();
                         String fileName = fileName1;
@@ -2198,7 +2198,7 @@ public class BiddingProjectService {
                     biddingProjectDataMapper.insert(biddingProjectData);
                 } else {
                     if (fileMap.get(biddingContentBak.getEnName()) != null) {
-                        System.out.println(fileMap.get(biddingContentBak.getEnName()));
+                        //System.out.println(fileMap.get(biddingContentBak.getEnName()));
                         MultipartFile fileFormal = fileMap.get(biddingContentBak.getEnName());
                         String fileName1 = fileFormal.getOriginalFilename();
                         String fileName = fileName1;
@@ -3151,7 +3151,7 @@ public class BiddingProjectService {
                     biddingProjectDataMapper.insert(biddingProjectData);
                 } else {
                     if (fileMap.get(biddingContentBak.getEnName()) != null) {
-                        System.out.println(fileMap.get(biddingContentBak.getEnName()));
+                        //System.out.println(fileMap.get(biddingContentBak.getEnName()));
                         MultipartFile fileFormal = fileMap.get(biddingContentBak.getEnName());
                         String fileName1 = fileFormal.getOriginalFilename();
                         String fileName = fileName1;
@@ -4007,7 +4007,7 @@ public class BiddingProjectService {
                     biddingProjectDataMapper.insert(biddingProjectData);
                 } else {
                     if (fileMap.get(biddingContentBak.getEnName()) != null) {
-                        System.out.println(fileMap.get(biddingContentBak.getEnName()));
+                        //System.out.println(fileMap.get(biddingContentBak.getEnName()));
                         MultipartFile fileFormal = fileMap.get(biddingContentBak.getEnName());
                         String fileName1 = fileFormal.getOriginalFilename();
                         String fileName = fileName1;
@@ -4556,7 +4556,7 @@ public class BiddingProjectService {
                     biddingProjectDataMapper.insert(biddingProjectData);
                 } else {
                     if (fileMap.get(biddingContentBak.getEnName()) != null) {
-                        System.out.println(fileMap.get(biddingContentBak.getEnName()));
+                        //System.out.println(fileMap.get(biddingContentBak.getEnName()));
                         MultipartFile fileFormal = fileMap.get(biddingContentBak.getEnName());
                         String fileName1 = fileFormal.getOriginalFilename();
                         String fileName = fileName1;

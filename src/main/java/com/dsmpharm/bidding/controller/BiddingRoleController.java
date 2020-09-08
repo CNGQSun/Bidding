@@ -27,19 +27,8 @@ public class BiddingRoleController {
 	@Resource
 	private BiddingRoleService biddingRoleService;
 
-	///**
-	//* 添加
-	//*/
-	//@ApiOperation(value = "添加角色", notes = "添加一条角色信息")
-	//@ApiImplicitParam(name = "role", value = "角色详细实体role", required = true, dataType = "Role")
-	//@PostMapping
-	//public Result insert(@RequestBody BiddingRole biddingRole){
-	//	biddingRoleService.insert(biddingRole);
-	//	return new Result<>(true, StatusCode.OK, "保存成功");
-	//}
-	//
 	/**
-	* 查询全部
+	* 查询所有角色名称
 	*/
 	@ApiOperation(value="查询所有角色名称" )
 	@GetMapping
@@ -47,52 +36,4 @@ public class BiddingRoleController {
 		Result result = biddingRoleService.selectAll();
 		return result;
 	}
-	//
-	///**
-	//* 根据ID查询
-	//*/
-	//@GetMapping(value = "/{id}")
-	//public Result findById(@PathVariable String id){
-	//	BiddingRole biddingRole =  biddingRoleService.findById(id);
-	//	return new Result<>(true, StatusCode.OK, "查询成功", biddingRole);
-	//}
-	//
-	///**
-	//* 更新
-	//*/
-	//@PutMapping(value = "/{id}")
-	//public Result update(@PathVariable String id, @RequestBody BiddingRole biddingRole) {
-	//	biddingRole.setId(id);
-	//	biddingRoleService.updateById(biddingRole);
-	//	return new Result<>(true, StatusCode.OK, "修改成功");
-	//}
-	//
-	//
-	///**
-	//* 删除
-	//*/
-	//@DeleteMapping(value = "/{id}")
-	//public Result deleteById(@PathVariable String id){
-	//	biddingRoleService.delete(id);
-	//	return new Result<>(true, StatusCode.OK, "删除成功");
-	//}
-	//
-	///**
-	//* 条件查询，无分页
-	//*/
-	//@PostMapping(value = "/list")
-	//public Result findSearch(@RequestBody BiddingRole biddingRole) {
-	//List<BiddingRole> biddingRoles = biddingRoleService.list(biddingRole);
-	//	return new Result<>(true, StatusCode.OK, "查询成功", biddingRoles);
-	//}
-	//
-	///**
-	//* 条件查询，无分页
-	//*/
-	//@PostMapping(value = "/list/{currentPage}/{pageSize}")
-	//public Result findSearch(@RequestBody BiddingRole biddingRole, @PathVariable int currentPage, @PathVariable int pageSize) {
-	//	List<BiddingRole> biddingRoles = biddingRoleService.list(biddingRole, currentPage, pageSize);
-	//	Integer count = biddingRoleService.selectCount(biddingRole);
-	//	return new Result<>(true, StatusCode.OK, "查询成功", new PageResult<BiddingRole>(count, biddingRoles));
-	//}
 }

@@ -2,6 +2,8 @@ package com.dsmpharm.bidding.utils;
 
 import org.apache.tools.zip.ZipEntry;
 import org.apache.tools.zip.ZipOutputStream;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -16,7 +18,7 @@ public class CompressUtil {
      * @param path   要压缩的文件路径
      * @param format 生成的格式（zip、rar）d
      */
-
+    private static Logger log = LoggerFactory.getLogger(CompressUtil.class);
     //@Value("${export.path}")
     //private String exportPath;//上传文件保存的本地目录，使用@Value获取全局配置文件中配置的属性值
 
@@ -48,8 +50,7 @@ public class CompressUtil {
         ZipOutputStream zipOutputStream = new ZipOutputStream(new BufferedOutputStream(outputStream));
 
         generateFile(zipOutputStream,file,"",zipName);
-
-        System.out.println("源文件位置：" + file.getAbsolutePath() + "，目的压缩文件生成位置：" + generateFileName);
+        log.info("源文件位置：" + file.getAbsolutePath() + "，目的压缩文件生成位置：" + generateFileName);
         // 关闭 输出流
         zipOutputStream.close();
         return generateFileName;

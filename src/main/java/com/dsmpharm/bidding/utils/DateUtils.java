@@ -559,8 +559,8 @@ public class DateUtils {
 	}  
 	
 
-	public static void main(String[] args) {
-		System.out.println(DateUtils.getBetweenDays("2010-04-15 09:17:29",
-				"2011-05-16 19:17:29"));
-	}
+	//public static void main(String[] args) {
+	//	System.out.println(DateUtils.getBetweenDays("2010-04-15 09:17:29",
+	//			"2011-05-16 19:17:29"));
+	//}
 }

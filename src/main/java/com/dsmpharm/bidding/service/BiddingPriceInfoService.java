@@ -1273,9 +1273,9 @@ public class BiddingPriceInfoService {
         }
         //    获取文件的名称
         String fileName = file.getOriginalFilename();
-        System.out.println(fileName);//      获取文件的后缀名
+        //System.out.println(fileName);//      获取文件的后缀名
         String pattern = fileName.substring(fileName.lastIndexOf(".") + 1);
-        System.out.println(pattern);
+        //System.out.println(pattern);
         List<List<String>> listContent = new ArrayList<>();
         try {
             if (file != null) {
@@ -1392,7 +1392,7 @@ public class BiddingPriceInfoService {
                 if (biddingPriceInfo.getBidTime() == null || biddingPriceInfo.getBidTime().equals("")) {
                     biddingPriceInfo.setBidTime("——");
                 }
-                System.out.println(biddingPriceInfo.getStrikePrice());
+                //System.out.println(biddingPriceInfo.getStrikePrice());
                 if (biddingPriceInfo.getStrikePrice() == null || biddingPriceInfo.getStrikePrice().equals("")) {
                     biddingPriceInfo.setStrikePrice("——");
                 }

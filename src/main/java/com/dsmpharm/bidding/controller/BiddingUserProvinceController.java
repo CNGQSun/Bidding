@@ -132,34 +132,4 @@ public class BiddingUserProvinceController {
 		Result result = biddingUserProvinceService.list(map);
 		return result;
 	}
-
-
-
-
-	///**
-	//* 查询全部
-	//*/
-	//@GetMapping
-	//public Result findAll(){
-	//	List<BiddingUserProvince> list = biddingUserProvinceService.selectAll();
-	//	return new Result<>(true, StatusCode.OK, "查询成功", list);
-	//}
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	///**
-	//* 条件查询，无分页
-	//*/
-	//@PostMapping(value = "/list")
-	//public Result findSearch(@RequestBody BiddingUserProvince biddingUserProvince) {
-	//List<BiddingUserProvince> biddingUserProvinces = biddingUserProvinceService.list(biddingUserProvince);
-	//	return new Result<>(true, StatusCode.OK, "查询成功", biddingUserProvinces);
-	//}
-
-
 }

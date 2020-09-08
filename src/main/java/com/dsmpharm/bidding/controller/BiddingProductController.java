@@ -171,29 +171,4 @@ public class BiddingProductController {
 		}
 		return "上传失败！";
 	}
-
-	///**
-	//* 查询全部
-	//*/
-	//@GetMapping
-	//public Result findAll(){
-	//	List<BiddingProduct> list = biddingProductService.selectAll();
-	//	return new Result<>(true, StatusCode.OK, "查询成功", list);
-	//}
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	///**
-	//* 条件查询，无分页
-	//*/
-	//@PostMapping(value = "/list")
-	//public Result findSearch(@RequestBody BiddingProduct biddingProduct) {
-	//List<BiddingProduct> biddingProducts = biddingProductService.list(biddingProduct);
-	//	return new Result<>(true, StatusCode.OK, "查询成功", biddingProducts);
-	//}
 }
